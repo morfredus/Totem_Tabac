@@ -1,6 +1,3 @@
-# ✅ **10 — `/docs/pwm_system_FR.md`**
-
-```markdown
 # Système PWM — Totem Feux du Tabac
 
 Ce document explique le fonctionnement du système PWM (Pulse Width Modulation) utilisé dans **Totem Feux du Tabac**.  
@@ -75,15 +72,23 @@ Module 3 → canal rouge 3
 
 Chaque canal PWM est associé à un GPIO défini dans `board_config.h`.
 
-Exemple :
 
+## ESP32 DevKit (esp32devkit)
 ```
-TRAFFIC_LIGHTS[0].red    = GPIO 13
-TRAFFIC_LIGHTS[0].yellow = GPIO 26
-TRAFFIC_LIGHTS[0].green  = GPIO 33
+Module 0 : Rouge 4, Jaune 5, Vert 12
+Module 1 : Rouge 13, Jaune 14, Vert 16
+Module 2 : Rouge 17, Jaune 18, Vert 19
+Module 3 : Rouge 21, Jaune 22, Vert 23
 ```
 
-Le mapping peut être modifié selon votre carte ESP32.
+## ESP32-S3 DevKitC-1 N16R8 (esp32s3_n16r8)
+```
+Module 0 : Rouge 1, Jaune 2, Vert 42
+Module 1 : Rouge 41, Jaune 40, Vert 39
+Module 2 : Rouge 4, Jaune 5, Vert 6
+Module 3 : Rouge 7, Jaune 15, Vert 16
+Boutons : 21 (mode), 20 (sous-mode)
+```
 
 ---
 

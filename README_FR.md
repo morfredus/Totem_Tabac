@@ -55,13 +55,21 @@ Licence : **MIT License**
 
 ## 📦 Matériel nécessaire
 
-- ESP32 DevKit (WROOM ou S3)
+- **ESP32 DevKit** (plusieurs modèles supportés) :
+  - UPESY WROOM (ESP32 classique)
+  - ESP32-S3 DevKitC-1 N16R8 (avec PSRAM)
 - 4 × modules de feux tricolores
 - 12 × GPIO compatibles PWM
+  - ESP32-S3 DevKitC-1 N16R8 (v0.11.3+) :
+    - Module 0 : Rouge 1, Jaune 2, Vert 42
+    - Module 1 : Rouge 41, Jaune 40, Vert 39
+    - Module 2 : Rouge 4, Jaune 5, Vert 6
+    - Module 3 : Rouge 7, Jaune 15, Vert 16
+    - Boutons : GPIO 21 (mode), 20 (sous-mode)
 - 2 × boutons (optionnel)
 - Alimentation 5V
 
-Les schémas de câblage sont disponibles dans `/docs/hardware_setup_FR.md`.
+Les schémas de câblage pour chaque carte sont disponibles dans `/docs/hardware_setup_FR.md`.
 
 ---
 

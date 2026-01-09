@@ -1,6 +1,3 @@
-# ✅ **11 — `/docs/troubleshooting.md`**
-
-```markdown
 # Troubleshooting — Totem Feux du Tabac
 
 This document lists common issues encountered when installing, wiring, compiling, or running **Totem Feux du Tabac**, along with their solutions.

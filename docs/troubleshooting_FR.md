@@ -1,6 +1,3 @@
-# ✅ **/docs/troubleshooting_FR.md**
-
-```markdown
 # Dépannage — Totem Feux du Tabac
 
 Ce document regroupe les problèmes les plus courants rencontrés lors de l’installation, du câblage, de la compilation ou de l’utilisation de **Totem Feux du Tabac**, ainsi que leurs solutions.
