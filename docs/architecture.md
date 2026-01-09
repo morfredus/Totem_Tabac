@@ -147,11 +147,70 @@ Defines all hardware‑related constants:
 - PWM channel numbers
 - Safety notes (boot‑sensitive pins)
 
-Example:
+### Multi-Environment Support (v0.11.0+)
 
-TRAFFIC_LIGHTS[0].red    = GPIO 13
-TRAFFIC_LIGHTS[0].yellow = GPIO 26
-TRAFFIC_LIGHTS[0].green  = GPIO 33
+Since version 0.11.0, `board_config.h` handles **multiple ESP32 boards** using conditional macros.
+
+The appropriate GPIO mapping is automatically selected during compilation based on the `-D ENV_xxx` flag defined in `platformio.ini`.
+
+#### File structure:
+
+```cpp
+#ifdef ENV_ESP32_DEVKIT
+    // Mapping for classic ESP32 (DevKit)
+    #define TL1_RED 4
+    #define TL1_YELLOW 5
+    // ...
+#endif
+
+#ifdef ENV_ESP32S3_N16R8
+    // Mapping for ESP32-S3 DevKitC-1 N16R8 (v0.11.2+)
+    #define TL1_RED 3
+    #define TL1_YELLOW 4
+    // ...
+#endif
+
+// Common structure
+struct TrafficLightPins { int red, yellow, green; };
+static const TrafficLightPins TRAFFIC_LIGHTS[4] = { ... };
+```
+
+#### Supported environments:
+
+**1. ENV_ESP32_DEVKIT (Classic ESP32)**
+
+- Environment: `esp32devkit`
+- Proven and validated mapping
+- GPIOs: 4, 5, 12, 13, 14, 16, 17, 18, 19, 21, 22, 23
+- Buttons: GPIO 25, 26
+
+
+**2. ENV_ESP32S3_N16R8 (ESP32-S3 DevKitC-1) — v0.11.3+**
+
+- Environment: `esp32s3_n16r8`
+- New secure mapping (firmware 0.11.3)
+- GPIOs:
+  - Module 0: Red 1, Yellow 2, Green 42
+  - Module 1: Red 41, Yellow 40, Green 39
+  - Module 2: Red 4, Yellow 5, Green 6
+  - Module 3: Red 7, Yellow 15, Green 16
+- Buttons: GPIO 21 (mode), 20 (sub-mode)
+
+Example (ESP32 DevKit):
+
+```
+TRAFFIC_LIGHTS[0].red    = GPIO 4
+TRAFFIC_LIGHTS[0].yellow = GPIO 5
+TRAFFIC_LIGHTS[0].green  = GPIO 12
+```
+
+Example (ESP32-S3 N16R8 v0.11.3+):
+
+```
+TRAFFIC_LIGHTS[0].red    = GPIO 1
+TRAFFIC_LIGHTS[0].yellow = GPIO 2
+TRAFFIC_LIGHTS[0].green  = GPIO 42
+```
 
 ---
 

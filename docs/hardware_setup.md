@@ -49,52 +49,141 @@ Module 1 → Red / Yellow / Green
 Module 2 → Red / Yellow / Green
 Module 3 → Red / Yellow / Green
 
-### Example mapping (from board_config.h)
+## 3.1 Multi-Environment Support (v0.11.0+)
 
+Since version 0.11.0, the project supports **two ESP32 boards** with different GPIO mappings.
+
+The mapping is automatically selected during compilation based on the chosen PlatformIO environment.
+
+### Mapping A: ESP32 DevKit (Classic ESP32)
+
+**PlatformIO Environment:** `esp32devkit`  
+**Board:** esp32doit-devkit1
+
+```
 Module 0:
-Red    → GPIO 13
-Yellow → GPIO 26
-Green  → GPIO 33
+  Red    → GPIO 4
+  Yellow → GPIO 5
+  Green  → GPIO 12
 
 Module 1:
-Red    → GPIO 14
-Yellow → GPIO 27
-Green  → GPIO 32
+  Red    → GPIO 13
+  Yellow → GPIO 14
+  Green  → GPIO 16
 
 Module 2:
-Red    → GPIO 16
-Yellow → GPIO 17
-Green  → GPIO 18
+  Red    → GPIO 17
+  Yellow → GPIO 18
+  Green  → GPIO 19
 
 Module 3:
-Red    → GPIO 19
-Yellow → GPIO 21
-Green  → GPIO 22
+  Red    → GPIO 21
+  Yellow → GPIO 22
+  Green  → GPIO 23
 
-*(Your actual mapping may differ depending on your board.)*
+Buttons:
+  Mode    → GPIO 25
+  Submode → GPIO 26
+```
+
+
+### Mapping B: ESP32-S3 DevKitC-1 N16R8 (v0.11.3+)
+
+**PlatformIO Environment:** `esp32s3_n16r8`  
+**Board:** esp32-s3-devkitc-1
+
+⚠️ **Update 0.11.3**: New GPIO mapping as in `board_config.h`:
+
+```
+Module 0:
+  Red    → GPIO 1
+  Yellow → GPIO 2
+  Green  → GPIO 42
+
+Module 1:
+  Red    → GPIO 41
+  Yellow → GPIO 40
+  Green  → GPIO 39
+
+Module 2:
+  Red    → GPIO 4
+  Yellow → GPIO 5
+  Green  → GPIO 6
+
+Module 3:
+  Red    → GPIO 7
+  Yellow → GPIO 15
+  Green  → GPIO 16
+
+Buttons:
+  Mode    → GPIO 21
+  Submode → GPIO 20
+```
+
+**Note:** This mapping avoids dangerous GPIOs:
+- ✗ GPIO 0, 1, 2: Boot/UART0
+- ✗ GPIO 45, 46: Strapping pins
+- ✗ GPIO 26-32: Input-only
+- ✓ GPIO 3-16: 100% PWM safe
 
 ---
 
 # 4. Wiring Diagram (Text Version)
 
-ESP32 GPIO 13  → Module 0 Red (+)
-ESP32 GPIO 26  → Module 0 Yellow (+)
-ESP32 GPIO 33  → Module 0 Green (+)
+Use the diagram corresponding to your ESP32 board (see section 3 for mappings).
 
-ESP32 GPIO 14  → Module 1 Red (+)
-ESP32 GPIO 27  → Module 1 Yellow (+)
-ESP32 GPIO 32  → Module 1 Green (+)
+### For ESP32 DevKit (esp32devkit):
 
-ESP32 GPIO 16  → Module 2 Red (+)
-ESP32 GPIO 17  → Module 2 Yellow (+)
-ESP32 GPIO 18  → Module 2 Green (+)
+```
+ESP32 GPIO 4   → Module 0 Red (+)
+ESP32 GPIO 5   → Module 0 Yellow (+)
+ESP32 GPIO 12  → Module 0 Green (+)
 
-ESP32 GPIO 19  → Module 3 Red (+)
-ESP32 GPIO 21  → Module 3 Yellow (+)
-ESP32 GPIO 22  → Module 3 Green (+)
+ESP32 GPIO 13  → Module 1 Red (+)
+ESP32 GPIO 14  → Module 1 Yellow (+)
+ESP32 GPIO 16  → Module 1 Green (+)
 
-ALL LED (–) → GND
-ESP32 GND   → Power supply GND
+ESP32 GPIO 17  → Module 2 Red (+)
+ESP32 GPIO 18  → Module 2 Yellow (+)
+ESP32 GPIO 19  → Module 2 Green (+)
+
+ESP32 GPIO 21  → Module 3 Red (+)
+ESP32 GPIO 22  → Module 3 Yellow (+)
+ESP32 GPIO 23  → Module 3 Green (+)
+
+ESP32 GPIO 25  → Mode Button
+ESP32 GPIO 26  → Submode Button
+
+ALL CATHODES (–) → GND
+ESP32 GND        → Power supply GND
+```
+
+
+### For ESP32-S3 DevKitC-1 N16R8 (esp32s3_n16r8) — v0.11.3+:
+
+```
+ESP32 GPIO 1   → Module 0 Red (+)
+ESP32 GPIO 2   → Module 0 Yellow (+)
+ESP32 GPIO 42  → Module 0 Green (+)
+
+ESP32 GPIO 41  → Module 1 Red (+)
+ESP32 GPIO 40  → Module 1 Yellow (+)
+ESP32 GPIO 39  → Module 1 Green (+)
+
+ESP32 GPIO 4   → Module 2 Red (+)
+ESP32 GPIO 5   → Module 2 Yellow (+)
+ESP32 GPIO 6   → Module 2 Green (+)
+
+ESP32 GPIO 7   → Module 3 Red (+)
+ESP32 GPIO 15  → Module 3 Yellow (+)
+ESP32 GPIO 16  → Module 3 Green (+)
+
+ESP32 GPIO 21  → Mode Button
+ESP32 GPIO 20  → Submode Button
+
+ALL CATHODES (–) → GND
+ESP32 GND        → Power supply GND
+```
 
 ---
 

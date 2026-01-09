@@ -51,52 +51,137 @@ Module 2 → Rouge / Jaune / Vert
 Module 3 → Rouge / Jaune / Vert
 ```
 
-### Exemple de mapping (depuis board_config.h)
+## 3.1 Support multi-environnements (v0.11.0+)
+
+Depuis la version 0.11.0, le projet supporte **deux cartes ESP32** avec des mappings GPIO différents.
+
+Le mapping est automatiquement sélectionné lors de la compilation selon l'environnement PlatformIO choisi.
+
+### Mapping A : ESP32 DevKit (ESP32 classique)
+
+**Environnement PlatformIO :** `esp32devkit`  
+**Board :** esp32doit-devkit1
 
 ```
 Module 0 :
-  Rouge  → GPIO 13
-  Jaune  → GPIO 26
-  Vert   → GPIO 33
+  Rouge  → GPIO 4
+  Jaune  → GPIO 5
+  Vert   → GPIO 12
 
 Module 1 :
-  Rouge  → GPIO 14
-  Jaune  → GPIO 27
-  Vert   → GPIO 32
+  Rouge  → GPIO 13
+  Jaune  → GPIO 14
+  Vert   → GPIO 16
 
 Module 2 :
-  Rouge  → GPIO 16
-  Jaune  → GPIO 17
-  Vert   → GPIO 18
+  Rouge  → GPIO 17
+  Jaune  → GPIO 18
+  Vert   → GPIO 19
 
 Module 3 :
-  Rouge  → GPIO 19
-  Jaune  → GPIO 21
-  Vert   → GPIO 22
+  Rouge  → GPIO 21
+  Jaune  → GPIO 22
+  Vert   → GPIO 23
+
+Boutons :
+  Mode      → GPIO 25
+  Sous-mode → GPIO 26
 ```
 
-*(Votre mapping réel peut varier selon la carte ESP32.)*
+
+### Mapping B : ESP32-S3 DevKitC-1 N16R8 (v0.11.3+)
+
+**Environnement PlatformIO :** `esp32s3_n16r8`  
+**Board :** esp32-s3-devkitc-1
+
+⚠️ **Mise à jour 0.11.3** : Nouveau mapping GPIO conforme au firmware.
+
+```
+Module 0 :
+  Rouge  → GPIO 1
+  Jaune  → GPIO 2
+  Vert   → GPIO 42
+
+Module 1 :
+  Rouge  → GPIO 41
+  Jaune  → GPIO 40
+  Vert   → GPIO 39
+
+Module 2 :
+  Rouge  → GPIO 4
+  Jaune  → GPIO 5
+  Vert   → GPIO 6
+
+Module 3 :
+  Rouge  → GPIO 7
+  Jaune  → GPIO 15
+  Vert   → GPIO 16
+
+Boutons :
+  Mode      → GPIO 21
+  Sous-mode → GPIO 20
+```
+
+**Note :** Ce mapping évite les GPIO dangereux :
+- ✗ GPIO 0, 1, 2 : Boot/UART0
+- ✗ GPIO 45, 46 : Strapping pins
+- ✗ GPIO 26-32 : Input-only
+- ✓ GPIO 3-16 : 100% PWM safe
 
 ---
 
 # 4. Schéma de câblage (version texte)
 
+Utilisez le schéma correspondant à votre carte ESP32 (voir section 3 pour les mappings).
+
+### Pour ESP32 DevKit (esp32devkit) :
+
 ```
-ESP32 GPIO 13  → Module 0 Rouge (+)
-ESP32 GPIO 26  → Module 0 Jaune (+)
-ESP32 GPIO 33  → Module 0 Vert (+)
+ESP32 GPIO 4   → Module 0 Rouge (+)
+ESP32 GPIO 5   → Module 0 Jaune (+)
+ESP32 GPIO 12  → Module 0 Vert (+)
 
-ESP32 GPIO 14  → Module 1 Rouge (+)
-ESP32 GPIO 27  → Module 1 Jaune (+)
-ESP32 GPIO 32  → Module 1 Vert (+)
+ESP32 GPIO 13  → Module 1 Rouge (+)
+ESP32 GPIO 14  → Module 1 Jaune (+)
+ESP32 GPIO 16  → Module 1 Vert (+)
 
-ESP32 GPIO 16  → Module 2 Rouge (+)
-ESP32 GPIO 17  → Module 2 Jaune (+)
-ESP32 GPIO 18  → Module 2 Vert (+)
+ESP32 GPIO 17  → Module 2 Rouge (+)
+ESP32 GPIO 18  → Module 2 Jaune (+)
+ESP32 GPIO 19  → Module 2 Vert (+)
 
-ESP32 GPIO 19  → Module 3 Rouge (+)
-ESP32 GPIO 21  → Module 3 Jaune (+)
-ESP32 GPIO 22  → Module 3 Vert (+)
+ESP32 GPIO 21  → Module 3 Rouge (+)
+ESP32 GPIO 22  → Module 3 Jaune (+)
+ESP32 GPIO 23  → Module 3 Vert (+)
+
+ESP32 GPIO 25  → Bouton Mode
+ESP32 GPIO 26  → Bouton Sous-mode
+
+TOUTES LES CATHODES (–) → GND
+ESP32 GND               → GND alimentation
+```
+
+
+### Pour ESP32-S3 DevKitC-1 N16R8 (esp32s3_n16r8) — v0.11.3+ :
+
+```
+ESP32 GPIO 1   → Module 0 Rouge (+)
+ESP32 GPIO 2   → Module 0 Jaune (+)
+ESP32 GPIO 42  → Module 0 Vert (+)
+
+ESP32 GPIO 41  → Module 1 Rouge (+)
+ESP32 GPIO 40  → Module 1 Jaune (+)
+ESP32 GPIO 39  → Module 1 Vert (+)
+
+ESP32 GPIO 4   → Module 2 Rouge (+)
+ESP32 GPIO 5   → Module 2 Jaune (+)
+ESP32 GPIO 6   → Module 2 Vert (+)
+
+ESP32 GPIO 7   → Module 3 Rouge (+)
+ESP32 GPIO 15  → Module 3 Jaune (+)
+ESP32 GPIO 16  → Module 3 Vert (+)
+
+ESP32 GPIO 21  → Bouton Mode
+ESP32 GPIO 20  → Bouton Sous-mode
 
 TOUTES LES CATHODES (–) → GND
 ESP32 GND               → GND alimentation

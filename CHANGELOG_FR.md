@@ -1,8 +1,99 @@
+#
+## [0.11.3] – Nouveau mapping GPIO ESP32-S3 (2026-01-09)
+### Modifié
+- Mise à jour du mapping GPIO pour l'environnement `esp32s3_n16r8` (ESP32-S3 DevKitC-1 N16R8) :
+  - Module 0 : Rouge 1, Jaune 2, Vert 42
+  - Module 1 : Rouge 41, Jaune 40, Vert 39
+  - Module 2 : Rouge 4, Jaune 5, Vert 6
+  - Module 3 : Rouge 7, Jaune 15, Vert 16
+  - Boutons : 21 (mode), 20 (sous-mode)
+- Tous les documents utilisateur (FR + EN) ont été mis à jour pour refléter ce mapping et garantir la cohérence avec le code source.
+
 # Journal des modifications — Totem Feux du Tabac
 Toutes les évolutions importantes du projet sont documentées ici.
 
 Le projet suit le schéma **Semantic Versioning (SemVer)** :  
 **MAJEUR.MINEUR.CORRECTIF**
+
+---
+
+## [0.11.2] – Corrections anti-bootloop ESP32-S3 (2026-01-09)
+### Corrigé
+- **Problème critique de bootloop sur ESP32-S3** causé par le choix de GPIO non sécurisés.
+- GPIO 1, 2 maintenant évités (UART0).
+- GPIO 0 maintenant évité (risque bouton boot).
+- GPIO 45, 46 maintenant évités (strapping pins).
+- GPIO 26-32 maintenant évités (input-only sur S3).
+
+### Modifié
+- Mapping GPIO ESP32-S3 mise à jour vers GPIO 3-16 (100% sécurisé pour PWM).
+- Nouveau mapping : Module 1 (GPIO 3-5), Module 2 (GPIO 6-8), Module 3 (GPIO 9-11), Module 4 (GPIO 12-14), Boutons (GPIO 15-16).
+- Documentation mise à jour pour refléter l'allocation réelle des GPIO.
+
+### Impact utilisateur
+- ESP32-S3 maintenant stable sans risque de bootloop.
+- Le câblage matériel doit utiliser GPIO 3-16 pour les LEDs.
+
+---
+
+## [0.11.1] – Nettoyage des noms d'environnements (2026-01-09)
+### Modifié
+- Environnement renommé de `upesy_wroom` à `esp32devkit` pour la clarté.
+- Spécification de la carte changée à `esp32doit-devkit1` (board standard PlatformIO).
+- Flag de compilation changé de `-D ENV_ESP32_CLASSIC` à `-D ENV_ESP32_DEVKIT`.
+
+---
+
+## [0.11.0] – Stabilisation de l'architecture multi-environnements (2026-01-09)
+### Ajouté
+- Section commune `[env]` dans `platformio.ini` pour partager la configuration.
+- Système d'héritage basé sur les flags (`${env.build_flags}`, `${env.lib_deps}`).
+- Décodeur d'exceptions pour le débogage ESP32-S3.
+
+### Modifié
+- `platformio.ini` restructuré pour une meilleure maintenabilité.
+- Les deux environnements héritent maintenant des paramètres communs.
+- Environnement par défaut défini sur `esp32devkit`.
+
+---
+
+## [0.10.0] – Refactorisation de la configuration GPIO (2026-01-09)
+### Ajouté
+- Nouvelle section de configuration commune `[env]` dans `platformio.ini`.
+- Toutes les dépendances centralisées dans la section commune.
+- Flags de compilation et vitesses de monitoring unifiés.
+
+### Modifié
+- `esp32devkit` et `esp32s3_n16r8` héritent maintenant de `[env]`.
+- Réduction de la duplication de configuration.
+- Structure de projet plus propre et maintenable.
+
+---
+
+## [0.9.0] – Architecture multi-environnements (2026-01-09)
+### Ajouté
+- **Nouvel environnement ESP32-S3 DevKitC-1 N16R8** avec support PSRAM.
+- Section `[env]` commune dans `platformio.ini` pour mutualiser les dépendances et flags.
+- Système de mapping GPIO multi-environnements dans `board_config.h`.
+- Flag de compilation `-D ENV_UPESY_WROOM` et `-D ENV_ESP32S3_N16R8` pour sélection automatique du mapping.
+- Mapping GPIO sécurisé pour ESP32-S3 (GPIO 1-14) évitant les GPIO sensibles au boot et USB/JTAG.
+- Librairies complètes ajoutées : Adafruit BusIO, GFX, ST7735/ST7789, TinyGPSPlus, U8g2.
+
+### Modifié
+- Restructuration complète de `platformio.ini` avec héritage des configurations communes.
+- `board_config.h` maintenant avec deux mappings distincts protégés par `#ifdef`.
+- Mapping UPESY_WROOM conservé strictement à l'identique (aucune modification).
+- Version incrémentée de 0.8.0 → 0.9.0.
+
+### Impact utilisateur
+- Le projet compile désormais pour deux cartes ESP32 différentes.
+- Possibilité de choisir l'environnement via PlatformIO : `upesy_wroom` ou `esp32s3_n16r8`.
+- Aucun impact sur le comportement des modes lumineux existants.
+
+### Impact développeur
+- Ajout de nouveaux environnements facilité via la section `[env]` commune.
+- Mapping GPIO modulaire et extensible.
+- Meilleure organisation du code avec séparation claire des configurations matérielles.
 
 ---
 

@@ -56,13 +56,21 @@ Licensed under the **MIT License**.
 
 ## 📦 Hardware Requirements
 
-- ESP32 DevKit (WROOM or S3)
-- 4 × Traffic‑light modules (Red/Yellow/Green)
-- 12 × PWM‑compatible GPIOs
-- 2 × Buttons (optional)
-- 5V power supply
+- **ESP32 DevKit** (multiple boards supported):
+  - UPESY WROOM (Classic ESP32)
 
-Full wiring diagrams are available in `/docs/hardware_setup.md`.
+  - ESP32-S3 DevKitC-1 N16R8 (v0.11.3+):
+    - Module 0: Red 1, Yellow 2, Green 42
+    - Module 1: Red 41, Yellow 40, Green 39
+    - Module 2: Red 4, Yellow 5, Green 6
+    - Module 3: Red 7, Yellow 15, Green 16
+    - Buttons: GPIO 21 (mode), 20 (sub-mode)
+  - 4 × Traffic‑light modules (Red/Yellow/Green)
+  - 12 × PWM‑compatible GPIOs
+  - 2 × Buttons (optional)
+  - 5V power supply
+
+Full wiring diagrams for each board are available in `/docs/hardware_setup.md`.
 
 ---
 

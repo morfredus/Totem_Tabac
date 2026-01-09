@@ -6,6 +6,98 @@ This project follows **Semantic Versioning (SemVer)**:
 
 ---
 
+## [0.11.3] – New ESP32-S3 GPIO Mapping (2026-01-09)
+### Changed
+- Updated GPIO mapping for `esp32s3_n16r8` (ESP32-S3 DevKitC-1 N16R8):
+  - Module 0: Red 1, Yellow 2, Green 42
+  - Module 1: Red 41, Yellow 40, Green 39
+  - Module 2: Red 4, Yellow 5, Green 6
+  - Module 3: Red 7, Yellow 15, Green 16
+  - Buttons: 21 (mode), 20 (sub-mode)
+- All user documentation (FR + EN) updated to reflect this mapping and ensure consistency with the source code.
+
+---
+
+## [0.11.2] – ESP32-S3 Anti-Bootloop Fixes (2026-01-09)
+### Fixed
+- **Critical bootloop issue on ESP32-S3** caused by unsafe GPIO selection.
+- GPIO 1, 2 now avoided (UART0 communication).
+- GPIO 0 now avoided (boot button risk).
+- GPIO 45, 46 now avoided (strapping pins).
+- GPIO 26-32 now avoided (input-only on S3).
+
+### Changed
+- ESP32-S3 GPIO mapping updated to GPIO 3-16 (100% safe for PWM).
+- New mapping: Module 1 (GPIO 3-5), Module 2 (GPIO 6-8), Module 3 (GPIO 9-11), Module 4 (GPIO 12-14), Buttons (GPIO 15-16).
+- Documentation updated to reflect real GPIO allocation.
+
+### User Impact
+- ESP32-S3 now stable with zero bootloop risk.
+- Hardware setup must use GPIO 3-16 for LEDs.
+
+---
+
+## [0.11.1] – Environment Naming Cleanup (2026-01-09)
+### Changed
+- Environment renamed from `upesy_wroom` to `esp32devkit` for clarity.
+- Board specification changed to `esp32doit-devkit1` (standard PlatformIO board).
+- Compilation flag changed from `-D ENV_ESP32_CLASSIC` to `-D ENV_ESP32_DEVKIT`.
+
+---
+
+## [0.11.0] – Dual-Environment Architecture Stabilization (2026-01-09)
+### Added
+- Common `[env]` section in `platformio.ini` for shared configuration.
+- Inheritance-based build flag system (`${env.build_flags}`, `${env.lib_deps}`).
+- Monitor exception decoder for ESP32-S3 debugging.
+
+### Changed
+- `platformio.ini` restructured for better maintainability.
+- Both environments now inherit common settings.
+- Default environment set to `esp32devkit`.
+
+---
+
+## [0.10.0] – GPIO Configuration Refactoring (2026-01-09)
+### Added
+- New `[env]` common configuration section in `platformio.ini`.
+- All dependencies centralized in common section.
+- Build flags and monitor speeds unified.
+
+### Changed
+- `esp32devkit` and `esp32s3_n16r8` now inherit from `[env]`.
+- Reduced configuration duplication.
+- Cleaner, more maintainable project structure.
+
+---
+
+## [0.9.0] – Multi-Environment Architecture (2026-01-09)
+### Added
+- **New ESP32-S3 DevKitC-1 N16R8 environment** with PSRAM support.
+- Common `[env]` section in `platformio.ini` to share dependencies and build flags.
+- Multi-environment GPIO mapping system in `board_config.h`.
+- Compilation flags `-D ENV_UPESY_WROOM` and `-D ENV_ESP32S3_N16R8` for automatic mapping selection.
+- Safe GPIO mapping for ESP32-S3 (GPIO 1-14) avoiding boot-sensitive and USB/JTAG pins.
+- Complete libraries added: Adafruit BusIO, GFX, ST7735/ST7789, TinyGPSPlus, U8g2.
+
+### Changed
+- Complete restructuring of `platformio.ini` with configuration inheritance.
+- `board_config.h` now features two distinct mappings protected by `#ifdef`.
+- UPESY_WROOM mapping kept strictly identical (no modifications).
+- Version incremented from 0.8.0 → 0.9.0.
+
+### User Impact
+- Project now compiles for two different ESP32 boards.
+- Environment selection available via PlatformIO: `upesy_wroom` or `esp32s3_n16r8`.
+- No impact on existing light mode behavior.
+
+### Developer Impact
+- New environments easily added via common `[env]` section.
+- Modular and extensible GPIO mapping.
+- Better code organization with clear hardware configuration separation.
+
+---
+
 ## [0.8.0] – K2000 Trail Effect (2026-01-08)
 ### Added
 - New **K2000 “light trail” effect** with PWM fading behind the main point.
