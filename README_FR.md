@@ -58,7 +58,9 @@ Licence : **MIT License**
 - **ESP32 DevKit** (plusieurs modèles supportés) :
   - UPESY WROOM (ESP32 classique)
   - ESP32-S3 DevKitC-1 N16R8 (avec PSRAM)
-- 4 × modules de feux tricolores
+- **4 × modules de feux tricolores** (choisir un système) :
+  - **LEDs PWM** (par défaut) : 3 pins par module (Rouge/Jaune/Vert) = 12 pins total
+  - **Modules NeoPixel** (v0.12.0+) : **1 pin data pour tous** (chaîne de 12 LEDs adressables)
 - 12 × GPIO compatibles PWM
   - ESP32-S3 DevKitC-1 N16R8 (v0.11.3+) :
     - Module 0 : Rouge 1, Jaune 2, Vert 42
@@ -68,6 +70,8 @@ Licence : **MIT License**
     - Boutons : GPIO 21 (mode), 20 (sous-mode)
 - 2 × boutons (optionnel)
 - Alimentation 5V
+
+🎆 **NOUVEAU en v0.12.0 :** Support NeoPixel ! Basculez facilement entre LEDs PWM traditionnelles (12 pins) et NeoPixel (1 seul pin !). Voir `/docs/neopixel_integration_FR.md` pour les détails.
 
 Les schémas de câblage pour chaque carte sont disponibles dans `/docs/hardware_setup_FR.md`.
 
@@ -91,8 +95,7 @@ Toute la documentation est disponible dans `/docs/` en français et en anglais.
 Points d’entrée recommandés :
 - `/docs/architecture_FR.md`
 - `/docs/hardware_setup_FR.md`
-- `/docs/modes_reference_FR.md`
-
+- `/docs/modes_reference_FR.md`- `/docs/neopixel_integration_FR.md` ⭐ NOUVEAU : Support des modules NeoPixel
 ---
 
 ## 🧩 Structure du projet

@@ -1,4 +1,46 @@
-#
+# Journal des modifications — Totem Feux du Tabac
+Toutes les évolutions importantes du projet sont documentées ici.
+
+Le projet suit le schéma **Semantic Versioning (SemVer)** :  
+**MAJEUR.MINEUR.CORRECTIF**
+
+---
+
+## [0.12.0] – Support NeoPixel & Gestionnaire Unifié (2026-01-10)
+### Ajouté
+- 🎆 **Support des modules NeoPixel** : Alternative aux feux tricolores PWM traditionnels
+  - **Contrôle par GPIO unique** : 1 pin contrôle les 12 LEDs (4 modules × 3 LEDs) via strip adressable
+  - Intégration directe via librairie Adafruit_NeoPixel
+  - Jaune rendu en mélange RGB (R:100%, V:70%) pour apparence naturelle
+- **Gestionnaire Unifié de Feux** : Classe `TrafficLightManager`
+  - Interface unique pour les systèmes PWM et NeoPixel
+  - Sélection automatique via flag de compilation `USE_NEOPIXEL_LIGHTS`
+  - Aucune modification de code nécessaire pour basculer entre systèmes
+  - Adressage LEDs : Module 0 (LEDs 0-2), Module 1 (LEDs 3-5), Module 2 (LEDs 6-8), Module 3 (LEDs 9-11)
+- **Configuration des pins dans board_config.h** : Définition unique `NEOPIXEL_DATA_PIN`
+  - Configurations exemple pour ESP32 DevKit et ESP32-S3
+  - Câblage drastiquement simplifié : 1 pin total (vs 12 pour PWM)
+- **Documentation complète** (EN + FR) :
+  - `/docs/neopixel_integration.md` & `_FR.md` : Installation, configuration, dépannage
+  - Diagrammes d'architecture et référence API
+  - Exigences matérielles et exemples de câblage
+
+### Modifié
+- **light_helpers.h/cpp** : Maintenant fonctions wrapper redirigeant vers le gestionnaire unifié
+- **modes.cpp** : `initLights()` utilise maintenant `trafficLights.begin()`
+- **Librairie Adafruit NeoPixel** : Déjà dans les dépendances (v1.12.0+)
+
+### Compatibilité
+- ✅ Toutes les 20+ animations fonctionnent identiquement avec PWM et NeoPixel
+- ✅ Rétrocompatible : Comportement par défaut inchangé (mode PWM)
+- ✅ Basculement transparent : Retirer/ajouter flag `-D USE_NEOPIXEL_LIGHTS` pour basculer
+
+### Documentation Mise à Jour
+- README.md & README_FR.md : Section NeoPixel ajoutée avec mise en avant de la version
+- Nouveaux guides dédiés : `neopixel_integration.md` & `_FR.md`
+
+---
+
 ## [0.11.4] – Nettoyage des animations & route auto (2026-01-10)
 ### Modifié
 - Suppression des modes redondants : Zen (fusionné dans Pulse Vert), Arc-en-ciel classique (Turbo conservé), Disco (dupliquait Jackpot), FDJ Winner et Client Gagnant (fusionnés en Gagnant).

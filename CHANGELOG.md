@@ -6,6 +6,41 @@ This project follows **Semantic Versioning (SemVer)**:
 
 ---
 
+## [0.12.0] – NeoPixel Support & Unified Manager (2026-01-10)
+### Added
+- 🎆 **NeoPixel module support**: Alternative to traditional PWM traffic lights
+  - **Single GPIO control**: 1 pin controls all 12 LEDs (4 modules × 3 LEDs) via addressable strip
+  - Direct integration via Adafruit_NeoPixel library
+  - Yellow rendered as RGB mix (R:100%, G:70%) for natural appearance
+- **Unified Traffic Light Manager**: `TrafficLightManager` class
+  - Single interface for both PWM and NeoPixel systems
+  - Automatic system selection via compile-time flag `USE_NEOPIXEL_LIGHTS`
+  - Zero code changes required to switch between systems
+  - LED addressing: Module 0 (LEDs 0-2), Module 1 (LEDs 3-5), Module 2 (LEDs 6-8), Module 3 (LEDs 9-11)
+- **Pin configuration in board_config.h**: Single `NEOPIXEL_DATA_PIN` definition
+  - Example configurations for ESP32 DevKit and ESP32-S3
+  - Drastically simplified wiring: 1 pin total (vs 12 for PWM)
+- **Complete documentation** (EN + FR):
+  - `/docs/neopixel_integration.md` & `_FR.md`: Setup, configuration, troubleshooting
+  - Architecture diagrams and API reference
+  - Hardware requirements and wiring examples
+
+### Changed
+- **light_helpers.h/cpp**: Now wrapper functions redirecting to unified manager
+- **modes.cpp**: `initLights()` now uses `trafficLights.begin()`
+- **Adafruit NeoPixel library**: Already in dependencies (v1.12.0+)
+
+### Compatibility
+- ✅ All 20+ animations work identically with both PWM and NeoPixel
+- ✅ Backward compatible: Default behavior unchanged (PWM mode)
+- ✅ Seamless switching: Remove/add `-D USE_NEOPIXEL_LIGHTS` flag to switch
+
+### Documentation Updated
+- README.md & README_FR.md: Added NeoPixel section with version highlight
+- New dedicated guides: `neopixel_integration.md` & `_FR.md`
+
+---
+
 ## [0.11.4] – Animation Cleanup & Auto Route (2026-01-10)
 ### Changed
 - Removed redundant modes: Zen (merged into Pulse Green), classic Rainbow (Turbo kept), Disco (duplicated Jackpot), FDJ Winner and Client Winner (merged into Winner).

@@ -88,9 +88,7 @@ static void fadeRed() {
 // ---------------------------------------------------------
 
 void initLights() {
-    for (int i = 0; i < 4; i++) {
-        initTrafficLightPWM(i);
-    }
+    trafficLights.begin();
     clearAll();
 }
 

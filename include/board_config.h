@@ -33,6 +33,9 @@
 #define TL4_YELLOW  22
 #define TL4_GREEN   23
 
+// Pin DATA pour les NeoPixels
+#define NEOPIXEL_DATA_PIN    27  // Pin DATA NeoPixel
+
 // Boutons physiques
 #define BUTTON_PIN   25   // change de mode
 #define BUTTON2_PIN  26   // change de sous-mode
@@ -76,11 +79,34 @@
 #define TL4_YELLOW    15    // 
 #define TL4_GREEN     16    // 
 
+// --- CONFIGURATION NEOPIXEL ---
+#define NEOPIXEL_DATA_PIN    8  // Pin DATA NeoPixel
+
 // --- BOUTONS (Bas Droit - Zone 19-21) ---
 #define BUTTON_PIN    21    // Près des GND du bas
 #define BUTTON2_PIN   20    //
 
 #endif
+
+// ========================================
+// CONFIGURATION NEOPIXEL (OPTIONNELLE)
+// ========================================
+// Si vous utilisez des modules NeoPixel au lieu des LEDs PWM classiques,
+// décommentez la définition ci-dessous et définissez le pin approprié.
+// Les NeoPixels sont adressables : un seul GPIO contrôle les 12 LEDs (4 modules × 3 LEDs).
+// Ajoutez également -D USE_NEOPIXEL_LIGHTS dans platformio.ini build_flags.
+
+// Organisation des LEDs :
+// Module 0 : LEDs 0, 1, 2 (Rouge, Jaune, Vert)
+// Module 1 : LEDs 3, 4, 5 (Rouge, Jaune, Vert)
+// Module 2 : LEDs 6, 7, 8 (Rouge, Jaune, Vert)
+// Module 3 : LEDs 9, 10, 11 (Rouge, Jaune, Vert)
+
+// Exemple pour ESP32 DevKit :
+// #define NEOPIXEL_DATA_PIN    27
+
+// Exemple pour ESP32-S3 :
+// #define NEOPIXEL_DATA_PIN    8
 
 // ========================================
 // STRUCTURE COMMUNE À TOUS LES ENVIRONNEMENTS

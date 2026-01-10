@@ -65,10 +65,13 @@ Licensed under the **MIT License**.
     - Module 2: Red 4, Yellow 5, Green 6
     - Module 3: Red 7, Yellow 15, Green 16
     - Buttons: GPIO 21 (mode), 20 (sub-mode)
-  - 4 × Traffic‑light modules (Red/Yellow/Green)
-  - 12 × PWM‑compatible GPIOs
-  - 2 × Buttons (optional)
-  - 5V power supply
+- **4 × Traffic‑light modules** (choose one system):
+  - **PWM LEDs** (default): 3 pins per module (Red/Yellow/Green) = 12 pins total
+  - **NeoPixel modules** (v0.12.0+): **1 data pin for all** (12 LEDs addressable chain)
+- 2 × Buttons (optional)
+- 5V power supply
+
+🎆 **NEW in v0.12.0:** NeoPixel support! Switch seamlessly between traditional PWM (12 pins) and NeoPixel (1 pin only!). See `/docs/neopixel_integration.md` for details.
 
 Full wiring diagrams for each board are available in `/docs/hardware_setup.md`.
 
@@ -93,6 +96,7 @@ Recommended starting points:
 - `/docs/architecture.md`
 - `/docs/hardware_setup.md`
 - `/docs/modes_reference.md`
+- `/docs/neopixel_integration.md` ⭐ NEW: NeoPixel module support
 
 ---
 
