@@ -1,3 +1,14 @@
+# .copilot: Evolution tracking — Branch dev/8x8
+# File: CHANGELOG.md
+# Project version: 0.12.0-dev8x8
+# Last update: 2026-01-10
+# Author: Fred & Copilot
+# - Changelog synchronized with README, hardware_setup, platformio.ini (EN/FR)
+# - Added NeoPixel 8x8 matrix, traffic light mapping, GPIO, synchronized doc
+# Active branch: dev/8x8
+# History:
+#   - v0.12.0-dev8x8: Added NeoPixel 8x8 matrix, traffic light mapping, synchronized doc
+#   - v0.11.x and earlier: PWM classic modules only
 #
 ## [0.12.0-dev8x8] – NeoPixel 8x8 Matrix Integration (2026-01-10)
 ### Added

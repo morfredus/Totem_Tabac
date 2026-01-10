@@ -1,3 +1,14 @@
+# .copilot: Suivi des évolutions — Branche dev/8x8
+# Fichier : CHANGELOG_FR.md
+# Version projet : 0.12.0-dev8x8
+# Dernière modif : 2026-01-10
+# Auteur : Fred & Copilot
+# - Journal des modifications synchronisé avec README, hardware_setup, platformio.ini (FR/EN)
+# - Ajout matrice NeoPixel 8x8, mapping feux, GPIO, doc synchronisée
+# Branche active : dev/8x8
+# Historique :
+#   - v0.12.0-dev8x8 : Ajout matrice NeoPixel 8x8, mapping feux, doc synchronisée
+#   - v0.11.x et antérieures : PWM modules classiques uniquement
 #
 ## [0.12.0-dev8x8] – Intégration matrice NeoPixel 8x8 (2026-01-10)
 ### Ajouté
