@@ -64,14 +64,12 @@ String renderWebPage() {
 "   container.innerHTML = '';\n"
 
 "   let modes = {\n"
+"       2:['Normal','Turbo'],\n"
+"       3:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
+"       4:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
 "       5:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
-"       6:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
-"       7:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
-"       3:['➡️ Normal','⬅️ Inversé'],\n"
-"       4:['Normal','Turbo'],\n"
-"       8:['➡️ Avant','⬅️ Arrière'],\n"
-"       9:['🐢 Lent','🚶 Normal','🏃 Rapide'],\n"
-"       10:['🐢 Lent','🚶 Normal','🏃 Rapide']\n"
+"       7:['➡️ Avant','⬅️ Arrière'],\n"
+"       8:['🐢 Lent','🚶 Normal','🏃 Rapide']\n"
 "   };\n"
 
 "   if(modes[s.mode]){\n"
@@ -111,14 +109,12 @@ String renderWebPage() {
 
     html += F("<h2>🌿 Modes doux</h2><div class=\"grid\">");
 
-    html += "<div class=\"btn zen\" data-mode=\"0\" onclick=\"setMode('zen')\">Zen</div>";
-    html += "<div class=\"btn amb\" data-mode=\"1\" onclick=\"setMode('ambiance')\">Ambiance</div>";
-    html += "<div class=\"btn vague\" data-mode=\"2\" onclick=\"setMode('vague')\">Vague</div>";
-    html += "<div class=\"btn arc\" data-mode=\"3\" onclick=\"setMode('arc')\">Arc-en-ciel</div>";
-    html += "<div class=\"btn arcturbo\" data-mode=\"4\" onclick=\"setMode('arc_turbo')\">Arc-en-ciel Turbo</div>";
-    html += "<div class=\"btn pulsev\" data-mode=\"5\" onclick=\"setMode('pulse_vert')\">Pulse Vert</div>";
-    html += "<div class=\"btn pulsej\" data-mode=\"6\" onclick=\"setMode('pulse_jaune')\">Pulse Jaune</div>";
-    html += "<div class=\"btn pulser\" data-mode=\"7\" onclick=\"setMode('pulse_rouge')\">Pulse Rouge</div>";
+    html += "<div class=\"btn amb\" data-mode=\"0\" onclick=\"setMode('ambiance')\">Éclairage doux</div>";
+    html += "<div class=\"btn vague\" data-mode=\"1\" onclick=\"setMode('vague')\">Vague</div>";
+    html += "<div class=\"btn arcturbo\" data-mode=\"2\" onclick=\"setMode('arc_turbo')\">Arc-en-ciel</div>";
+    html += "<div class=\"btn pulsev\" data-mode=\"3\" onclick=\"setMode('pulse_vert')\">Pulse Vert</div>";
+    html += "<div class=\"btn pulsej\" data-mode=\"4\" onclick=\"setMode('pulse_jaune')\">Pulse Jaune</div>";
+    html += "<div class=\"btn pulser\" data-mode=\"5\" onclick=\"setMode('pulse_rouge')\">Pulse Rouge</div>";
 
     html += "</div>";
 
@@ -134,13 +130,11 @@ String renderWebPage() {
 
     html += F("<h2>🔥 Modes dynamiques</h2><div class=\"grid\">");
 
-    html += "<div class=\"btn rush\" data-mode=\"8\" onclick=\"setMode('rush')\">Rush</div>";
-    html += "<div class=\"btn k2000\" data-mode=\"9\" onclick=\"setMode('k2000')\">K2000</div>";
-    html += "<div class=\"btn disco\" data-mode=\"10\" onclick=\"setMode('disco')\">Disco</div>";
-    html += "<div class=\"btn jackpot\" data-mode=\"11\" onclick=\"setMode('jackpot')\">Jackpot</div>";
-    html += "<div class=\"btn fdj\" data-mode=\"12\" onclick=\"setMode('fdj')\">FDJ Winner</div>";
-    html += "<div class=\"btn gagnant\" data-mode=\"13\" onclick=\"setMode('client_gagnant')\">Gagnant</div>";
-    html += "<div class=\"btn perdant\" data-mode=\"14\" onclick=\"setMode('client_perdant')\">Perdant</div>";
+    html += "<div class=\"btn rush\" data-mode=\"6\" onclick=\"setMode('rush')\">Rush</div>";
+    html += "<div class=\"btn k2000\" data-mode=\"7\" onclick=\"setMode('k2000')\">K2000</div>";
+    html += "<div class=\"btn jackpot\" data-mode=\"8\" onclick=\"setMode('jackpot')\">Jackpot</div>";
+    html += "<div class=\"btn gagnant\" data-mode=\"9\" onclick=\"setMode('gagnant')\">Gagnant</div>";
+    html += "<div class=\"btn perdant\" data-mode=\"10\" onclick=\"setMode('client_perdant')\">Perdant</div>";
 
     html += "</div>";
 
@@ -150,11 +144,11 @@ String renderWebPage() {
 
     html += F("<h2>🧱 Utilitaires</h2><div class=\"grid\">");
 
-    html += "<div class=\"btn util\" data-mode=\"15\" onclick=\"setMode('ouverture')\">Ouverture</div>";
-    html += "<div class=\"btn util\" data-mode=\"16\" onclick=\"setMode('fermeture')\">Fermeture</div>";
-    html += "<div class=\"btn util\" data-mode=\"17\" onclick=\"setMode('pause')\">Pause café</div>";
-    html += "<div class=\"btn util\" data-mode=\"18\" onclick=\"setMode('maintenance')\">Maintenance</div>";
-    html += "<div class=\"btn util\" data-mode=\"19\" onclick=\"setMode('humeur')\">Humeur du Patron</div>";
+    html += "<div class=\"btn util\" data-mode=\"11\" onclick=\"setMode('ouverture')\">Ouverture</div>";
+    html += "<div class=\"btn util\" data-mode=\"12\" onclick=\"setMode('fermeture')\">Fermeture</div>";
+    html += "<div class=\"btn util\" data-mode=\"13\" onclick=\"setMode('pause')\">Pause caf\u00e9</div>";
+    html += "<div class=\"btn util\" data-mode=\"14\" onclick=\"setMode('maintenance')\">Maintenance</div>";
+    html += "<div class=\"btn util\" data-mode=\"15\" onclick=\"setMode('humeur')\">Humeur du Patron</div>";
 
     html += "</div>";
     // ---------------------------------------------------------

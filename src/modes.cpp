@@ -7,7 +7,7 @@
 // VARIABLES GLOBALES
 // ---------------------------------------------------------
 
-Mode currentMode = MODE_ZEN;
+Mode currentMode = MODE_PULSE_VERT;
 int subMode = 0;
 int humeurColor = 0;
 
@@ -128,7 +128,7 @@ static void handleAutoMode() {
         if (currentMode != MODE_FERMETURE) setMode(MODE_FERMETURE);
     }
     else if (hour < autoEveningHour) {
-        if (currentMode != MODE_ZEN) setMode(MODE_ZEN);
+        if (currentMode != MODE_PULSE_VERT) setMode(MODE_PULSE_VERT);
     }
     else {
         if (currentMode != MODE_FERMETURE) setMode(MODE_FERMETURE);
@@ -162,14 +162,7 @@ void updateMode() {
     switch (currentMode) {
 
     // -----------------------------------------------------
-    // 1. MODE_ZEN — respiration verte lente
-    // -----------------------------------------------------
-    case MODE_ZEN:
-        fadeGreen();
-        break;
-
-    // -----------------------------------------------------
-    // 2. MODE_AMBIANCE_DOUCE
+    // 1. MODE_AMBIANCE_DOUCE
     // -----------------------------------------------------
     case MODE_AMBIANCE_DOUCE:
         if (now - lastUpdate > 30) {
@@ -185,7 +178,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 3. MODE_VAGUE
+    // 2. MODE_VAGUE
     // -----------------------------------------------------
     case MODE_VAGUE:
         if (now - lastUpdate > 180) {
@@ -198,18 +191,17 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 4. MODE_ARC_EN_CIEL
+    // 3. MODE_ARC_EN_CIEL_TURBO
     // -----------------------------------------------------
-    case MODE_ARC_EN_CIEL:
-        if (now - lastUpdate > 150) {
+    case MODE_ARC_EN_CIEL_TURBO:
+        if (now - lastUpdate > (subMode == 0 ? 120 : 60)) {
 
             int step = animStep % 6;
 
             for (int i = 0; i < 4; i++) {
                 clearModule(i);
 
-                int s = (step + (subMode == 1 ? -i : i)) % 6;
-                if (s < 0) s += 6;
+                int s = (step + i) % 6;
 
                 switch (s) {
                     case 0: setRed(i, 255); break;
@@ -227,28 +219,28 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 5. MODE_PULSE_VERT
+    // 4. MODE_PULSE_VERT
     // -----------------------------------------------------
     case MODE_PULSE_VERT:
         fadeGreen();
         break;
 
     // -----------------------------------------------------
-    // 6. MODE_PULSE_JAUNE
+    // 5. MODE_PULSE_JAUNE
     // -----------------------------------------------------
     case MODE_PULSE_JAUNE:
         fadeYellow();
         break;
 
     // -----------------------------------------------------
-    // 7. MODE_PULSE_ROUGE
+    // 6. MODE_PULSE_ROUGE
     // -----------------------------------------------------
     case MODE_PULSE_ROUGE:
         fadeRed();
         break;
 
     // -----------------------------------------------------
-    // 8. MODE_RUSH
+    // 7. MODE_RUSH
     // -----------------------------------------------------
     case MODE_RUSH:
         if (now - lastUpdate > 120) {
@@ -263,7 +255,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 9. MODE_K2000 — vitesse corrigée
+    // 8. MODE_K2000 — vitesse corrigée
     // -----------------------------------------------------
     case MODE_K2000: {
     // Vitesse selon sous-mode
@@ -318,26 +310,7 @@ void updateMode() {
 
 
     // -----------------------------------------------------
-    // 10. MODE_DISCO
-    // -----------------------------------------------------
-    case MODE_DISCO: {
-        int delayMs = (subMode == 0 ? 180 : subMode == 1 ? 120 : 70);
-
-        if (now - lastUpdate > (unsigned long)delayMs) {
-            for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setRed(i, random(255));
-                setYellow(i, random(255));
-                setGreen(i, random(255));
-            }
-            animStep++;
-            lastUpdate = now;
-        }
-        break;
-    }
-
-    // -----------------------------------------------------
-    // 11. MODE_JACKPOT
+    // 9. MODE_JACKPOT
     // -----------------------------------------------------
     case MODE_JACKPOT: {
         int delayMs = (subMode == 0 ? 150 : subMode == 1 ? 100 : 60);
@@ -365,23 +338,39 @@ void updateMode() {
     }
 
     // -----------------------------------------------------
-    // 12. MODE_FDJ_WINNER
+    // 10. MODE_GAGNANT — Festif (fusion FDJ + Client gagnant)
     // -----------------------------------------------------
-    case MODE_FDJ_WINNER:
-        if (now - lastUpdate > 100) {
+    case MODE_GAGNANT:
+        if (now - lastUpdate > 90) {
 
-            if (animStep < 10) {
+            // Phase 1 : Clignotement jaune rapide (plus festif que FDJ seul)
+            if (animStep < 8) {
                 bool on = animStep % 2;
                 for (int i = 0; i < 4; i++) {
                     clearModule(i);
                     setYellow(i, on ? 255 : 0);
                 }
             }
-            else if (animStep < 20) {
+            // Phase 2 : Vague verte montante
+            else if (animStep < 16) {
                 clearAll();
-                int pos = animStep - 10;
-                if (pos < 4) setGreen(pos, 255);
+                int pos = animStep - 8;
+                if (pos < 4) {
+                    setGreen(pos, 255);
+                    // Ajoute un effet de traînée
+                    if (pos > 0) setGreen(pos - 1, 120);
+                }
             }
+            // Phase 3 : Couleurs aléatoires festives (comme Client Gagnant)
+            else if (animStep < 28) {
+                for (int i = 0; i < 4; i++) {
+                    clearModule(i);
+                    setRed(i, random(200, 255));
+                    setYellow(i, random(200, 255));
+                    setGreen(i, random(200, 255));
+                }
+            }
+            // Phase 4 : Finale verte stable
             else {
                 for (int i = 0; i < 4; i++) {
                     clearModule(i);
@@ -395,33 +384,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 13. MODE_CLIENT_GAGNANT
-    // -----------------------------------------------------
-    case MODE_CLIENT_GAGNANT:
-        if (now - lastUpdate > 120) {
-
-            if (animStep < 12) {
-                for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setRed(i, random(255));
-                    setYellow(i, random(255));
-                    setGreen(i, random(255));
-                }
-            }
-            else {
-                for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setGreen(i, 255);
-                }
-            }
-
-            animStep++;
-            lastUpdate = now;
-        }
-        break;
-
-    // -----------------------------------------------------
-    // 14. MODE_CLIENT_PERDANT
+    // 11. MODE_CLIENT_PERDANT
     // -----------------------------------------------------
     case MODE_CLIENT_PERDANT:
         if (now - lastUpdate > 180) {
@@ -440,7 +403,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 15. MODE_OUVERTURE
+    // 12. MODE_OUVERTURE
     // -----------------------------------------------------
     case MODE_OUVERTURE:
         for (int i = 0; i < 4; i++) {
@@ -450,7 +413,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 16. MODE_FERMETURE
+    // 13. MODE_FERMETURE
     // -----------------------------------------------------
     case MODE_FERMETURE:
         for (int i = 0; i < 4; i++) {
@@ -460,7 +423,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 17. MODE_PAUSE_CAFE
+    // 14. MODE_PAUSE_CAFE
     // -----------------------------------------------------
     case MODE_PAUSE_CAFE:
         if (now - lastUpdate > 300) {
@@ -478,7 +441,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 18. MODE_MAINTENANCE
+    // 15. MODE_MAINTENANCE
     // -----------------------------------------------------
     case MODE_MAINTENANCE:
         if (now - lastUpdate > 250) {
@@ -502,35 +465,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 19. MODE_ARC_EN_CIEL_TURBO
-    // -----------------------------------------------------
-    case MODE_ARC_EN_CIEL_TURBO:
-        if (now - lastUpdate > (subMode == 0 ? 120 : 60)) {
-
-            int step = animStep % 6;
-
-            for (int i = 0; i < 4; i++) {
-                clearModule(i);
-
-                int s = (step + i) % 6;
-
-                switch (s) {
-                    case 0: setRed(i, 255); break;
-                    case 1: setYellow(i, 255); break;
-                    case 2: setGreen(i, 255); break;
-                    case 3: setRGB(i, true, true, 0); break;
-                    case 4: setRGB(i, true, false, 80); break;
-                    case 5: setRGB(i, true, true, 255); break;
-                }
-            }
-
-            animStep++;
-            lastUpdate = now;
-        }
-        break;
-
-    // -----------------------------------------------------
-    // 20. MODE_HUMEUR_PATRON
+    // 16. MODE_HUMEUR_PATRON
     // -----------------------------------------------------
     case MODE_HUMEUR_PATRON:
         applyHumeurColor();
@@ -556,13 +491,11 @@ void nextSubMode() {
             subMode = (subMode + 1) % 3;
             break;
 
-        case MODE_ARC_EN_CIEL:
         case MODE_ARC_EN_CIEL_TURBO:
         case MODE_K2000:
             subMode = (subMode + 1) % 2;
             break;
 
-        case MODE_DISCO:
         case MODE_JACKPOT:
             subMode = (subMode + 1) % 3;
             break;

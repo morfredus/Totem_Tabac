@@ -1,6 +1,3 @@
-# ✅ **8 — `/docs/modes_reference_FR.md`**
-
-```markdown
 # Référence des modes — Totem Feux du Tabac
 
 Ce document décrit tous les modes lumineux disponibles dans **Totem Feux du Tabac**.  
@@ -10,310 +7,352 @@ Ce guide est conçu pour être clair et accessible, même pour un débutant.
 
 ---
 
-# 1. Vue d’ensemble
+# 1. Vue d'ensemble
 
-Le système inclut **plus de 20 modes lumineux**, regroupés en catégories :
+Le système inclut **16 modes lumineux**, regroupés en catégories :
 
-- Modes d’ambiance  
-- Modes Pulse  
-- Animations dynamiques  
-- Effets spéciaux  
-- Modes fonctionnels  
-- Modes fun / spécifiques au tabac  
+- Modes d'ambiance (2 modes)
+- Mode Arc-en-ciel (1 mode)
+- Modes Pulse (3 modes)
+- Animations dynamiques (3 modes)
+- Effets spéciaux (2 modes)
+- Modes fonctionnels (4 modes)
+- Mode humeur (1 mode)
 
 Chaque mode peut être sélectionné via :
 
-- L’interface Web  
+- L'interface Web  
 - Le bouton physique (Mode suivant)  
 - Les routes API  
 
-Les sous‑modes permettent de varier :
-
-- La vitesse  
-- La direction  
-- Les couleurs  
-- Les effets  
+Les sous‑modes permettent de varier la vitesse, la direction ou les effets.
 
 ---
 
-# 2. Modes d’ambiance
+# 2. Modes d'ambiance
 
-## 2.1 Respiration Zen
-Effet de respiration douce sur tous les modules.
+## 2.1 Éclairage Doux (Ambiance Douce)
+**Index : 0**
 
-- Fade sinusoidal  
-- Très calme  
-- Idéal pour une ambiance discrète  
-
-**Sous‑modes :**  
-0 = très lent  
-1 = lent  
-2 = normal  
-
----
-
-## 2.2 Ambiance Douce
 Cycle de couleurs doux et progressif.
 
-- Transitions légères  
-- Atmosphère relaxante  
+- Transitions légères entre vert et jaune
+- Atmosphère relaxante et chaleureuse
+- Animation douce en continu
 
-**Sous‑modes :**  
-0 = tons chauds  
-1 = tons froids  
-2 = mixte  
+**Pas de sous‑modes**
 
 ---
 
-## 2.3 Vague
-Une vague lumineuse qui traverse les 4 modules.
+## 2.2 Vague
+**Index : 1**
 
-- Activation séquentielle  
-- Fade fluide  
+Une vague lumineuse verte qui traverse les 4 modules.
 
-**Sous‑modes :**  
-0 = vague lente  
-1 = vague moyenne  
-2 = vague rapide  
+- Activation séquentielle des modules
+- Effet apaisant et fluide
+- Mouvement constant de gauche à droite
+
+**Pas de sous‑modes**
 
 ---
 
-# 3. Modes Arc‑en‑ciel
+# 3. Mode Arc‑en‑ciel
 
 ## 3.1 Arc‑en‑ciel
-Cycle RGB classique.
+**Index : 2**
 
-- Rotation douce des teintes  
-- Modules synchronisés  
+Cycle RGB dynamique et coloré.
 
-**Sous‑modes :**  
-0 = lent  
-1 = normal  
-2 = rapide  
-
----
-
-## 3.2 Arc‑en‑ciel Turbo
-Version plus rapide et énergique.
-
-- Cycle très rapide  
-- Effet dynamique  
+- Rotation complète des couleurs de l'arc-en-ciel
+- Modules décalés pour effet de vague
+- 6 couleurs : Rouge, Jaune, Vert, Cyan, Violet, Blanc
 
 **Sous‑modes :**  
-0 = turbo  
-1 = hyper  
-2 = extrême  
+- 0 = Normal (120 ms entre les étapes)
+- 1 = Turbo (60 ms entre les étapes)
 
 ---
 
 # 4. Modes Pulse (PWM)
 
-Ces modes utilisent un **fade PWM réel**.
+Ces modes utilisent un **fade PWM réel** pour une respiration douce et fluide.
 
 ## 4.1 Pulse Vert  
-## 4.2 Pulse Jaune  
-## 4.3 Pulse Rouge  
+**Index : 3**
 
-Chaque mode :
-
-- Fait varier une couleur en fade  
-- Utilise une courbe sinus  
-- Tous les modules pulsent ensemble  
+Respiration verte sinusoïdale sur tous les modules.
 
 **Sous‑modes :**  
-0 = lent  
-1 = normal  
-2 = rapide  
+- 0 = Lent 🐢 (40 ms par step)
+- 1 = Normal 🚶 (20 ms par step)
+- 2 = Rapide 🏃 (10 ms par step)
+
+---
+
+## 4.2 Pulse Jaune  
+**Index : 4**
+
+Respiration jaune sinusoïdale sur tous les modules.
+
+**Sous‑modes :**  
+- 0 = Lent 🐢 (40 ms par step)
+- 1 = Normal 🚶 (20 ms par step)
+- 2 = Rapide 🏃 (10 ms par step)
+
+---
+
+## 4.3 Pulse Rouge  
+**Index : 5**
+
+Respiration rouge sinusoïdale sur tous les modules.
+
+**Sous‑modes :**  
+- 0 = Lent 🐢 (40 ms par step)
+- 1 = Normal 🚶 (20 ms par step)
+- 2 = Rapide 🏃 (10 ms par step)
 
 ---
 
 # 5. Animations dynamiques
 
 ## 5.1 Rush
-Effet de poursuite rapide.
+**Index : 6**
 
-- Flashs rapides en séquence  
-- Animation énergique  
+Effet de clignotement rouge rapide et énergique.
 
-**Sous‑modes :**  
-0 = sens horaire  
-1 = sens antihoraire  
-2 = aléatoire  
+- Flashs rouges synchronisés sur tous les modules
+- Animation très dynamique
+- Idéal pour attirer l'attention ou période de rush
+
+**Pas de sous‑modes**
 
 ---
 
 ## 5.2 K2000 (Bidirectionnel)
-Effet Knight Rider classique.
+**Index : 7**
 
-- Point rouge qui va gauche → droite → gauche  
-- Mouvement fluide  
+Effet Knight Rider classique avec point lumineux blanc et traînée.
+
+- Point principal blanc intense (255)
+- Traînée lumineuse derrière (150 puis 60)
+- Mouvement bidirectionnel fluide
+- Inversion automatique aux extrémités
 
 **Sous‑modes :**  
-0 = lent  
-1 = normal  
-2 = rapide  
+- 0 = Avant ➡️ (150 ms par step)
+- 1 = Arrière ⬅️ (80 ms par step)
+- Note : Le sous-mode 2 accélère davantage (40 ms)
 
 ---
 
-## 5.3 K2000 Traînée (Light Tail)
-Version améliorée avec traînée lumineuse.
+## 5.3 Jackpot
+**Index : 8**
 
-- Point principal rouge  
-- Traînée qui s’estompe derrière  
-- Effet très fluide en PWM  
+Effet "machine à sous" très festif.
 
-**Sous‑modes :**  
-0 = traînée courte  
-1 = traînée moyenne  
-2 = traînée longue  
-
----
-
-## 5.4 Disco
-Clignotements aléatoires multicolores.
-
-- Très aléatoire  
-- Effet “soirée”  
+- Couleurs RGB aléatoires qui changent rapidement
+- Flash blanc complet toutes les 8 étapes
+- Animation continue et énergique
 
 **Sous‑modes :**  
-0 = chaos léger  
-1 = chaos moyen  
-2 = chaos total  
+- 0 = Lent 🐢 (150 ms par step)
+- 1 = Normal 🚶 (100 ms par step)
+- 2 = Rapide 🏃 (60 ms par step)
 
 ---
 
 # 6. Effets spéciaux
 
-## 6.1 Jackpot
-Effet “machine à sous”.
+## 6.1 Gagnant 🎉
+**Index : 9**
 
-- Rotation rapide  
-- Fin avec flash gagnant  
+Animation de célébration complète qui fusionne l'ancien FDJ Winner et Client Gagnant.
 
-**Sous‑modes :**  
-0 = rotation lente  
-1 = rotation rapide  
-2 = rotation extrême  
+**Déroulement en 4 phases :**
 
----
+1. **Phase 1** (étapes 0-7) : Clignotement jaune rapide et festif
+   - Alternance jaune plein / éteint à 90 ms
+   
+2. **Phase 2** (étapes 8-15) : Vague verte montante
+   - Point vert qui monte avec traînée
+   - Effet de progression vers le haut
+   
+3. **Phase 3** (étapes 16-27) : Couleurs aléatoires lumineuses
+   - RGB aléatoire dans les valeurs hautes (200-255)
+   - Effet très festif et énergique
+   
+4. **Phase 4** (étapes 28+) : Vert stable final
+   - Tous les modules en vert fixe
+   - Confirmation de la victoire
 
-## 6.2 FDJ Winner
-Animation de célébration pour gagnants.
+**Caractéristiques :**
+- Plus festif que l'ancien FDJ Winner seul
+- Moins intense et plus long que Jackpot
+- Animation complète et satisfaisante
+- Durée totale : environ 2,5 secondes
 
-- Flashs bleu/blanc  
-- Stroboscope rapide  
-
-**Sous‑modes :**  
-0 = court  
-1 = moyen  
-2 = long  
+**Pas de sous‑modes**
 
 ---
 
 # 7. Modes interaction client
 
-## 7.1 Client Gagnant
-Célébration verte.
+## 7.1 Client Perdant
+**Index : 10**
 
-- Flashs verts  
-- Effet positif  
+Flashs rouges avec jaune intermittent pour indiquer une perte.
 
----
+- Rouge fixe en continu
+- Jaune qui clignote en alternance
+- Animation claire mais pas agressive
+- Délai de 180 ms entre les changements
 
-## 7.2 Client Perdant
-Effet rouge “perdu”.
-
-- Flashs rouges  
-- Animation courte  
+**Pas de sous‑modes**
 
 ---
 
 # 8. Modes fonctionnels
 
 ## 8.1 Ouverture
-Indique l’ouverture du tabac.
+**Index : 11**
 
-- Animation verte  
-- Accueil chaleureux  
+Signal d'ouverture du commerce.
+
+- Vert fixe sur tous les modules
+- Signal clair et accueillant
+- Visible de loin
 
 ---
 
 ## 8.2 Fermeture
-Indique la fermeture.
+**Index : 12**
 
-- Animation rouge  
-- Fade vers extinction  
+Signal de fermeture du commerce.
+
+- Rouge fixe sur tous les modules
+- Signal clair de fermeture
+- Visible de loin
 
 ---
 
 ## 8.3 Pause Café
-Indique une pause temporaire.
+**Index : 13**
 
-- Pulse jaune  
-- Effet calme et clair  
+Indication d'une pause temporaire.
+
+- Jaune fixe en continu
+- Vert qui clignote toutes les 300 ms
+- Signal clair mais pas urgent
 
 ---
 
 ## 8.4 Maintenance
-Indique un travail technique.
+**Index : 14**
 
-- Alternance jaune/rouge  
-- Clignotement lent  
+Signal de maintenance technique.
+
+- Cycle complet de 6 couleurs
+- Rouge → Jaune → Vert → Blanc → Violet → Bleu
+- Changement toutes les 250 ms
+- Signal technique et visible
 
 ---
 
 # 9. Mode humeur
 
 ## 9.1 Humeur du Patron
-Mode fun représentant l’humeur du patron.
+**Index : 15**
 
-**Sous‑modes :**  
-0 = Heureux (vert)  
-1 = Neutre (jaune)  
-2 = Énervé (rouge)  
-3 = Énergique (arc‑en‑ciel)  
-4 = Fatigué (bleu doux)  
-5 = Fête (disco)  
+Mode fun représentant l'humeur du patron sur le module 4 uniquement.
+
+**Couleurs disponibles (sélectionnables via l'interface web) :**
+
+- 0 = Heureux 😊 (vert)
+- 1 = Calme 😌 (jaune)
+- 2 = Énervé 😡 (rouge)
+- 3 = Serein 😇 (bleu)
+- 4 = Créatif 🎨 (violet)
+- 5 = Neutre 😐 (blanc)
+
+**Note :** Seul le module 4 (le plus haut) est allumé dans ce mode.
 
 ---
 
 # 10. Tableau récapitulatif
 
 ```
-Catégorie            | Mode                | Sous‑modes | Description
----------------------|---------------------|------------|-------------------------------
-Ambiance             | Zen                 | Oui        | Respiration douce
-Ambiance             | Ambiance Douce      | Oui        | Cycle léger
-Ambiance             | Vague               | Oui        | Vague lumineuse
-Arc‑en‑ciel          | Arc‑en‑ciel         | Oui        | Cycle RGB
-Arc‑en‑ciel          | Arc‑en‑ciel Turbo   | Oui        | Cycle rapide
-Pulse                | Pulse Vert          | Oui        | Fade PWM
-Pulse                | Pulse Jaune         | Oui        | Fade PWM
-Pulse                | Pulse Rouge         | Oui        | Fade PWM
-Dynamique            | Rush                | Oui        | Poursuite rapide
-Dynamique            | K2000               | Oui        | Balayage rouge
-Dynamique            | K2000 Traînée       | Oui        | Balayage + traînée
-Dynamique            | Disco               | Oui        | Flashs aléatoires
-Spécial              | Jackpot             | Oui        | Effet casino
-Spécial              | FDJ Winner          | Oui        | Célébration
-Client               | Client Gagnant      | Non        | Flash vert
-Client               | Client Perdant      | Non        | Flash rouge
-Fonctionnel          | Ouverture           | Non        | Animation verte
-Fonctionnel          | Fermeture           | Non        | Animation rouge
-Fonctionnel          | Pause Café          | Non        | Pulse jaune
-Fonctionnel          | Maintenance         | Non        | Avertissement
-Humeur               | Humeur du Patron    | Oui        | 6 humeurs
+Index | Catégorie      | Mode                    | Sous‑modes | Description
+------|----------------|-------------------------|------------|-------------------------------
+0     | Ambiance       | Éclairage doux          | Non        | Cycle vert/jaune doux
+1     | Ambiance       | Vague                   | Non        | Vague verte séquentielle
+2     | Arc‑en‑ciel    | Arc‑en‑ciel             | Oui (0-1)  | Cycle RGB coloré
+3     | Pulse          | Pulse Vert              | Oui (0-2)  | Respiration verte PWM
+4     | Pulse          | Pulse Jaune             | Oui (0-2)  | Respiration jaune PWM
+5     | Pulse          | Pulse Rouge             | Oui (0-2)  | Respiration rouge PWM
+6     | Dynamique      | Rush                    | Non        | Clignotement rouge rapide
+7     | Dynamique      | K2000                   | Oui (0-1)  | Balayage blanc avec traînée
+8     | Dynamique      | Jackpot                 | Oui (0-2)  | Couleurs aléatoires + flash
+9     | Spécial        | Gagnant 🎉              | Non        | Animation festive 4 phases
+10    | Client         | Client Perdant          | Non        | Flash rouge/jaune
+11    | Fonctionnel    | Ouverture               | Non        | Vert fixe
+12    | Fonctionnel    | Fermeture               | Non        | Rouge fixe
+13    | Fonctionnel    | Pause Café              | Non        | Jaune + vert clignotant
+14    | Fonctionnel    | Maintenance             | Non        | Cycle 6 couleurs
+15    | Humeur         | Humeur du Patron        | Oui (0-5)  | Couleur module 4
 ```
 
 ---
 
-# 11. Conclusion
+# 11. Changements par rapport aux versions précédentes
 
-Cette référence couvre tous les modes disponibles dans **Totem Feux du Tabac**.  
-Chaque mode peut être modifié ou étendu dans `modes.cpp`.
+## Modes supprimés
+
+- **MODE_ZEN** : Supprimé car identique à Pulse Vert. Utilisez Pulse Vert à la place.
+- **MODE_ARC_EN_CIEL (classique)** : Supprimé car Arc-en-ciel Turbo suffit. Le mode restant offre maintenant 2 vitesses via sous-modes.
+- **MODE_DISCO** : Supprimé car identique à Jackpot. Utilisez Jackpot à la place.
+- **MODE_FDJ_WINNER** : Fusionné dans le nouveau mode Gagnant.
+- **MODE_CLIENT_GAGNANT** : Fusionné dans le nouveau mode Gagnant.
+
+## Modes modifiés
+
+- **Gagnant 🎉** : Nouveau mode qui combine les meilleurs aspects de FDJ Winner et Client Gagnant, avec une animation en 4 phases plus festive et complète.
+
+## Impact sur l'interface web
+
+Tous les boutons ont été réorganisés pour refléter la nouvelle structure :
+- Les indices des modes ont été mis à jour
+- Les sous-modes correspondent aux bons modes
+- Le mode automatique dispose maintenant d'une route fonctionnelle `/auto`
+
+---
+
+# 12. Mode automatique
+
+Le système inclut un mode automatique qui change automatiquement entre :
+
+- **Fermeture** (rouge) : avant l'heure d'ouverture et après l'heure de fermeture
+- **Pulse Vert** (par défaut) : pendant les heures d'ouverture
+
+Configuration via l'interface web :
+- Heure d'ouverture (par défaut : 8h)
+- Heure de fermeture (par défaut : 18h)
+- Activation/désactivation
+
+---
+
+# 13. Conclusion
+
+Cette référence couvre tous les 16 modes disponibles dans **Totem Feux du Tabac**.  
+Chaque mode peut être modifié ou étendu dans [modes.cpp](../src/modes.cpp).
 
 Pour aller plus loin :
 
-- `/docs/pwm_system_FR.md`  
-- `/docs/architecture_FR.md`  
-- `/docs/troubleshooting_FR.md`  
+- [/docs/pwm_system_FR.md](pwm_system_FR.md) — Détails techniques sur le système PWM
+- [/docs/architecture_FR.md](architecture_FR.md) — Architecture du projet
+- [/docs/troubleshooting_FR.md](troubleshooting_FR.md) — Résolution de problèmes
+
+---
+
+**Dernière mise à jour :** Janvier 2026  
+**Version :** Compatible avec la version actuelle du firmware

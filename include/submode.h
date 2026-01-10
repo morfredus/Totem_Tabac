@@ -18,15 +18,14 @@ inline void nextSubMode() {
             subMode %= 3; // 3 vitesses
             break;
 
-        case MODE_ARC_EN_CIEL:
-            subMode %= 2; // normal / inversé
+        case MODE_ARC_EN_CIEL_TURBO:
+            subMode %= 2; // normal / turbo
             break;
 
         case MODE_K2000:
             subMode %= 2; // direction
             break;
 
-        case MODE_DISCO:
         case MODE_JACKPOT:
             subMode %= 3; // 3 vitesses
             break;

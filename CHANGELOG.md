@@ -6,6 +6,22 @@ This project follows **Semantic Versioning (SemVer)**:
 
 ---
 
+## [0.11.4] – Animation Cleanup & Auto Route (2026-01-10)
+### Changed
+- Removed redundant modes: Zen (merged into Pulse Green), classic Rainbow (Turbo kept), Disco (duplicated Jackpot), FDJ Winner and Client Winner (merged into Winner).
+- New **Winner** mode: 4-phase festive sequence (yellow flash → green wave with trail → bright RGB random → stable green finale), more festive than FDJ Winner but lighter than Jackpot.
+- Default mode switched to Pulse Green; automatic mode daytime uses Pulse Green instead of Zen.
+- Web UI buttons reorganized with correct indices and highlighting; removed obsolete buttons and added Winner.
+- Sub-mode mappings updated to match remaining modes.
+
+### Fixed
+- Added missing `/auto` route to handle automatic mode configuration (fixes Not found: /auto).
+
+### Docs
+- Updated FR/EN mode reference to reflect mode removals, new Winner, button reordering, and auto-mode behavior.
+
+---
+
 ## [0.11.3] – New ESP32-S3 GPIO Mapping (2026-01-09)
 ### Changed
 - Updated GPIO mapping for `esp32s3_n16r8` (ESP32-S3 DevKitC-1 N16R8):

@@ -1,4 +1,20 @@
 #
+## [0.11.4] – Nettoyage des animations & route auto (2026-01-10)
+### Modifié
+- Suppression des modes redondants : Zen (fusionné dans Pulse Vert), Arc-en-ciel classique (Turbo conservé), Disco (dupliquait Jackpot), FDJ Winner et Client Gagnant (fusionnés en Gagnant).
+- Nouveau mode **Gagnant** : séquence festive en 4 phases (flash jaune → vague verte avec traînée → RGB aléatoire lumineux → vert final), plus festif que FDJ Winner mais moins intense que Jackpot.
+- Mode par défaut basculé sur Pulse Vert ; en mode auto la journée passe sur Pulse Vert au lieu de Zen.
+- Boutons UI réorganisés avec les bons indices et surbrillance ; boutons obsolètes retirés, bouton Gagnant ajouté.
+- Mappage des sous-modes mis à jour pour coller aux modes restants.
+
+### Corrigé
+- Ajout de la route `/auto` manquante pour la configuration du mode automatique (corrige le "Not found: /auto").
+
+### Docs
+- Référentiels FR/EN des modes mis à jour : suppressions, nouveau Gagnant, réorganisation des boutons, comportement du mode auto.
+
+---
+
 ## [0.11.3] – Nouveau mapping GPIO ESP32-S3 (2026-01-09)
 ### Modifié
 - Mise à jour du mapping GPIO pour l'environnement `esp32s3_n16r8` (ESP32-S3 DevKitC-1 N16R8) :
