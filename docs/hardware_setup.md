@@ -1,4 +1,19 @@
 # Hardware Setup — Totem Feux du Tabac
+#
+## 🟦 8x8 NeoPixel Matrix (dev/8x8)
+
+> **New in 0.12.0-dev8x8**: The project supports an 8x8 NeoPixel matrix for advanced traffic light simulation and animations.
+
+- **Addressing:** 0–63, top-to-bottom, left-to-right
+- **Traffic light mapping:**
+  - Red:    0 1 8 9   | 3 4 11 12   | 6 7 14 15
+  - Yellow: 24 25 32 33 | 27 28 35 36 | 30 31 38 39
+  - Green:  48 49 56 57 | 51 52 59 60 | 54 55 62 63
+- **GPIO used:** See `board_config.h` (per environment)
+- **Branch:** All matrix features are developed on `dev/8x8`
+
+See README and changelog for full details. All documentation is synchronized per .copilot rules.
+
 
 This guide explains how to wire and assemble the hardware for the **Totem Feux du Tabac** project.  
 It is written for beginners and assumes no prior electronics experience.

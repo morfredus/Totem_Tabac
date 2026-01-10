@@ -1,3 +1,15 @@
+#
+## [0.12.0-dev8x8] – NeoPixel 8x8 Matrix Integration (2026-01-10)
+### Added
+- Support for 8x8 NeoPixel matrix (addressed 0–63, top-to-bottom, left-to-right)
+- Traffic light simulation: 3 tricolor lights mapped on the matrix (red, yellow, green for each)
+- Safe GPIO selection for matrix per environment (see board_config.h)
+- All user documentation (EN/FR) updated: mapping, wiring, and usage
+- Project version bumped to 0.12.0-dev8x8
+### Changed
+- .copilot rules enforced: every change is versioned, documented, and synchronized (EN/FR)
+- README, hardware_setup, and changelogs updated for matrix support
+
 # Changelog — Totem Feux du Tabac
 All notable changes to this project are documented in this file.
 

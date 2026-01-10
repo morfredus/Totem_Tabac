@@ -1,4 +1,19 @@
 # Totem Feux du Tabac
+#
+## ⚡️ NeoPixel 8x8 Matrix (dev/8x8)
+
+> **New in 0.12.0-dev8x8**: The project now supports an 8x8 NeoPixel matrix for advanced traffic light simulation and animations.
+
+- **Matrix addressing:** 0–63, top-to-bottom, left-to-right
+- **Traffic light mapping:**
+  - Red:    0 1 8 9   | 3 4 11 12   | 6 7 14 15
+  - Yellow: 24 25 32 33 | 27 28 35 36 | 30 31 38 39
+  - Green:  48 49 56 57 | 51 52 59 60 | 54 55 62 63
+- **GPIO used:** See `board_config.h` (per environment)
+- **Branch:** All matrix features are developed on `dev/8x8`
+
+All documentation, changelogs, and hardware guides are synchronized per .copilot rules.
+
 An open‑source ESP32‑based animated traffic‑light system designed for French tobacco shops (“tabacs”).  
 The project controls **4 physical traffic‑light modules** (Red / Yellow / Green) using **12 PWM channels**, offering more than 20 lighting modes including K2000, rainbow, pulses, jackpot, FDJ animations, and more.
 

@@ -1,4 +1,16 @@
 #
+## [0.12.0-dev8x8] – Intégration matrice NeoPixel 8x8 (2026-01-10)
+### Ajouté
+- Prise en charge d'une matrice NeoPixel 8x8 (adresses 0–63, haut en bas, gauche à droite)
+- Simulation de 3 feux tricolores sur la matrice (rouge, jaune, vert pour chaque feu)
+- Sélection sécurisée du GPIO pour la matrice selon l'environnement (voir board_config.h)
+- Documentation utilisateur (FR/EN) mise à jour : mapping, câblage, utilisation
+- Version projet passée à 0.12.0-dev8x8
+### Modifié
+- Règles .copilot appliquées : chaque évolution est versionnée, documentée et synchronisée (FR/EN)
+- README, guides hardware et changelogs mis à jour pour la matrice
+
+#
 ## [0.11.3] – Nouveau mapping GPIO ESP32-S3 (2026-01-09)
 ### Modifié
 - Mise à jour du mapping GPIO pour l'environnement `esp32s3_n16r8` (ESP32-S3 DevKitC-1 N16R8) :

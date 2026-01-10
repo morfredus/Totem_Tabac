@@ -1,4 +1,19 @@
 # Installation matérielle — Totem Feux du Tabac
+#
+## 🟦 Matrice NeoPixel 8x8 (dev/8x8)
+
+> **Nouveau en 0.12.0-dev8x8** : Le projet gère une matrice NeoPixel 8x8 pour la simulation avancée des feux tricolores et des animations.
+
+- **Adressage :** 0–63, haut en bas, gauche à droite
+- **Mapping feux tricolores :**
+  - Rouge :   0 1 8 9   | 3 4 11 12   | 6 7 14 15
+  - Jaune :  24 25 32 33 | 27 28 35 36 | 30 31 38 39
+  - Vert :   48 49 56 57 | 51 52 59 60 | 54 55 62 63
+- **GPIO utilisé :** Voir `board_config.h` (par environnement)
+- **Branche :** Toutes les fonctions matrice sont développées sur `dev/8x8`
+
+Voir README et changelog pour tous les détails. Toute la documentation est synchronisée selon les règles .copilot.
+
 
 Ce guide explique comment câbler et assembler le matériel du projet **Totem Feux du Tabac**.  
 Il est conçu pour être accessible aux débutants, sans connaissances préalables en électronique.
