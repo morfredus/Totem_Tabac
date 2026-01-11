@@ -1,16 +1,6 @@
 #ifndef BOARD_CONFIG_H
 #define BOARD_CONFIG_H
 
-// ========================================
-// .copilot: Règles permanentes appliquées
-// - Toute modification de ce fichier doit être documentée dans le changelog et les README (FR/EN)
-// - Versionner toute évolution matérielle ou logicielle
-// - Synchroniser la documentation utilisateur à chaque évolution
-// - Numérotation du projet obligatoire
-// - Branche active : dev/8x8 (gestion matrice NeoPixel 8x8)
-// - Mapping matrice 8x8 : voir README pour schéma et indexation
-// - GPIO matrice défini ci-dessous, par environnement
-
 // CONFIGURATION MULTI-ENVIRONNEMENTS
 // ========================================
 // Ce fichier définit le mapping GPIO pour différentes cartes ESP32.
