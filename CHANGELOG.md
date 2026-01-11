@@ -1,3 +1,25 @@
+## [0.13.0] – Modern festive web UI redesign (2026-01-11)
+### Added
+- Complete redesign of web interface with modern, festive, and professional styling.
+- Glassmorphism design with gradient backgrounds and blur effects.
+- Smooth animations (float, pulse, glow effects).
+- Google Fonts integration (Poppins font family).
+- Improved color palette buttons (larger, perfectly round, tooltips).
+- Dedicated submode button styling with reserved space to prevent UI jumping.
+- Enhanced hover effects and visual feedback.
+- Responsive design optimized for mobile and desktop.
+
+### Changed
+- Web UI now uses modern CSS gradients and backdrop filters.
+- Submode zones now have fixed height (60px) to maintain consistent layout.
+- Color mood buttons increased from 48px to 60px for better accessibility.
+- Interface title with animated gradient and emoji decorations.
+
+### Fixed
+- Submodes now properly display when mode is selected.
+- Submodes are clickable and functional with dedicated styling.
+- UI no longer jumps when submodes appear/disappear.
+
 ## [1.0.0] – Modern web UI overhaul (2026-01-11)
 ### Added
 - New modern, interactive, responsive web interface.

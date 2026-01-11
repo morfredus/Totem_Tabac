@@ -1,3 +1,25 @@
+## [0.13.0] – Refonte complète de l'interface web festive (2026-01-11)
+### Ajouté
+- Refonte complète de l'interface web avec un style moderne, festif et professionnel.
+- Design glassmorphism avec fonds dégradés et effets de flou.
+- Animations fluides (effets float, pulse, glow).
+- Intégration de Google Fonts (police Poppins).
+- Amélioration des boutons de palette de couleurs (plus grands, parfaitement ronds, infobulles).
+- Style dédié pour les boutons de sous-modes avec espace réservé pour éviter les sauts d'interface.
+- Effets de survol améliorés et retour visuel renforcé.
+- Design responsive optimisé pour mobile et ordinateur.
+
+### Modifié
+- L'interface web utilise maintenant des dégradés CSS modernes et des filtres backdrop.
+- Les zones de sous-modes ont une hauteur fixe (60px) pour maintenir une mise en page cohérente.
+- Boutons d'humeur du patron agrandis de 48px à 60px pour une meilleure accessibilité.
+- Titre de l'interface avec dégradé animé et décorations emoji.
+
+### Corrigé
+- Les sous-modes s'affichent maintenant correctement lors de la sélection d'un mode.
+- Les sous-modes sont cliquables et fonctionnels avec un style dédié.
+- L'interface ne saute plus lorsque les sous-modes apparaissent/disparaissent.
+
 ## [1.0.0] – Refonte UI web moderne (2026-01-11)
 ### Ajouté
 - Nouvelle interface web moderne, interactive et responsive.
