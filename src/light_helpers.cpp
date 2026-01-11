@@ -120,6 +120,13 @@ uint8_t getMatrixBrightness() {
     return matrixBrightness;
 }
 
+// Fonction helper pour appliquer le brightness global aux couleurs RGB
+void applyMatrixBrightnessToRGB(uint8_t& r, uint8_t& g, uint8_t& b) {
+    r = (r * matrixBrightness) / 255;
+    g = (g * matrixBrightness) / 255;
+    b = (b * matrixBrightness) / 255;
+}
+
 void loadMatrixBrightnessFromNVS() {
     matrixPrefs.begin("matrix", true);
     matrixBrightness = matrixPrefs.getUChar("brightness", 128);

@@ -51,5 +51,7 @@ void setMode(Mode m);
 void updateMode();
 void allOff();
 void nextMode();
+void loadModeFromNVS();
+void saveCurrentModeToNVS();
 
 #endif

@@ -16,6 +16,29 @@ void saveDisplayTypeToNVS() {
     displayPrefs.putInt("type", (int)currentDisplayType);
     displayPrefs.end();
 }
+
+// --- Persistance du mode actuel et sous-mode (NVS) ---
+static Preferences modePrefs;
+
+void loadModeFromNVS() {
+    modePrefs.begin("mode", true); // lecture seule
+    int m = modePrefs.getInt("current", (int)MODE_PULSE_VERT);
+    int sub = modePrefs.getInt("submode", 0);
+    int hum = modePrefs.getInt("humeur", 0);
+    modePrefs.end();
+    
+    currentMode = (Mode)m;
+    subMode = sub;
+    humeurColor = hum;
+}
+
+void saveCurrentModeToNVS() {
+    modePrefs.begin("mode", false); // écriture
+    modePrefs.putInt("current", (int)currentMode);
+    modePrefs.putInt("submode", subMode);
+    modePrefs.putInt("humeur", humeurColor);
+    modePrefs.end();
+}
 #include "modes.h"
 #include "wifi_manager.h"
 #include "light_helpers.h"
@@ -148,6 +171,7 @@ void setMode(Mode m) {
     lastUpdate = millis();
     lastFadeUpdate = millis();
     clearAllUniversal();
+    saveCurrentModeToNVS(); // Sauvegarder le nouveau mode
 }
 
 void nextMode() {
@@ -751,4 +775,5 @@ void nextSubMode() {
             subMode = 0;
             break;
     }
+    saveCurrentModeToNVS(); // Sauvegarder les changements de sous-mode/humeur
 }

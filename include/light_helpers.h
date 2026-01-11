@@ -5,6 +5,7 @@ void setMatrixBrightness(uint8_t b);
 uint8_t getMatrixBrightness();
 void loadMatrixBrightnessFromNVS();
 void saveMatrixBrightnessToNVS();
+void applyMatrixBrightnessToRGB(uint8_t& r, uint8_t& g, uint8_t& b);
 // Helpers universels pour PWM ou matrice selon currentDisplayType
 void initLightsUniversal();
 void clearModuleUniversal(int module);

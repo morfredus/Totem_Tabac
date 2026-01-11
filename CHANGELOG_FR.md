@@ -1,3 +1,20 @@
+## [0.16.0] – Persistance complète et contrôle de luminosité (2026-01-11)
+### Ajouté
+- **Persistance NVS complète** : Le mode d'animation actuel, le sous-mode et la couleur d'humeur sont maintenant sauvegardés et restaurés au démarrage.
+- **Plage de luminosité 0-255** : La luminosité de la matrice peut maintenant être réglée de 0% (off) à 100% (luminosité maximale).
+- **Luminosité dynamique dans les animations** : La valeur de luminosité est maintenant appliquée à toutes les animations matrice pour un contrôle d'intensité cohérent.
+
+### Modifié
+- Minimum de luminosité changé de 10 à 0 (permet d'éteindre complètement la matrice).
+- Toutes les animations mettent maintenant à l'échelle les couleurs des pixels en fonction du paramètre de luminosité global.
+- Persistance NVS inclut maintenant : type d'affichage, luminosité, mode actuel, sous-mode et couleur d'humeur.
+
+### Détails techniques
+- Ajout des fonctions `loadModeFromNVS()` et `saveCurrentModeToNVS()`.
+- Ajout de la fonction helper `applyMatrixBrightnessToRGB()` pour la mise à l'échelle cohérente de la luminosité.
+- Persistance du mode sauvegardée à chaque changement de mode/sous-mode/humeur.
+- Validation de la plage de luminosité : 0 (off) à 255 (max).
+
 ## [0.15.0] – Animations matrice avancées (2026-01-11)
 ### Ajouté
 - **Humeur du patron** : Effet de vague diagonale sur toute la matrice avec fading progressif (30-100% de luminosité, jamais éteint).

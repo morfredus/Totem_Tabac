@@ -83,7 +83,7 @@ void setup() {
         if (server.hasArg("value")) b = server.arg("value").toInt();
         else if (server.hasArg("b")) b = server.arg("b").toInt();
         if (b != -1) {
-            if (b < 10) b = 10;
+            if (b < 0) b = 0;
             if (b > 255) b = 255;
             setMatrixBrightness((uint8_t)b);
         }
@@ -96,12 +96,13 @@ void setup() {
     loadDisplayTypeFromNVS();
     // Restaure la luminosité matrice
     loadMatrixBrightnessFromNVS();
+    // Restaure le mode et sous-mode actuel
+    loadModeFromNVS();
 
     pinMode(BUTTON_PIN, INPUT_PULLUP);
     pinMode(BUTTON2_PIN, INPUT_PULLUP);
 
     initLights();
-    clearAll();
 
     connectToKnownWiFi();
     Serial.println("IP: " + getCurrentIP());

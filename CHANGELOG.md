@@ -1,3 +1,20 @@
+## [0.16.0] – Full persistence and brightness control (2026-01-11)
+### Added
+- **Full NVS persistence**: Current animation mode, submode, and mood color are now saved and restored on boot.
+- **Brightness range 0-255**: Matrix brightness can now be set from 0% (off) to 100% (full brightness).
+- **Dynamic brightness in animations**: Brightness value is now applied to all matrix animations for consistent intensity control.
+
+### Changed
+- Brightness minimum changed from 10 to 0 (allows complete matrix shutdown).
+- All animations now scale pixel colors based on global brightness setting.
+- NVS persistence now includes: display type, brightness, current mode, submode, and mood color.
+
+### Technical Details
+- Added `loadModeFromNVS()` and `saveCurrentModeToNVS()` functions.
+- Added `applyMatrixBrightnessToRGB()` helper function for consistent brightness scaling.
+- Mode persistence saves on every mode/submode/mood change.
+- Brightness range validation: 0 (off) to 255 (max).
+
 ## [0.15.0] – Enhanced matrix animations (2026-01-11)
 ### Added
 - **Patron mood (Humeur du patron)**: Full matrix diagonal wave effect with color fading (30-100% brightness, never fully off).
