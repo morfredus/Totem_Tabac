@@ -76,7 +76,7 @@ inline String renderWebPage() {
     html += (getDisplayType()==DISPLAY_MATRIX?"flex":"none");
     html += ";\">\n";
     html += "<span class=\"param-label\">Luminosité matrice :</span>\n";
-    html += "<input id=\"brightness-slider\" class=\"param-slider\" type='range' min='10' max='255' value='";
+    html += "<input id=\"brightness-slider\" class=\"param-slider\" type='range' min='0' max='255' value='";
     html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
     html += "' oninput='setBrightness(this.value)'>\n";
     html += "<span id=\"brightness-value\">";

@@ -1,3 +1,75 @@
+## [0.17.0] – Enhanced matrix animations for Rush, K2000, Jackpot, FDJ Winner, and Maintenance (2026-01-11)
+### Added
+- **Rush mode**: Fast-moving horizontal lines with different speeds, creating a dynamic speed effect with red-orange and yellow colors.
+- **K2000 mode**: Classic Kitt-style scanner with vertical columns sweeping left-right with red trailing effect.
+- **Jackpot mode**: Slot machine animation with 3 columns of scrolling symbols (Dollar, 7, Cherry, Star) with golden flash on win.
+- **FDJ Winner mode**: Victory animation with 3 phases: golden flash, confetti explosion from center, and falling golden coins.
+- **Maintenance mode**: Complete matrix test cycling through 8 solid colors, horizontal line scan (cyan), and vertical column scan (orange).
+
+### Changed
+- All 5 modes now have dedicated 8x8 matrix animations that utilize the full display.
+- Matrix animations respect global brightness settings via `applyMatrixBrightnessToRGB()`.
+- PWM animations remain unchanged and fully functional.
+- Animations designed to work with or without mask overlay on columns/lines 2 and 5.
+
+### Technical Details
+- Rush: Dual-speed horizontal scrolling with trailing effects (50ms refresh).
+- K2000: Vertical column scanner with 3-level fade trail (100/60/35ms speeds).
+- Jackpot: 4-symbol slot machine with color-coded symbols and periodic golden flash (120/80/50ms speeds).
+- FDJ Winner: 40-frame animation loop with explosion physics and particle effects (80ms refresh).
+- Maintenance: 24-phase test pattern for complete LED validation (200ms per phase).
+
+## [0.16.1] – Fix brightness scaling for all animations (2026-01-11)
+### Fixed
+- **Brightness now applied to ALL matrix animations**: All 6 custom animations (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) now properly respect the global brightness setting.
+- Fixed smileys brightness in Ouverture/Fermeture modes.
+- Fixed coffee animation brightness in Pause Café mode.
+- Fixed fireworks brightness in Gagnant mode.
+- Fixed rain brightness in Perdant mode.
+- Fixed diagonal wave brightness in Humeur Patron mode.
+- Brightness can now be set to 0 (complete matrix off) without issues.
+
+### Technical Details
+- Applied `applyMatrixBrightnessToRGB()` to all animation pixel colors before display.
+- Each animation now scales RGB values by global brightness before calling `setPixelXY()`.
+- Ensures consistent brightness control across all animation types.
+
+## [0.16.0] – Full persistence and brightness control (2026-01-11)
+### Added
+- **Full NVS persistence**: Current animation mode, submode, and mood color are now saved and restored on boot.
+- **Brightness range 0-255**: Matrix brightness can now be set from 0% (off) to 100% (full brightness).
+- **Dynamic brightness in animations**: Brightness value is now applied to all matrix animations for consistent intensity control.
+
+### Changed
+- Brightness minimum changed from 10 to 0 (allows complete matrix shutdown).
+- All animations now scale pixel colors based on global brightness setting.
+- NVS persistence now includes: display type, brightness, current mode, submode, and mood color.
+
+### Technical Details
+- Added `loadModeFromNVS()` and `saveCurrentModeToNVS()` functions.
+- Added `applyMatrixBrightnessToRGB()` helper function for consistent brightness scaling.
+- Mode persistence saves on every mode/submode/mood change.
+- Brightness range validation: 0 (off) to 255 (max).
+
+## [0.15.0] – Enhanced matrix animations (2026-01-11)
+### Added
+- **Patron mood (Humeur du patron)**: Full matrix diagonal wave effect with color fading (30-100% brightness, never fully off).
+- **Opening (Ouverture)**: Green full matrix with animated happy smiley face (LED eyes and curved smile off).
+- **Closing (Fermeture)**: Red full matrix with animated neutral smiley face (LED eyes and straight mouth off).
+- **Coffee break (Pause Café)**: Creative warm animation with rising bubbles and hot brown/orange gradient, mimicking steam from coffee.
+- **Winner (Client Gagnant)**: Joy animation with full-matrix color waves and fireworks effect (yellow/green/magenta pulses).
+- **Loser (Client Perdant)**: Sadness animation with rain-like falling effect in blue-grey and purple tones.
+
+### Changed
+- All 6 utility animations now use full 8x8 matrix for more visual impact when matrix mode is active.
+- PWM mode animations remain unchanged and independent.
+- Animation helper functions modularized for maintainability.
+
+### Technical Details
+- Matrix animations use brightness scaling and wave effects for smooth visual flow.
+- Added static animation state tracking per mode for seamless animation transitions.
+- Diagonal wave calculation optimized for performance on 64-LED matrix.
+
 ## [0.14.1] – Matrix 8x8 initialization fix (2026-01-11)
 ### Fixed
 - **Matrix GPIO pin**: Changed from GPIO 27 to GPIO 15 (more stable at boot, no boot conflicts).

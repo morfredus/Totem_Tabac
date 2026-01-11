@@ -1,3 +1,75 @@
+## [0.17.0] – Animations matrice améliorées pour Rush, K2000, Jackpot, FDJ Winner et Maintenance (2026-01-11)
+### Ajouté
+- **Mode Rush** : Lignes horizontales se déplaçant rapidement à différentes vitesses, créant un effet dynamique de vitesse avec couleurs rouge-orange et jaune.
+- **Mode K2000** : Scanner classique style Kitt avec colonnes verticales balayant de gauche à droite avec effet de traînée rouge.
+- **Mode Jackpot** : Animation de machine à sous avec 3 colonnes de symboles défilants (Dollar, 7, Cerise, Étoile) avec flash doré lors d'un gain.
+- **Mode FDJ Winner** : Animation de victoire en 3 phases : flash doré, explosion de confettis depuis le centre, et pluie de pièces dorées.
+- **Mode Maintenance** : Test complet de la matrice avec cycle de 8 couleurs unies, scan horizontal de lignes (cyan), et scan vertical de colonnes (orange).
+
+### Modifié
+- Les 5 modes ont maintenant des animations matrice 8x8 dédiées qui utilisent l'intégralité de l'affichage.
+- Les animations matrice respectent le paramètre de luminosité global via `applyMatrixBrightnessToRGB()`.
+- Les animations PWM restent inchangées et pleinement fonctionnelles.
+- Animations conçues pour fonctionner avec ou sans masque sur les colonnes/lignes 2 et 5.
+
+### Détails techniques
+- Rush : Défilement horizontal à double vitesse avec effets de traînée (rafraîchissement 50ms).
+- K2000 : Scanner de colonnes verticales avec traînée à 3 niveaux de dégradé (vitesses 100/60/35ms).
+- Jackpot : Machine à sous à 4 symboles avec symboles codés par couleur et flash doré périodique (vitesses 120/80/50ms).
+- FDJ Winner : Boucle d'animation de 40 frames avec physique d'explosion et effets de particules (rafraîchissement 80ms).
+- Maintenance : Motif de test en 24 phases pour validation complète des LED (200ms par phase).
+
+## [0.16.1] – Correction mise à l'échelle de luminosité pour toutes les animations (2026-01-11)
+### Corrigé
+- **Luminosité maintenant appliquée à TOUTES les animations matrice** : Les 6 animations personnalisées (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) respectent maintenant correctement le paramètre de luminosité global.
+- Correction de la luminosité des smileys en modes Ouverture/Fermeture.
+- Correction de la luminosité de l'animation café en mode Pause Café.
+- Correction de la luminosité du feu d'artifice en mode Gagnant.
+- Correction de la luminosité de la pluie en mode Perdant.
+- Correction de la luminosité de la vague diagonale en mode Humeur Patron.
+- La luminosité peut maintenant être réglée à 0 (matrice complètement éteinte) sans problèmes.
+
+### Détails techniques
+- Application de `applyMatrixBrightnessToRGB()` à toutes les couleurs de pixels d'animation avant affichage.
+- Chaque animation met maintenant à l'échelle les valeurs RGB par la luminosité globale avant d'appeler `setPixelXY()`.
+- Assure un contrôle de luminosité cohérent sur tous les types d'animations.
+
+## [0.16.0] – Persistance complète et contrôle de luminosité (2026-01-11)
+### Ajouté
+- **Persistance NVS complète** : Le mode d'animation actuel, le sous-mode et la couleur d'humeur sont maintenant sauvegardés et restaurés au démarrage.
+- **Plage de luminosité 0-255** : La luminosité de la matrice peut maintenant être réglée de 0% (off) à 100% (luminosité maximale).
+- **Luminosité dynamique dans les animations** : La valeur de luminosité est maintenant appliquée à toutes les animations matrice pour un contrôle d'intensité cohérent.
+
+### Modifié
+- Minimum de luminosité changé de 10 à 0 (permet d'éteindre complètement la matrice).
+- Toutes les animations mettent maintenant à l'échelle les couleurs des pixels en fonction du paramètre de luminosité global.
+- Persistance NVS inclut maintenant : type d'affichage, luminosité, mode actuel, sous-mode et couleur d'humeur.
+
+### Détails techniques
+- Ajout des fonctions `loadModeFromNVS()` et `saveCurrentModeToNVS()`.
+- Ajout de la fonction helper `applyMatrixBrightnessToRGB()` pour la mise à l'échelle cohérente de la luminosité.
+- Persistance du mode sauvegardée à chaque changement de mode/sous-mode/humeur.
+- Validation de la plage de luminosité : 0 (off) à 255 (max).
+
+## [0.15.0] – Animations matrice avancées (2026-01-11)
+### Ajouté
+- **Humeur du patron** : Effet de vague diagonale sur toute la matrice avec fading progressif (30-100% de luminosité, jamais éteint).
+- **Ouverture** : Matrice verte complète avec animation smiley heureux (yeux et sourire courbe éteints).
+- **Fermeture** : Matrice rouge complète avec animation smiley neutre (yeux et bouche droite éteints).
+- **Pause café** : Animation créative avec effet de café chaud, bulles montantes et gradient marron/orange (imite la vapeur de café).
+- **Gagnant** : Animation de joie avec vagues de couleurs et effet feu d'artifice sur toute la matrice (pulsations jaune/vert/magenta).
+- **Perdant** : Animation de tristesse avec pluie de gouttes en bleu-gris et violet sombre.
+
+### Modifié
+- Les 6 animations utilitaires utilisent maintenant l'intégralité de la matrice 8x8 pour plus d'impact visuel en mode matrice.
+- Les animations en mode PWM restent inchangées et indépendantes.
+- Fonctions d'animation modularisées pour une meilleure maintenabilité.
+
+### Détails techniques
+- Les animations matrice utilisent la mise à l'échelle de la luminosité et les effets d'onde pour un flux visuel fluide.
+- Suivi d'état d'animation statique par mode pour des transitions d'animation transparentes.
+- Calcul d'onde diagonale optimisé pour les performances sur une matrice de 64 LEDs.
+
 ## [0.14.1] – Correction initialisation matrice 8x8 (2026-01-11)
 ### Corrigé
 - **Pin GPIO matrice** : Changement du GPIO 27 vers GPIO 15 (plus stable au démarrage, pas de conflit boot).
