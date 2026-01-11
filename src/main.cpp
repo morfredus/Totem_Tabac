@@ -3,6 +3,7 @@
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include <HTTPUpdateServer.h>
 
 #include "wifi_manager.h"
 #include "light_helpers.h"
@@ -12,6 +13,7 @@
 #include "submode.h"
 
 WebServer server(80);
+HTTPUpdateServer httpUpdater;
 
 // Anti-rebond boutons
 bool lastButtonState = HIGH;
@@ -112,7 +114,7 @@ void setup() {
 
     // Configuration ArduinoOTA
     ArduinoOTA.setHostname("Totem-Tabac");
-    ArduinoOTA.setPassword("totem2026");  // Mot de passe OTA
+    // ArduinoOTA.setPassword("totem2026");  // Décommenter pour activer la protection par mot de passe
     
     ArduinoOTA.onStart([]() {
         String type;
@@ -146,7 +148,9 @@ void setup() {
     
     ArduinoOTA.begin();
     Serial.println("OTA pr\u00eat");
-
+    // Configuration du serveur OTA Web (interface de mise à jour)
+    httpUpdater.setup(&server, "/update");
+    Serial.println("Serveur OTA Web sur /update");
     server.on("/", [](){
         server.send(200, "text/html", renderWebPage());
     });

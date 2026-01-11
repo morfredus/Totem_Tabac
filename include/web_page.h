@@ -54,8 +54,7 @@ inline String renderWebPage() {
     html += "<body>\n";
     html += "<div class=\"header\">\n";
     html += "<h1>🎰 TOTEM TABAC 🎰</h1>\n";
-    html += "<div class=\"version\">✨ Version " PROJECT_VERSION " ✨</div>\n";
-    html += "<div class=\"ip\">📡 ";
+    html += "<div class=\"version\">✨ Version " PROJECT_VERSION " | 📡 ";
     html += getCurrentIP();
     html += "</div>\n";
     html += "</div>\n";
@@ -82,6 +81,10 @@ inline String renderWebPage() {
     html += "<span id=\"brightness-value\">";
     html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
     html += "</span></div>\n";
+    html += "<div class=\"param-row\">\n";
+    html += "<span class=\"param-label\">🔄 Mise à jour OTA :</span>\n";
+    html += "<div class=\"submode-btn\" onclick=\"window.open('/update','_blank')\">🚀 Ouvrir page de mise à jour</div>\n";
+    html += "</div>\n";
     html += "</div>\n";
 
     // Modes doux

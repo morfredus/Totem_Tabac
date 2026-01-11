@@ -219,9 +219,9 @@ static void applyHumeurColor() {
                 int distance = abs(diag - (wavePhase % 8));
                 if (distance > 4) distance = 8 - distance;
                 
-                // Fading de 30% à 100%
-                uint8_t brightness = (30 + (70 * (4 - distance)) / 4);
-                brightness = constrain(brightness, 30, 255);
+                // Fading de 20% à 100% (plus accentué)
+                uint8_t brightness = (20 + (80 * (4 - distance)) / 4);
+                brightness = constrain(brightness, 20, 255);
                 
                 uint8_t scaled_r = (r * brightness) / 255;
                 uint8_t scaled_g = (g * brightness) / 255;
