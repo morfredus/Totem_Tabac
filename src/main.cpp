@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <WebServer.h>
+#include <ESPmDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
 #include "wifi_manager.h"
 #include "light_helpers.h"
@@ -107,6 +110,43 @@ void setup() {
     connectToKnownWiFi();
     Serial.println("IP: " + getCurrentIP());
 
+    // Configuration ArduinoOTA
+    ArduinoOTA.setHostname("Totem-Tabac");
+    ArduinoOTA.setPassword("totem2026");  // Mot de passe OTA
+    
+    ArduinoOTA.onStart([]() {
+        String type;
+        if (ArduinoOTA.getCommand() == U_FLASH) {
+            type = "sketch";
+        } else {  // U_SPIFFS
+            type = "filesystem";
+        }
+        Serial.println("D\u00e9marrage mise \u00e0 jour OTA: " + type);
+        // Éteindre tous les LEDs pendant la mise à jour
+        clearAllUniversal();
+        showUniversal();
+    });
+    
+    ArduinoOTA.onEnd([]() {
+        Serial.println("\nMise \u00e0 jour OTA termin\u00e9e");
+    });
+    
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        Serial.printf("Progression: %u%%\r", (progress / (total / 100)));
+    });
+    
+    ArduinoOTA.onError([](ota_error_t error) {
+        Serial.printf("Erreur[%u]: ", error);
+        if (error == OTA_AUTH_ERROR) Serial.println("Erreur authentification");
+        else if (error == OTA_BEGIN_ERROR) Serial.println("Erreur d\u00e9marrage");
+        else if (error == OTA_CONNECT_ERROR) Serial.println("Erreur connexion");
+        else if (error == OTA_RECEIVE_ERROR) Serial.println("Erreur r\u00e9ception");
+        else if (error == OTA_END_ERROR) Serial.println("Erreur fin");
+    });
+    
+    ArduinoOTA.begin();
+    Serial.println("OTA pr\u00eat");
+
     server.on("/", [](){
         server.send(200, "text/html", renderWebPage());
     });
@@ -167,6 +207,7 @@ void setup() {
 }
 
 void loop() {
+    ArduinoOTA.handle();
     server.handleClient();
     handleButton1();
     handleButton2();

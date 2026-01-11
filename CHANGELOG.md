@@ -1,3 +1,25 @@
+## [0.18.0] – OTA (Over-The-Air) firmware updates (2026-01-11)
+### Added
+- **OTA Updates**: Firmware can now be updated wirelessly over WiFi without USB cable.
+- **ArduinoOTA Integration**: Native ESP32 OTA implementation with password protection.
+- **OTA Status Monitoring**: Real-time progress feedback and error handling during updates.
+- **LED Shutdown on Update**: All LEDs automatically turn off during OTA update for visual feedback.
+
+### Technical Details
+- OTA Hostname: `Totem-Tabac`
+- OTA Password: `totem2026` (configurable)
+- mDNS support for device discovery
+- Update progress displayed via Serial monitor
+- Comprehensive error handling (Auth, Begin, Connect, Receive, End)
+- Flash usage: 67.8% (888,973 bytes) - includes OTA libraries
+- RAM usage: 15.3% (50,092 bytes)
+
+### Usage
+- Connect to same WiFi network as the totem
+- Use Arduino IDE: Tools → Port → Totem-Tabac (network port)
+- Or use PlatformIO: `pio run -t upload --upload-port Totem-Tabac.local`
+- Enter password `totem2026` when prompted
+
 ## [0.17.0] – Enhanced matrix animations for Rush, K2000, Jackpot, FDJ Winner, and Maintenance (2026-01-11)
 ### Added
 - **Rush mode**: Fast-moving horizontal lines with different speeds, creating a dynamic speed effect with red-orange and yellow colors.
