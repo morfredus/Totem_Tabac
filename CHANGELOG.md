@@ -1,3 +1,24 @@
+## [0.17.0] – Enhanced matrix animations for Rush, K2000, Jackpot, FDJ Winner, and Maintenance (2026-01-11)
+### Added
+- **Rush mode**: Fast-moving horizontal lines with different speeds, creating a dynamic speed effect with red-orange and yellow colors.
+- **K2000 mode**: Classic Kitt-style scanner with vertical columns sweeping left-right with red trailing effect.
+- **Jackpot mode**: Slot machine animation with 3 columns of scrolling symbols (Dollar, 7, Cherry, Star) with golden flash on win.
+- **FDJ Winner mode**: Victory animation with 3 phases: golden flash, confetti explosion from center, and falling golden coins.
+- **Maintenance mode**: Complete matrix test cycling through 8 solid colors, horizontal line scan (cyan), and vertical column scan (orange).
+
+### Changed
+- All 5 modes now have dedicated 8x8 matrix animations that utilize the full display.
+- Matrix animations respect global brightness settings via `applyMatrixBrightnessToRGB()`.
+- PWM animations remain unchanged and fully functional.
+- Animations designed to work with or without mask overlay on columns/lines 2 and 5.
+
+### Technical Details
+- Rush: Dual-speed horizontal scrolling with trailing effects (50ms refresh).
+- K2000: Vertical column scanner with 3-level fade trail (100/60/35ms speeds).
+- Jackpot: 4-symbol slot machine with color-coded symbols and periodic golden flash (120/80/50ms speeds).
+- FDJ Winner: 40-frame animation loop with explosion physics and particle effects (80ms refresh).
+- Maintenance: 24-phase test pattern for complete LED validation (200ms per phase).
+
 ## [0.16.1] – Fix brightness scaling for all animations (2026-01-11)
 ### Fixed
 - **Brightness now applied to ALL matrix animations**: All 6 custom animations (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) now properly respect the global brightness setting.

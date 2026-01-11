@@ -1,3 +1,24 @@
+## [0.17.0] – Animations matrice améliorées pour Rush, K2000, Jackpot, FDJ Winner et Maintenance (2026-01-11)
+### Ajouté
+- **Mode Rush** : Lignes horizontales se déplaçant rapidement à différentes vitesses, créant un effet dynamique de vitesse avec couleurs rouge-orange et jaune.
+- **Mode K2000** : Scanner classique style Kitt avec colonnes verticales balayant de gauche à droite avec effet de traînée rouge.
+- **Mode Jackpot** : Animation de machine à sous avec 3 colonnes de symboles défilants (Dollar, 7, Cerise, Étoile) avec flash doré lors d'un gain.
+- **Mode FDJ Winner** : Animation de victoire en 3 phases : flash doré, explosion de confettis depuis le centre, et pluie de pièces dorées.
+- **Mode Maintenance** : Test complet de la matrice avec cycle de 8 couleurs unies, scan horizontal de lignes (cyan), et scan vertical de colonnes (orange).
+
+### Modifié
+- Les 5 modes ont maintenant des animations matrice 8x8 dédiées qui utilisent l'intégralité de l'affichage.
+- Les animations matrice respectent le paramètre de luminosité global via `applyMatrixBrightnessToRGB()`.
+- Les animations PWM restent inchangées et pleinement fonctionnelles.
+- Animations conçues pour fonctionner avec ou sans masque sur les colonnes/lignes 2 et 5.
+
+### Détails techniques
+- Rush : Défilement horizontal à double vitesse avec effets de traînée (rafraîchissement 50ms).
+- K2000 : Scanner de colonnes verticales avec traînée à 3 niveaux de dégradé (vitesses 100/60/35ms).
+- Jackpot : Machine à sous à 4 symboles avec symboles codés par couleur et flash doré périodique (vitesses 120/80/50ms).
+- FDJ Winner : Boucle d'animation de 40 frames avec physique d'explosion et effets de particules (rafraîchissement 80ms).
+- Maintenance : Motif de test en 24 phases pour validation complète des LED (200ms par phase).
+
 ## [0.16.1] – Correction mise à l'échelle de luminosité pour toutes les animations (2026-01-11)
 ### Corrigé
 - **Luminosité maintenant appliquée à TOUTES les animations matrice** : Les 6 animations personnalisées (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) respectent maintenant correctement le paramètre de luminosité global.
