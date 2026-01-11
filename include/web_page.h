@@ -54,35 +54,12 @@ inline String renderWebPage() {
     html += "<body>\n";
     html += "<div class=\"header\">\n";
     html += "<h1>🎰 TOTEM TABAC 🎰</h1>\n";
-    html += "<div class=\"version\">✨ Version " PROJECT_VERSION " ✨</div>\n";
-    html += "<div class=\"ip\">📡 ";
+    html += "<div class=\"version\">✨ Version " PROJECT_VERSION " | 📡 ";
     html += getCurrentIP();
     html += "</div>\n";
     html += "</div>\n";
     html += "<div class=\"container\">\n";
-    // Paramètres
-    html += "<div class=\"param-card\">\n";
-    html += "<div class=\"param-title\">⚙️ Paramètres d'affichage</div>\n";
-    html += "<div class=\"param-row\">\n";
-    html += "<span class=\"param-label\">Système d'affichage :</span>\n";
-    html += "<label><input class=\"param-radio\" type='radio' name='display' value='0' ";
-    if(getDisplayType()==DISPLAY_PWM) html += "checked ";
-    html += "onclick='setDisplay(0)'> PWM (modules classiques)</label>\n";
-    html += "<label><input class=\"param-radio\" type='radio' name='display' value='1' ";
-    if(getDisplayType()==DISPLAY_MATRIX) html += "checked ";
-    html += "onclick='setDisplay(1)'> Matrice NeoPixel 8x8</label>\n";
-    html += "</div>\n";
-    html += "<div class=\"param-row param-bright\" id=\"brightness-row\" style=\"display:";
-    html += (getDisplayType()==DISPLAY_MATRIX?"flex":"none");
-    html += ";\">\n";
-    html += "<span class=\"param-label\">Luminosité matrice :</span>\n";
-    html += "<input id=\"brightness-slider\" class=\"param-slider\" type='range' min='0' max='255' value='";
-    html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
-    html += "' oninput='setBrightness(this.value)'>\n";
-    html += "<span id=\"brightness-value\">";
-    html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
-    html += "</span></div>\n";
-    html += "</div>\n";
+    
 
     // Modes doux
     html += "<h2>🌿 Modes doux</h2><div class=\"grid\">\n";
@@ -150,6 +127,34 @@ inline String renderWebPage() {
     html += "</div>\n";
 
 
+    // Paramètres déplacés en fin et renommés
+    html += "<div class=\"param-card\">\n";
+    html += "<div class=\"param-title\">Utilitaires</div>\n";
+    html += "<div class=\"param-row\">\n";
+    html += "<span class=\"param-label\">Système d'affichage :</span>\n";
+    html += "<label><input class=\"param-radio\" type='radio' name='display' value='0' ";
+    if(getDisplayType()==DISPLAY_PWM) html += "checked ";
+    html += "onclick='setDisplay(0)'> PWM (modules classiques)</label>\n";
+    html += "<label><input class=\"param-radio\" type='radio' name='display' value='1' ";
+    if(getDisplayType()==DISPLAY_MATRIX) html += "checked ";
+    html += "onclick='setDisplay(1)'> Matrice NeoPixel 8x8</label>\n";
+    html += "</div>\n";
+    html += "<div class=\"param-row param-bright\" id=\"brightness-row\" style=\"display:";
+    html += (getDisplayType()==DISPLAY_MATRIX?"flex":"none");
+    html += ";\">\n";
+    html += "<span class=\"param-label\">Luminosité matrice :</span>\n";
+    html += "<input id=\"brightness-slider\" class=\"param-slider\" type='range' min='0' max='255' value='";
+    html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
+    html += "' oninput='setBrightness(this.value)'>\n";
+    html += "<span id=\"brightness-value\">";
+    html += String(getMatrixBrightness ? getMatrixBrightness() : 128);
+    html += "</span></div>\n";
+    html += "<div class=\"param-row\">\n";
+    html += "<span class=\"param-label\">🔄 Mise à jour OTA :</span>\n";
+    html += "<div class=\"submode-btn\" onclick=\"window.open('/update','_blank')\">🚀 Ouvrir page de mise à jour</div>\n";
+    html += "</div>\n";
+    html += "</div>\n";
+
     html += "</div>\n"; // container
 
     // JS pour sous-modes dynamiques
@@ -169,8 +174,8 @@ inline String renderWebPage() {
     html += "  let submodeDoux = '';\n";
     html += "  let submodeDyn = '';\n";
     html += "  let submodeUtil = '';\n";
-    html += "  // Modes doux\n";
-    html += "  if([2,3,4,5].includes(mode)) {\n";
+    html += "  // Modes doux (inclut Vague)\n";
+    html += "  if([1,2,3,4,5].includes(mode)) {\n";
     html += "    submodeDoux = `<div class='submode-btn' onclick='nextSubMode()'>🎨 Sous-mode : <strong>${subModeLabel(mode,sub)}</strong></div>`;\n";
     html += "  }\n";
     html += "  document.getElementById('submode-doux').innerHTML = submodeDoux;\n";
@@ -187,7 +192,7 @@ inline String renderWebPage() {
     html += "}\n";
     html += "function nextSubMode(){fetch('/submode').then(()=>{setTimeout(fetchStatusAndUpdateSubmode,200);});}\n";
     html += "function subModeLabel(mode,sub){\n";
-    html += "  if([2,3,4,5,7,8].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
+    html += "  if([1,2,3,4,5,7,8].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
     html += "  return '';\n";
     html += "}\n";
     html += "document.addEventListener('DOMContentLoaded',fetchStatusAndUpdateSubmode);\n";

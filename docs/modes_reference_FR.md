@@ -229,36 +229,37 @@ Effet rouge “perdu”.
 ---
 
 # 8. Modes fonctionnels
+## 2.2 Ambiance Douce (matrice)
+Fond chaud + respiration verte douce sur toute la matrice 8x8.
 
-## 8.1 Ouverture
-Indique l’ouverture du tabac.
-
-- Animation verte  
+- Accent visuel près des colonnes 0/3/6 (compatible masque 3 feux)  
+- Atmosphère relaxante  
 - Accueil chaleureux  
+## 2.3 Vague (matrice)
+Vague d’eau sinusoïdale bleue/cyan avec crêtes blanches (écume), se déplaçant horizontalement.
 
----
+- Accent visuel près des colonnes 0/3/6  
+- Dégradé de profondeur (bleu sombre → cyan → blanc)  
+- **Sous‑modes vitesse** : 0 = Lent, 1 = Moyen, 2 = Rapide  
 
-## 8.2 Fermeture
-Indique la fermeture.
-
-- Animation rouge  
+# 3. Modes Arc‑en‑ciel (adaptés matrice 0.19.0)
 - Fade vers extinction  
+## 3.1 Arc‑en‑ciel (matrice)
+Bandes verticales défilantes (rouge → violet) sur toute la matrice.
 
+- Modulation verticale légère pour le relief  
+- Accent visuel près des colonnes 0/3/6  
+
+# 4. Modes Pulse (PWM et matrice)
+
+Ces modes utilisent un fade sinus (PWM) et une respiration uniforme pleine matrice (8x8) avec légère variation spatiale.
 ---
-
-## 8.3 Pause Café
-Indique une pause temporaire.
-
-- Pulse jaune  
-- Effet calme et clair  
-
----
-
-## 8.4 Maintenance
-Indique un travail technique.
-
-- Alternance jaune/rouge  
-- Clignotement lent  
+## 4.1 Pulse Vert (matrice)  
+## 4.2 Pulse Jaune (matrice)  
+## 4.3 Pulse Rouge (matrice)  
+- Fades sinusoidal  
+- Très calme  
+- Idéal pour une ambiance discrète  
 
 ---
 

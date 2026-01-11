@@ -35,7 +35,7 @@ Sub‑modes allow variations such as:
 
 ---
 
-# 2. Ambient Modes
+# 2. Ambient Modes (matrix‑adapted 0.19.0)
 
 ## 2.1 Zen Breathing
 A soft breathing effect across all modules.
@@ -51,10 +51,10 @@ A soft breathing effect across all modules.
 
 ---
 
-## 2.2 Soft Ambiance
-A gentle color cycling effect.
+## 2.2 Soft Ambiance (matrix)
+Warm base + soft green breathing across the full 8x8 matrix.
 
-- Low‑intensity transitions  
+- Visual accent near columns 0/3/6 (compatible with 3‑light mask)  
 - Relaxed atmosphere  
 
 **Sub‑modes:**  
@@ -64,11 +64,12 @@ A gentle color cycling effect.
 
 ---
 
-## 2.3 Wave
-A wave of light moving across the 4 modules.
+## 2.3 Wave (matrix)
+Ocean‑style sinusoidal blue/cyan wave with white crests (foam), moving horizontally across the matrix.
 
-- Sequential activation  
-- Smooth fade in/out  
+- Visual accent near columns 0/3/6  
+- Depth gradient (dark blue → cyan → white)  
+- **Speed sub‑modes**: 0 = Slow, 1 = Medium, 2 = Fast  
 
 **Sub‑modes:**  
 0 = slow wave  
@@ -77,13 +78,13 @@ A wave of light moving across the 4 modules.
 
 ---
 
-# 3. Rainbow Modes
+# 3. Rainbow Modes (matrix‑adapted 0.19.0)
 
-## 3.1 Rainbow
-Classic RGB rainbow cycling.
+## 3.1 Rainbow (matrix)
+Vertical scrolling bands (red → violet) across the full matrix.
 
-- Smooth hue rotation  
-- All modules synchronized  
+- Light vertical modulation for relief  
+- Visual accent near columns 0/3/6  
 
 **Sub‑modes:**  
 0 = slow  
@@ -105,13 +106,13 @@ A faster, more energetic version.
 
 ---
 
-# 4. Pulse Modes (PWM)
+# 4. Pulse Modes (PWM & matrix)
 
-These modes use **true PWM fading**.
+These modes use sinusoidal fading (PWM) and uniform breathing on the full matrix (8x8) with subtle spatial variation.
 
-## 4.1 Pulse Green  
-## 4.2 Pulse Yellow  
-## 4.3 Pulse Red  
+## 4.1 Pulse Green (matrix)  
+## 4.2 Pulse Yellow (matrix)  
+## 4.3 Pulse Red (matrix)  
 
 Each mode:
 

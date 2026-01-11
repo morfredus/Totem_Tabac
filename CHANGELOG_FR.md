@@ -1,3 +1,41 @@
+## [0.19.0] – Modes doux adaptés à la matrice (2026-01-11)
+### Modifié
+- **Ambiance douce (matrice)** : fond chaud avec respiration verte pleine matrice, accent visuel près des colonnes 0/3/6 (compatible masque 3 feux).
+- **Vague (matrice)** : onde verte diagonale traversant la matrice, relief près des colonnes 0/3/6.
+- **Arc‑en‑ciel (matrice)** : bandes verticales défilantes (rouge→violet) sur toute la matrice avec modulation verticale.
+- **Pulse Vert/Jaune/Rouge (matrice)** : respiration uniforme sur toute la matrice avec légère variation spatiale.
+
+### Détails techniques
+- Utilisation complète des 64 LEDs en mode matrice pour les six modes doux.
+- Respect du brightness global via `applyMatrixBrightnessToRGB()`.
+- Compatibilité visuelle avec un cache matérialisant 3 feux (colonnes 0/3/6 accentuées).
+
+### Documentation
+- README et README_FR mis à jour (0.19.0), ajout de la page OTA personnalisée.
+- Références de modes mises à jour pour refléter l’adaptation à la matrice.
+
+## [0.18.0] – Mises à jour firmware OTA (Over-The-Air) (2026-01-11)
+### Ajouté
+- **Mises à jour OTA** : Le firmware peut maintenant être mis à jour sans fil via WiFi sans câble USB.
+- **Intégration ArduinoOTA** : Implémentation OTA native ESP32 avec protection par mot de passe.
+- **Surveillance d'état OTA** : Retour en temps réel de la progression et gestion des erreurs pendant les mises à jour.
+- **Extinction des LEDs pendant MAJ** : Toutes les LEDs s'éteignent automatiquement pendant la mise à jour OTA pour retour visuel.
+
+### Détails techniques
+- Nom d'hôte OTA : `Totem-Tabac`
+- Mot de passe OTA : `totem2026` (configurable)
+- Support mDNS pour découverte de l'appareil
+- Progression de mise à jour affichée via moniteur série
+- Gestion d'erreurs complète (Auth, Begin, Connect, Receive, End)
+- Utilisation Flash : 67.8% (888 973 octets) - inclut bibliothèques OTA
+- Utilisation RAM : 15.3% (50 092 octets)
+
+### Utilisation
+- Se connecter au même réseau WiFi que le totem
+- Utiliser Arduino IDE : Outils → Port → Totem-Tabac (port réseau)
+- Ou utiliser PlatformIO : `pio run -t upload --upload-port Totem-Tabac.local`
+- Entrer le mot de passe `totem2026` quand demandé
+
 ## [0.17.0] – Animations matrice améliorées pour Rush, K2000, Jackpot, FDJ Winner et Maintenance (2026-01-11)
 ### Ajouté
 - **Mode Rush** : Lignes horizontales se déplaçant rapidement à différentes vitesses, créant un effet dynamique de vitesse avec couleurs rouge-orange et jaune.

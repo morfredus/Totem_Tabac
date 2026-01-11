@@ -1,10 +1,15 @@
 #include <Arduino.h>
 #include <WebServer.h>
+#include <ESPmDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+#include <Update.h>
 
 #include "wifi_manager.h"
 #include "light_helpers.h"
 #include "modes.h"
 #include "web_page.h"
+#include "ota_page.h"
 #include "board_config.h"
 #include "submode.h"
 
@@ -107,6 +112,78 @@ void setup() {
     connectToKnownWiFi();
     Serial.println("IP: " + getCurrentIP());
 
+    // Configuration ArduinoOTA
+    ArduinoOTA.setHostname("Totem-Tabac");
+    // ArduinoOTA.setPassword("totem2026");  // Décommenter pour activer la protection par mot de passe
+    
+    ArduinoOTA.onStart([]() {
+        String type;
+        if (ArduinoOTA.getCommand() == U_FLASH) {
+            type = "sketch";
+        } else {  // U_SPIFFS
+            type = "filesystem";
+        }
+        Serial.println("D\u00e9marrage mise \u00e0 jour OTA: " + type);
+        // Éteindre tous les LEDs pendant la mise à jour
+        clearAllUniversal();
+        showUniversal();
+    });
+    
+    ArduinoOTA.onEnd([]() {
+        Serial.println("\nMise \u00e0 jour OTA termin\u00e9e");
+    });
+    
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        Serial.printf("Progression: %u%%\r", (progress / (total / 100)));
+    });
+    
+    ArduinoOTA.onError([](ota_error_t error) {
+        Serial.printf("Erreur[%u]: ", error);
+        if (error == OTA_AUTH_ERROR) Serial.println("Erreur authentification");
+        else if (error == OTA_BEGIN_ERROR) Serial.println("Erreur d\u00e9marrage");
+        else if (error == OTA_CONNECT_ERROR) Serial.println("Erreur connexion");
+        else if (error == OTA_RECEIVE_ERROR) Serial.println("Erreur r\u00e9ception");
+        else if (error == OTA_END_ERROR) Serial.println("Erreur fin");
+    });
+    
+    ArduinoOTA.begin();
+    Serial.println("OTA pr\u00eat");
+
+    // Page OTA personnalis\u00e9e
+    server.on("/update", HTTP_GET, [](){
+        server.send(200, "text/html", renderOTAPage());
+    });
+    
+    // Handler POST pour l'upload OTA
+    server.on("/update", HTTP_POST, [](){
+        server.sendHeader("Connection", "close");
+        server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
+        delay(500);
+        ESP.restart();
+    }, [](){
+        HTTPUpload& upload = server.upload();
+        if (upload.status == UPLOAD_FILE_START) {
+            Serial.printf("Update: %s\n", upload.filename.c_str());
+            // \u00c9teindre les LEDs pendant la MAJ
+            clearAllUniversal();
+            showUniversal();
+            if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
+                Update.printError(Serial);
+            }
+        } else if (upload.status == UPLOAD_FILE_WRITE) {
+            if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+                Update.printError(Serial);
+            }
+        } else if (upload.status == UPLOAD_FILE_END) {
+            if (Update.end(true)) {
+                Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+            } else {
+                Update.printError(Serial);
+            }
+        }
+    });
+    Serial.println("Serveur OTA Web sur /update");
+
     server.on("/", [](){
         server.send(200, "text/html", renderWebPage());
     });
@@ -167,6 +244,7 @@ void setup() {
 }
 
 void loop() {
+    ArduinoOTA.handle();
     server.handleClient();
     handleButton1();
     handleButton2();
