@@ -102,11 +102,25 @@ static void fadeGreen() {
     if (now - lastFadeUpdate > (unsigned long)delayMs) {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
-        for (int i = 0; i < 4; i++) {
-            clearModuleUniversal(i);
-            setGreenUniversal(i, b);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            // Pulse vert sur toute la matrice (avec légère variation spatiale)
+            for (int y = 0; y < 8; y++) {
+                for (int x = 0; x < 8; x++) {
+                    int offset = (x + y) % 4; // ondulation subtile
+                    uint8_t gv = constrain(b + offset * 6, 0, 255);
+                    uint8_t r = 0, g = gv, bcol = 0;
+                    applyMatrixBrightnessToRGB(r, g, bcol);
+                    setPixelXY(x, y, r, g, bcol);
+                }
+            }
+            showUniversal();
+        } else {
+            for (int i = 0; i < 4; i++) {
+                clearModuleUniversal(i);
+                setGreenUniversal(i, b);
+            }
+            showUniversal();
         }
-        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -121,11 +135,26 @@ static void fadeYellow() {
     if (now - lastFadeUpdate > (unsigned long)delayMs) {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
-        for (int i = 0; i < 4; i++) {
-            clearModuleUniversal(i);
-            setYellowUniversal(i, b);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            // Pulse jaune sur toute la matrice
+            for (int y = 0; y < 8; y++) {
+                for (int x = 0; x < 8; x++) {
+                    int offset = ((x * 2 + y) % 5);
+                    uint8_t rv = constrain(b + offset * 4, 0, 255);
+                    uint8_t gv = constrain(b + offset * 4, 0, 255);
+                    uint8_t bv = 0;
+                    applyMatrixBrightnessToRGB(rv, gv, bv);
+                    setPixelXY(x, y, rv, gv, bv);
+                }
+            }
+            showUniversal();
+        } else {
+            for (int i = 0; i < 4; i++) {
+                clearModuleUniversal(i);
+                setYellowUniversal(i, b);
+            }
+            showUniversal();
         }
-        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -140,11 +169,25 @@ static void fadeRed() {
     if (now - lastFadeUpdate > (unsigned long)delayMs) {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
-        for (int i = 0; i < 4; i++) {
-            clearModuleUniversal(i);
-            setRedUniversal(i, b);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            // Pulse rouge sur toute la matrice
+            for (int y = 0; y < 8; y++) {
+                for (int x = 0; x < 8; x++) {
+                    int offset = (abs(3 - (x % 7)) + y) % 5;
+                    uint8_t rv = constrain(b + offset * 5, 0, 255);
+                    uint8_t gv = 0, bv = 0;
+                    applyMatrixBrightnessToRGB(rv, gv, bv);
+                    setPixelXY(x, y, rv, gv, bv);
+                }
+            }
+            showUniversal();
+        } else {
+            for (int i = 0; i < 4; i++) {
+                clearModuleUniversal(i);
+                setRedUniversal(i, b);
+            }
+            showUniversal();
         }
-        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -422,16 +465,40 @@ void updateMode() {
     // MODE_AMBIANCE_DOUCE
     // -----------------------------------------------------
     case MODE_AMBIANCE_DOUCE:
-        if (now - lastUpdate > 30) {
-            int b = (sin(animStep * 0.04) + 1) * 100;
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-                setYellowUniversal(i, 80);
-                setGreenUniversal(i, b);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            if (now - lastUpdate > 40) {
+                // Ambiance douce : fond chaud + respiration verte douce sur toute la matrice
+                int breath = (sin(animStep * 0.05) + 1) * 100; // 0..200
+                clearAllUniversal();
+                for (int y = 0; y < 8; y++) {
+                    for (int x = 0; x < 8; x++) {
+                        // Accentuer légèrement près des colonnes 0,3,6 (masque potentiel)
+                        int distCol = min(min(abs(x-0), abs(x-3)), abs(x-6));
+                        int accent = max(0, 3 - distCol) * 12; // 0..36
+                        uint8_t r = 220, g = 160 + accent, b = 0; // base chaude
+                        // respiration verte superposée
+                        uint8_t gv = constrain(breath + accent, 0, 255);
+                        g = min<uint8_t>(255, g/2 + gv);
+                        applyMatrixBrightnessToRGB(r, g, b);
+                        setPixelXY(x, y, r, g, b);
+                    }
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
             }
-            showUniversal();
-            animStep++;
-            lastUpdate = now;
+        } else {
+            if (now - lastUpdate > 30) {
+                int b = (sin(animStep * 0.04) + 1) * 100;
+                for (int i = 0; i < 4; i++) {
+                    clearModuleUniversal(i);
+                    setYellowUniversal(i, 80);
+                    setGreenUniversal(i, b);
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
 
@@ -439,13 +506,67 @@ void updateMode() {
     // MODE_VAGUE
     // -----------------------------------------------------
     case MODE_VAGUE:
-        if (now - lastUpdate > 180) {
-            clearAllUniversal();
-            int pos = animStep % 4;
-            setGreenUniversal(pos, 255);
-            showUniversal();
-            animStep++;
-            lastUpdate = now;
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            // Nouvelle "vague" façon mer : sinusoïde horizontale avec crêtes blanches,
+            // dégradé bleu/cyan, full-matrix. Vitesse selon sous-mode.
+            int delayMs = (subMode == 0 ? 120 : subMode == 1 ? 80 : 55);
+            if (now - lastUpdate > (unsigned long)delayMs) {
+                clearAllUniversal();
+                float phase = animStep * 0.35f; // progression de la vague
+                for (int x = 0; x < 8; x++) {
+                    // Position de la crête principale (sinus horizontal)
+                    float crestYf = 3.5f + 2.5f * sinf(phase + x * 0.7f);
+                    // Seconde harmonique déphasée (écume supplémentaire)
+                    float crestYf2 = 3.5f + 1.3f * sinf(phase + x * 1.2f + 1.57f);
+                    for (int y = 0; y < 8; y++) {
+                        float d = fabsf((float)y - crestYf);
+                        float d2 = fabsf((float)y - crestYf2);
+                        uint8_t r = 0, g = 0, b = 0;
+                        if (d < 0.4f) {
+                            // Crête blanche (écume)
+                            r = 220; g = 235; b = 255;
+                        } else if (d < 1.2f) {
+                            // Proche de la crête : cyan éclatant
+                            r = 0; g = 200; b = 255;
+                        } else if (d < 2.2f) {
+                            // Corps de vague : bleu soutenu
+                            r = 0; g = 100; b = 180;
+                        } else {
+                            // Profondeur : bleu sombre
+                            r = 0; g = 30; b = 90;
+                        }
+                        // Écume secondaire (harmonique) : éclaircissement subtil si proche crest2
+                        if (d2 < 0.6f) {
+                            r = min<uint8_t>(255, r + 20);
+                            g = min<uint8_t>(255, g + 20);
+                            b = min<uint8_t>(255, b + 25);
+                        }
+                        // Petit accent visuel autour des colonnes 0/3/6 (compat masque)
+                        int distCol = min(min(abs(x-0), abs(x-3)), abs(x-6));
+                        if (distCol <= 1 && d < 1.2f) {
+                            r = min<uint8_t>(255, r + 15);
+                            g = min<uint8_t>(255, g + 15);
+                            b = min<uint8_t>(255, b + 15);
+                        }
+                        applyMatrixBrightnessToRGB(r, g, b);
+                        setPixelXY(x, y, r, g, b);
+                    }
+                }
+                // Option : seconde vague déphasée légère (mélange subtil)
+                // (pour garder performance, mix implicite par palette ci-dessus)
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
+        } else {
+            if (now - lastUpdate > 180) {
+                clearAllUniversal();
+                int pos = animStep % 4;
+                setGreenUniversal(pos, 255);
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
 
@@ -453,30 +574,60 @@ void updateMode() {
     // MODE_ARC_EN_CIEL (avec sous-modes de vitesse)
     // -----------------------------------------------------
     case MODE_ARC_EN_CIEL: {
-        int delayMs = (subMode == 0 ? 150 : subMode == 1 ? 100 : 50);
+        int delayMs = (subMode == 0 ? 130 : subMode == 1 ? 90 : 60);
         
-        if (now - lastUpdate > (unsigned long)delayMs) {
-
-            int step = animStep % 6;
-
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-
-                int s = (step + i) % 6;
-
-                switch (s) {
-                    case 0: setRedUniversal(i, 255); break;
-                    case 1: setYellowUniversal(i, 255); break;
-                    case 2: setGreenUniversal(i, 255); break;
-                    case 3: setRGBUniversal(i, true, true, 0); break;
-                    case 4: setRGBUniversal(i, true, false, 80); break;
-                    case 5: setRGBUniversal(i, true, true, 255); break;
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            if (now - lastUpdate > (unsigned long)delayMs) {
+                clearAllUniversal();
+                int t = animStep;
+                for (int y = 0; y < 8; y++) {
+                    for (int x = 0; x < 8; x++) {
+                        // Bandes verticales arc‑en‑ciel qui défilent vers la droite
+                        int idx = (x + (t/2)) % 6;
+                        uint8_t r=0,g=0,b=0;
+                        switch (idx) {
+                            case 0: r=255; g=0;   b=0;   break; // Rouge
+                            case 1: r=255; g=150; b=0;   break; // Orange
+                            case 2: r=255; g=255; b=0;   break; // Jaune
+                            case 3: r=0;   g=255; b=0;   break; // Vert
+                            case 4: r=0;   g=100; b=255; break; // Bleu
+                            case 5: r=180; g=0;   b=255; break; // Violet
+                        }
+                        // Légère modulation verticale pour relief
+                        uint8_t mod = (uint8_t)(20 * sin((y + t) * 0.3));
+                        r = constrain(r - mod, 0, 255);
+                        g = constrain(g - mod, 0, 255);
+                        b = constrain(b - mod, 0, 255);
+                        // Accent visuel proche colonnes 0,3,6
+                        int distCol = min(min(abs(x-0), abs(x-3)), abs(x-6));
+                        if (distCol <= 1) { r = min(255, (int)r + 20); g = min(255, (int)g + 20); b = min(255, (int)b + 20); }
+                        applyMatrixBrightnessToRGB(r, g, b);
+                        setPixelXY(x, y, r, g, b);
+                    }
                 }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
             }
-
-            showUniversal();
-            animStep++;
-            lastUpdate = now;
+        } else {
+            if (now - lastUpdate > (unsigned long)delayMs) {
+                int step = animStep % 6;
+                for (int i = 0; i < 4; i++) {
+                    clearModuleUniversal(i);
+                    int s = (step + i) % 6;
+                    switch (s) {
+                        case 0: setRedUniversal(i, 255); break;
+                        case 1: setYellowUniversal(i, 255); break;
+                        case 2: setGreenUniversal(i, 255); break;
+                        case 3: setRGBUniversal(i, true, true, 0); break;
+                        case 4: setRGBUniversal(i, true, false, 80); break;
+                        case 5: setRGBUniversal(i, true, true, 255); break;
+                    }
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
     }

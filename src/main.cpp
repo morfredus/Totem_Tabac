@@ -3,17 +3,17 @@
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
-#include <HTTPUpdateServer.h>
+#include <Update.h>
 
 #include "wifi_manager.h"
 #include "light_helpers.h"
 #include "modes.h"
 #include "web_page.h"
+#include "ota_page.h"
 #include "board_config.h"
 #include "submode.h"
 
 WebServer server(80);
-HTTPUpdateServer httpUpdater;
 
 // Anti-rebond boutons
 bool lastButtonState = HIGH;
@@ -148,9 +148,42 @@ void setup() {
     
     ArduinoOTA.begin();
     Serial.println("OTA pr\u00eat");
-    // Configuration du serveur OTA Web (interface de mise à jour)
-    httpUpdater.setup(&server, "/update");
+
+    // Page OTA personnalis\u00e9e
+    server.on("/update", HTTP_GET, [](){
+        server.send(200, "text/html", renderOTAPage());
+    });
+    
+    // Handler POST pour l'upload OTA
+    server.on("/update", HTTP_POST, [](){
+        server.sendHeader("Connection", "close");
+        server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
+        delay(500);
+        ESP.restart();
+    }, [](){
+        HTTPUpload& upload = server.upload();
+        if (upload.status == UPLOAD_FILE_START) {
+            Serial.printf("Update: %s\n", upload.filename.c_str());
+            // \u00c9teindre les LEDs pendant la MAJ
+            clearAllUniversal();
+            showUniversal();
+            if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
+                Update.printError(Serial);
+            }
+        } else if (upload.status == UPLOAD_FILE_WRITE) {
+            if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+                Update.printError(Serial);
+            }
+        } else if (upload.status == UPLOAD_FILE_END) {
+            if (Update.end(true)) {
+                Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+            } else {
+                Update.printError(Serial);
+            }
+        }
+    });
     Serial.println("Serveur OTA Web sur /update");
+
     server.on("/", [](){
         server.send(200, "text/html", renderWebPage());
     });

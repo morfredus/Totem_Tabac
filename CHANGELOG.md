@@ -1,3 +1,19 @@
+## [0.19.0] – Soft modes adapted to matrix (2026-01-11)
+### Changed
+- **Soft Ambiance (matrix)**: warm base with soft green breathing across the full matrix, visual accent near columns 0/3/6 (compatible with 3‑light mask).
+- **Wave (matrix)**: diagonal green wave traversing the full matrix, relief near columns 0/3/6.
+- **Rainbow (matrix)**: vertical scrolling bands (red→violet) across the full matrix with vertical modulation.
+- **Pulse Green/Yellow/Red (matrix)**: uniform breathing across the full matrix with subtle spatial variation.
+
+### Technical Details
+- Full use of all 64 LEDs in matrix mode for the six soft modes.
+- Global brightness respected via `applyMatrixBrightnessToRGB()`.
+- Visual compatibility with physical mask highlighting three lights (columns 0/3/6 accented).
+
+### Documentation
+- README and README_FR updated (0.19.0), added custom OTA page reference.
+- Mode references updated to reflect matrix adaptation.
+
 ## [0.18.0] – OTA (Over-The-Air) firmware updates (2026-01-11)
 ### Added
 - **OTA Updates**: Firmware can now be updated wirelessly over WiFi without USB cable.
