@@ -111,11 +111,9 @@ void setup() {
     });
 
     // Modes doux
-    server.on("/mode/zen", [](){ setMode(MODE_ZEN); ajaxOK(); });
     server.on("/mode/ambiance", [](){ setMode(MODE_AMBIANCE_DOUCE); ajaxOK(); });
     server.on("/mode/vague", [](){ setMode(MODE_VAGUE); ajaxOK(); });
     server.on("/mode/arc", [](){ setMode(MODE_ARC_EN_CIEL); ajaxOK(); });
-    server.on("/mode/arc_turbo", [](){ setMode(MODE_ARC_EN_CIEL_TURBO); ajaxOK(); });
     server.on("/mode/pulse_vert", [](){ setMode(MODE_PULSE_VERT); ajaxOK(); });
     server.on("/mode/pulse_jaune", [](){ setMode(MODE_PULSE_JAUNE); ajaxOK(); });
     server.on("/mode/pulse_rouge", [](){ setMode(MODE_PULSE_ROUGE); ajaxOK(); });
@@ -123,7 +121,6 @@ void setup() {
     // Modes dynamiques
     server.on("/mode/rush", [](){ setMode(MODE_RUSH); ajaxOK(); });
     server.on("/mode/k2000", [](){ setMode(MODE_K2000); ajaxOK(); });
-    server.on("/mode/disco", [](){ setMode(MODE_DISCO); ajaxOK(); });
     server.on("/mode/jackpot", [](){ setMode(MODE_JACKPOT); ajaxOK(); });
     server.on("/mode/fdj", [](){ setMode(MODE_FDJ_WINNER); ajaxOK(); });
     server.on("/mode/client_gagnant", [](){ setMode(MODE_CLIENT_GAGNANT); ajaxOK(); });

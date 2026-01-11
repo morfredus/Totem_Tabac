@@ -86,19 +86,17 @@ inline String renderWebPage() {
 
     // Modes doux
     html += "<h2>🌿 Modes doux</h2><div class=\"grid\">\n";
-    for(int i=0;i<=7;i++){
+    for(int i=0;i<=5;i++){
         html += "<div class=\"btn";
         if(currentMode==i) html += " selected";
         html += "";
         switch(i){
-            case 0: html += " data-mode=\"0\" onclick='setMode(0)'>Zen</div>"; break;
-            case 1: html += " data-mode=\"1\" onclick='setMode(1)'>Ambiance</div>"; break;
-            case 2: html += " data-mode=\"2\" onclick='setMode(2)'>Vague</div>"; break;
-            case 3: html += " data-mode=\"3\" onclick='setMode(3)'>Arc-en-ciel</div>"; break;
-            case 4: html += " data-mode=\"4\" onclick='setMode(4)'>Arc-en-ciel Turbo</div>"; break;
-            case 5: html += " data-mode=\"5\" onclick='setMode(5)'>Pulse Vert</div>"; break;
-            case 6: html += " data-mode=\"6\" onclick='setMode(6)'>Pulse Jaune</div>"; break;
-            case 7: html += " data-mode=\"7\" onclick='setMode(7)'>Pulse Rouge</div>"; break;
+            case 0: html += " data-mode=\"0\" onclick='setMode(0)'>Ambiance</div>"; break;
+            case 1: html += " data-mode=\"1\" onclick='setMode(1)'>Vague</div>"; break;
+            case 2: html += " data-mode=\"2\" onclick='setMode(2)'>Arc-en-ciel</div>"; break;
+            case 3: html += " data-mode=\"3\" onclick='setMode(3)'>Pulse Vert</div>"; break;
+            case 4: html += " data-mode=\"4\" onclick='setMode(4)'>Pulse Jaune</div>"; break;
+            case 5: html += " data-mode=\"5\" onclick='setMode(5)'>Pulse Rouge</div>"; break;
         }
     }
     html += "</div>\n";
@@ -107,18 +105,17 @@ inline String renderWebPage() {
 
     // Modes dynamiques
     html += "<h2>🔥 Modes dynamiques</h2><div class=\"grid\">\n";
-    for(int i=8;i<=14;i++){
+    for(int i=6;i<=11;i++){
         html += "<div class=\"btn";
         if(currentMode==i) html += " selected";
         html += "";
         switch(i){
-            case 8: html += " data-mode=\"8\" onclick='setMode(8)'>Rush</div>"; break;
-            case 9: html += " data-mode=\"9\" onclick='setMode(9)'>K2000</div>"; break;
-            case 10: html += " data-mode=\"10\" onclick='setMode(10)'>Disco</div>"; break;
-            case 11: html += " data-mode=\"11\" onclick='setMode(11)'>Jackpot</div>"; break;
-            case 12: html += " data-mode=\"12\" onclick='setMode(12)'>FDJ Winner</div>"; break;
-            case 13: html += " data-mode=\"13\" onclick='setMode(13)'>Gagnant</div>"; break;
-            case 14: html += " data-mode=\"14\" onclick='setMode(14)'>Perdant</div>"; break;
+            case 6: html += " data-mode=\"6\" onclick='setMode(6)'>Rush</div>"; break;
+            case 7: html += " data-mode=\"7\" onclick='setMode(7)'>K2000</div>"; break;
+            case 8: html += " data-mode=\"8\" onclick='setMode(8)'>Jackpot</div>"; break;
+            case 9: html += " data-mode=\"9\" onclick='setMode(9)'>FDJ Winner</div>"; break;
+            case 10: html += " data-mode=\"10\" onclick='setMode(10)'>Gagnant</div>"; break;
+            case 11: html += " data-mode=\"11\" onclick='setMode(11)'>Perdant</div>"; break;
         }
     }
     html += "</div>\n";
@@ -127,16 +124,16 @@ inline String renderWebPage() {
 
     // Utilitaires
     html += "<h2>🧱 Utilitaires</h2><div class=\"grid\">\n";
-    for(int i=15;i<=19;i++){
+    for(int i=12;i<=16;i++){
         html += "<div class=\"btn";
         if(currentMode==i) html += " selected";
         html += "";
         switch(i){
-            case 15: html += " data-mode=\"15\" onclick='setMode(15)'>Ouverture</div>"; break;
-            case 16: html += " data-mode=\"16\" onclick='setMode(16)'>Fermeture</div>"; break;
-            case 17: html += " data-mode=\"17\" onclick='setMode(17)'>Pause café</div>"; break;
-            case 18: html += " data-mode=\"18\" onclick='setMode(18)'>Maintenance</div>"; break;
-            case 19: html += " data-mode=\"19\" onclick='setMode(19)'>Humeur du Patron</div>"; break;
+            case 12: html += " data-mode=\"12\" onclick='setMode(12)'>Ouverture</div>"; break;
+            case 13: html += " data-mode=\"13\" onclick='setMode(13)'>Fermeture</div>"; break;
+            case 14: html += " data-mode=\"14\" onclick='setMode(14)'>Pause café</div>"; break;
+            case 15: html += " data-mode=\"15\" onclick='setMode(15)'>Maintenance</div>"; break;
+            case 16: html += " data-mode=\"16\" onclick='setMode(16)'>Humeur du Patron</div>"; break;
         }
     }
     html += "</div>\n";
@@ -173,26 +170,24 @@ inline String renderWebPage() {
     html += "  let submodeDyn = '';\n";
     html += "  let submodeUtil = '';\n";
     html += "  // Modes doux\n";
-    html += "  if([3,4,5,6,7].includes(mode)) {\n";
+    html += "  if([2,3,4,5].includes(mode)) {\n";
     html += "    submodeDoux = `<div class='submode-btn' onclick='nextSubMode()'>🎨 Sous-mode : <strong>${subModeLabel(mode,sub)}</strong></div>`;\n";
     html += "  }\n";
     html += "  document.getElementById('submode-doux').innerHTML = submodeDoux;\n";
     html += "  // Modes dynamiques\n";
-    html += "  if([9,10,11].includes(mode)) {\n";
+    html += "  if([7,8].includes(mode)) {\n";
     html += "    submodeDyn = `<div class='submode-btn' onclick='nextSubMode()'>⚡ Sous-mode : <strong>${subModeLabel(mode,sub)}</strong></div>`;\n";
     html += "  }\n";
     html += "  document.getElementById('submode-dyn').innerHTML = submodeDyn;\n";
     html += "  // Utilitaires\n";
-    html += "  if([19].includes(mode)) {\n";
+    html += "  if([16].includes(mode)) {\n";
     html += "    submodeUtil = `<div class='submode-btn' onclick='nextSubMode()'>🎨 Changer couleur</div>`;\n";
     html += "  }\n";
     html += "  document.getElementById('submode-util').innerHTML = submodeUtil;\n";
     html += "}\n";
     html += "function nextSubMode(){fetch('/submode').then(()=>{setTimeout(fetchStatusAndUpdateSubmode,200);});}\n";
     html += "function subModeLabel(mode,sub){\n";
-    html += "  if([5,6,7,10,11].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
-    html += "  if([3,4].includes(mode)) return ['Normal','Inversé'][sub%2];\n";
-    html += "  if([9].includes(mode)) return ['Gauche→Droite','Droite→Gauche'][sub%2];\n";
+    html += "  if([2,3,4,5,7,8].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
     html += "  return '';\n";
     html += "}\n";
     html += "document.addEventListener('DOMContentLoaded',fetchStatusAndUpdateSubmode);\n";

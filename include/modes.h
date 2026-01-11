@@ -8,26 +8,23 @@ void saveDisplayTypeToNVS();
 #include "board_config.h"
 
 enum Mode {
-    MODE_ZEN,
-    MODE_AMBIANCE_DOUCE,
-    MODE_VAGUE,
-    MODE_ARC_EN_CIEL,
-    MODE_ARC_EN_CIEL_TURBO,
-    MODE_PULSE_VERT,
-    MODE_PULSE_JAUNE,
-    MODE_PULSE_ROUGE,
-    MODE_RUSH,
-    MODE_K2000,
-    MODE_DISCO,
-    MODE_JACKPOT,
-    MODE_FDJ_WINNER,
-    MODE_CLIENT_GAGNANT,
-    MODE_CLIENT_PERDANT,
-    MODE_OUVERTURE,
-    MODE_FERMETURE,
-    MODE_PAUSE_CAFE,
-    MODE_MAINTENANCE,
-    MODE_HUMEUR_PATRON,
+    MODE_AMBIANCE_DOUCE,      // 0
+    MODE_VAGUE,               // 1
+    MODE_ARC_EN_CIEL,         // 2 (avec sous-modes vitesse)
+    MODE_PULSE_VERT,          // 3
+    MODE_PULSE_JAUNE,         // 4
+    MODE_PULSE_ROUGE,         // 5
+    MODE_RUSH,                // 6
+    MODE_K2000,               // 7
+    MODE_JACKPOT,             // 8
+    MODE_FDJ_WINNER,          // 9
+    MODE_CLIENT_GAGNANT,      // 10
+    MODE_CLIENT_PERDANT,      // 11
+    MODE_OUVERTURE,           // 12
+    MODE_FERMETURE,           // 13
+    MODE_PAUSE_CAFE,          // 14
+    MODE_MAINTENANCE,         // 15
+    MODE_HUMEUR_PATRON,       // 16
     MODE_MAX
 };
 

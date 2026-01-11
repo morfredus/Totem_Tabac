@@ -1,3 +1,19 @@
+## [0.14.0] – Mode cleanup and optimization (2026-01-11)
+### Removed
+- **MODE_ZEN**: Removed redundant mode (duplicate of Pulse Vert).
+- **MODE_DISCO**: Removed (similar to Jackpot).
+- **MODE_ARC_EN_CIEL_TURBO**: Removed (merged into Arc-en-ciel with speed submodes).
+
+### Changed
+- **MODE_ARC_EN_CIEL**: Now uses speed submodes (Slow/Medium/Fast) instead of direction inversion.
+- Default startup mode changed from ZEN to PULSE_VERT.
+- Mode enum reindexed for consistency (17 modes instead of 20).
+- Web UI buttons now properly aligned with new mode indices.
+
+### Fixed
+- Web UI mode selection now correctly highlights active mode.
+- Submode display logic updated for new mode structure.
+
 ## [0.13.0] – Modern festive web UI redesign (2026-01-11)
 ### Added
 - Complete redesign of web interface with modern, festive, and professional styling.

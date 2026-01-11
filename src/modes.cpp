@@ -26,7 +26,7 @@ void saveDisplayTypeToNVS() {
 // ---------------------------------------------------------
 
 
-Mode currentMode = MODE_ZEN;
+Mode currentMode = MODE_PULSE_VERT;
 int subMode = 0;
 int humeurColor = 0;
 
@@ -207,14 +207,7 @@ void updateMode() {
     switch (currentMode) {
 
     // -----------------------------------------------------
-    // 1. MODE_ZEN — respiration verte lente
-    // -----------------------------------------------------
-    case MODE_ZEN:
-        fadeGreen();
-        break;
-
-    // -----------------------------------------------------
-    // 2. MODE_AMBIANCE_DOUCE
+    // MODE_AMBIANCE_DOUCE
     // -----------------------------------------------------
     case MODE_AMBIANCE_DOUCE:
         if (now - lastUpdate > 30) {
@@ -230,7 +223,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 3. MODE_VAGUE
+    // MODE_VAGUE
     // -----------------------------------------------------
     case MODE_VAGUE:
         if (now - lastUpdate > 180) {
@@ -243,18 +236,19 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 4. MODE_ARC_EN_CIEL
+    // MODE_ARC_EN_CIEL (avec sous-modes de vitesse)
     // -----------------------------------------------------
-    case MODE_ARC_EN_CIEL:
-        if (now - lastUpdate > 150) {
+    case MODE_ARC_EN_CIEL: {
+        int delayMs = (subMode == 0 ? 150 : subMode == 1 ? 100 : 50);
+        
+        if (now - lastUpdate > (unsigned long)delayMs) {
 
             int step = animStep % 6;
 
             for (int i = 0; i < 4; i++) {
                 clearModuleUniversal(i);
 
-                int s = (step + (subMode == 1 ? -i : i)) % 6;
-                if (s < 0) s += 6;
+                int s = (step + i) % 6;
 
                 switch (s) {
                     case 0: setRedUniversal(i, 255); break;
@@ -270,30 +264,31 @@ void updateMode() {
             lastUpdate = now;
         }
         break;
+    }
 
     // -----------------------------------------------------
-    // 5. MODE_PULSE_VERT
+    // MODE_PULSE_VERT
     // -----------------------------------------------------
     case MODE_PULSE_VERT:
         fadeGreen();
         break;
 
     // -----------------------------------------------------
-    // 6. MODE_PULSE_JAUNE
+    // MODE_PULSE_JAUNE
     // -----------------------------------------------------
     case MODE_PULSE_JAUNE:
         fadeYellow();
         break;
 
     // -----------------------------------------------------
-    // 7. MODE_PULSE_ROUGE
+    // MODE_PULSE_ROUGE
     // -----------------------------------------------------
     case MODE_PULSE_ROUGE:
         fadeRed();
         break;
 
     // -----------------------------------------------------
-    // 8. MODE_RUSH
+    // MODE_RUSH
     // -----------------------------------------------------
     case MODE_RUSH:
         if (now - lastUpdate > 120) {
@@ -308,7 +303,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 9. MODE_K2000 — vitesse corrigée
+    // MODE_K2000 — vitesse corrigée
     // -----------------------------------------------------
     case MODE_K2000: {
     // Vitesse selon sous-mode
@@ -363,26 +358,7 @@ void updateMode() {
 
 
     // -----------------------------------------------------
-    // 10. MODE_DISCO
-    // -----------------------------------------------------
-    case MODE_DISCO: {
-        int delayMs = (subMode == 0 ? 180 : subMode == 1 ? 120 : 70);
-
-        if (now - lastUpdate > (unsigned long)delayMs) {
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-                setRedUniversal(i, random(255));
-                setYellowUniversal(i, random(255));
-                setGreenUniversal(i, random(255));
-            }
-            animStep++;
-            lastUpdate = now;
-        }
-        break;
-    }
-
-    // -----------------------------------------------------
-    // 11. MODE_JACKPOT
+    // MODE_JACKPOT
     // -----------------------------------------------------
     case MODE_JACKPOT: {
         int delayMs = (subMode == 0 ? 150 : subMode == 1 ? 100 : 60);
@@ -410,7 +386,7 @@ void updateMode() {
     }
 
     // -----------------------------------------------------
-    // 12. MODE_FDJ_WINNER
+    // MODE_FDJ_WINNER
     // -----------------------------------------------------
     case MODE_FDJ_WINNER:
         if (now - lastUpdate > 100) {
@@ -547,35 +523,7 @@ void updateMode() {
         break;
 
     // -----------------------------------------------------
-    // 19. MODE_ARC_EN_CIEL_TURBO
-    // -----------------------------------------------------
-    case MODE_ARC_EN_CIEL_TURBO:
-        if (now - lastUpdate > (subMode == 0 ? 120 : 60)) {
-
-            int step = animStep % 6;
-
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-
-                int s = (step + i) % 6;
-
-                switch (s) {
-                    case 0: setRedUniversal(i, 255); break;
-                    case 1: setYellowUniversal(i, 255); break;
-                    case 2: setGreenUniversal(i, 255); break;
-                    case 3: setRGBUniversal(i, true, true, 0); break;
-                    case 4: setRGBUniversal(i, true, false, 80); break;
-                    case 5: setRGBUniversal(i, true, true, 255); break;
-                }
-            }
-
-            animStep++;
-            lastUpdate = now;
-        }
-        break;
-
-    // -----------------------------------------------------
-    // 20. MODE_HUMEUR_PATRON
+    // MODE_HUMEUR_PATRON
     // -----------------------------------------------------
     case MODE_HUMEUR_PATRON:
         applyHumeurColor();
@@ -595,19 +543,11 @@ void nextSubMode() {
 
     switch (currentMode) {
 
+        case MODE_ARC_EN_CIEL:
         case MODE_PULSE_VERT:
         case MODE_PULSE_JAUNE:
         case MODE_PULSE_ROUGE:
-            subMode = (subMode + 1) % 3;
-            break;
-
-        case MODE_ARC_EN_CIEL:
-        case MODE_ARC_EN_CIEL_TURBO:
         case MODE_K2000:
-            subMode = (subMode + 1) % 2;
-            break;
-
-        case MODE_DISCO:
         case MODE_JACKPOT:
             subMode = (subMode + 1) % 3;
             break;
