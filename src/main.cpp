@@ -42,6 +42,16 @@ void handleButton2() {
 }
 
 void setup() {
+                        // Endpoint AJAX pour sous-mode (UI web)
+                        server.on("/submode", [](){
+                            nextSubMode();
+                            ajaxOK();
+                        });
+                    // Route AJAX pour changer de sous-mode
+                    server.on("/submode", [](){
+                        nextSubMode();
+                        ajaxOK();
+                    });
                 // Route AJAX pour humeur du patron (couleur)
                 server.on("/humeur", [](){
                     if (server.hasArg("value")) {

@@ -1,4 +1,3 @@
-
 #ifndef WEB_PAGE_H
 #define WEB_PAGE_H
 
@@ -87,6 +86,8 @@ inline String renderWebPage() {
         }
     }
     html += "</div>\n";
+    // Zone sous-mode pour modes doux
+    html += "<div id='submode-doux' class='submode-zone'></div>\n";
 
     // Modes dynamiques
     html += "<h2>🔥 Modes dynamiques</h2><div class=\"grid\">\n";
@@ -105,6 +106,8 @@ inline String renderWebPage() {
         }
     }
     html += "</div>\n";
+    // Zone sous-mode pour modes dynamiques
+    html += "<div id='submode-dyn' class='submode-zone'></div>\n";
 
     // Utilitaires
     html += "<h2>🧱 Utilitaires</h2><div class=\"grid\">\n";
@@ -120,7 +123,7 @@ inline String renderWebPage() {
             case 19: html += " data-mode=\"19\" onclick='setMode(19)'>Humeur du Patron</div>"; break;
         }
     }
-    html += "</div>\n";
+    html += "<div id='submode-util' class='submode-zone'></div>\n";
 
     // Humeur du Patron
     html += "<h2>😎 Humeur du Patron</h2><div style=\"display:flex;justify-content:center;gap:10px;\">";
@@ -135,14 +138,55 @@ inline String renderWebPage() {
 
     html += "</div>\n"; // container
 
+    // JS pour sous-modes dynamiques
+    html += "<script>\n";
+    html += "let currentMode = 0;\n";
+    html += "let currentSub = 0;\n";
+    html += "function fetchStatusAndUpdateSubmode() {\n";
+    html += "  fetch('/status').then(r=>r.json()).then(data=>{\n";
+    html += "    currentMode = data.mode;\n";
+    html += "    currentSub = data.sub;\n";
+    html += "    updateSubmodeUI();\n";
+    html += "  });\n";
+    html += "}\n";
+    html += "function updateSubmodeUI() {\n";
+    html += "  let mode = currentMode;\n";
+    html += "  let sub = currentSub;\n";
+    html += "  let submodeHTML = '';\n";
+    html += "  // Modes doux\n";
+    html += "  if([3,4,5,6,7].includes(mode)) {\n";
+    html += "    submodeHTML = `<button class='btn' onclick='nextSubMode()'>Sous-mode : <span id=\\\"submode-label\\\">${subModeLabel(mode,sub)}</span></button>`;\n";
+    html += "  }\n";
+    html += "  document.getElementById('submode-doux').innerHTML = submodeHTML;\n";
+    html += "  // Modes dynamiques\n";
+    html += "  if([9,10,11].includes(mode)) {\n";
+    html += "    submodeHTML = `<button class='btn' onclick='nextSubMode()'>Sous-mode : <span id=\\\"submode-label\\\">${subModeLabel(mode,sub)}</span></button>`;\n";
+    html += "  }\n";
+    html += "  document.getElementById('submode-dyn').innerHTML = submodeHTML;\n";
+    html += "  // Utilitaires\n";
+    html += "  if([19].includes(mode)) {\n";
+    html += "    submodeHTML = `<button class='btn' onclick='nextSubMode()'>Changer couleur</button>`;\n";
+    html += "  }\n";
+    html += "  document.getElementById('submode-util').innerHTML = submodeHTML;\n";
+    html += "}\n";
+    html += "function nextSubMode(){fetch('/submode').then(()=>{setTimeout(fetchStatusAndUpdateSubmode,200);});}\n";
+    html += "function subModeLabel(mode,sub){\n";
+    html += "  if([5,6,7,10,11].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
+    html += "  if([3,4].includes(mode)) return ['Normal','Inversé'][sub%2];\n";
+    html += "  if([9].includes(mode)) return ['Gauche→Droite','Droite→Gauche'][sub%2];\n";
+    html += "  return '';\n";
+    html += "}\n";
+    html += "document.addEventListener('DOMContentLoaded',fetchStatusAndUpdateSubmode);\n";
+    html += "</script>\n";
+
     // JS embarqué pour l'interactivité AJAX (placé juste avant </body>)
     html += "<script>\n";
     html += "console.log('JS chargé');\n";
     html += "function setDisplay(val){\n";
     html += "  console.log('setDisplay',val);\n";
-        html += "  fetch('/display?value=' + val).then(()=>{\n";
+    html += "  fetch('/display?value=' + val).then(()=>{\n";
     html += "    document.querySelectorAll('.param-radio').forEach(r=>r.checked=false);\n";
-    html += "    var sel = document.querySelector('.param-radio[value=\"' + val + '\"]'); if(sel) sel.checked=true;\n";
+    html += "    var sel = document.querySelector('.param-radio[value=\\\"' + val + '\\\"]'); if(sel) sel.checked=true;\n";
     html += "    if(val==1){document.getElementById('brightness-row').style.display='flex';}else{document.getElementById('brightness-row').style.display='none';}\n";
     html += "  });\n";
     html += "}\n";

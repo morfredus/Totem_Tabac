@@ -1,4 +1,3 @@
-
 ## [1.0.0] – Refonte UI web moderne (2026-01-11)
 ### Ajouté
 - Nouvelle interface web moderne, interactive et responsive.

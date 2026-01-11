@@ -1,4 +1,3 @@
-
 ## [1.0.0] – Modern web UI overhaul (2026-01-11)
 ### Added
 - New modern, interactive, responsive web interface.
