@@ -227,6 +227,9 @@ static void applyHumeurColor() {
                 uint8_t scaled_g = (g * brightness) / 255;
                 uint8_t scaled_b = (b * brightness) / 255;
                 
+                // Appliquer le brightness global
+                applyMatrixBrightnessToRGB(scaled_r, scaled_g, scaled_b);
+                
                 setPixelXY(x, y, scaled_r, scaled_g, scaled_b);
             }
         }
@@ -246,6 +249,9 @@ static void applyHumeurColor() {
 
 // --- Fonctions helper pour animations matrice ---
 static void drawSmileySmiley(uint8_t r, uint8_t g, uint8_t b) {
+    // Appliquer brightness global
+    applyMatrixBrightnessToRGB(r, g, b);
+    
     // Remplir tout en couleur
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 8; x++) {
@@ -263,6 +269,9 @@ static void drawSmileySmiley(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 static void drawSmileyNeutral(uint8_t r, uint8_t g, uint8_t b) {
+    // Appliquer brightness global
+    applyMatrixBrightnessToRGB(r, g, b);
+    
     // Remplir tout en couleur
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 8; x++) {
@@ -308,7 +317,11 @@ static void drawAnimationPauseCafe() {
         for (int x = 0; x < 8; x++) {
             int brightness = 150 + (50 * sin((x + y + coffeeStep * 2) * 0.5)) / 1;
             brightness = constrain(brightness, 100, 200);
-            setPixelXY(x, y, brightness, brightness / 2, 0); // Marron chaud
+            uint8_t r = brightness;
+            uint8_t g = brightness / 2;
+            uint8_t b = 0;
+            applyMatrixBrightnessToRGB(r, g, b);
+            setPixelXY(x, y, r, g, b); // Marron chaud
         }
     }
     
@@ -317,7 +330,9 @@ static void drawAnimationPauseCafe() {
         int bubbleY = (coffeeStep * 2 + i * 3) % 8;
         int bubbleX = 2 + i * 2;
         if (bubbleX < 8 && bubbleY < 8) {
-            setPixelXY(bubbleX, bubbleY, 200, 200, 255); // Blanc/bleu clair
+            uint8_t r = 200, g = 200, b = 255;
+            applyMatrixBrightnessToRGB(r, g, b);
+            setPixelXY(bubbleX, bubbleY, r, g, b); // Blanc/bleu clair
         }
     }
 }
@@ -340,16 +355,21 @@ static void drawAnimationClientGagnant() {
             int dist = abs(x - 3.5) + abs(y - 3.5);
             int wave = ((dist + winStep * 2) % 8);
             
+            uint8_t r, g, b;
             if (wave < 2) {
                 // Éclair jaune/blanc
-                setPixelXY(x, y, 255, 255, 0);
+                r = 255; g = 255; b = 0;
             } else if (wave < 4) {
                 // Transition vers vert
-                setPixelXY(x, y, 0, 255, 100);
+                r = 0; g = 255; b = 100;
             } else {
                 // Bleu/magenta
-                setPixelXY(x, y, (sin(x * 0.5 + winStep) + 1) * 127, 0, (cos(y * 0.5 + winStep) + 1) * 127);
+                r = (sin(x * 0.5 + winStep) + 1) * 127;
+                g = 0;
+                b = (cos(y * 0.5 + winStep) + 1) * 127;
             }
+            applyMatrixBrightnessToRGB(r, g, b);
+            setPixelXY(x, y, r, g, b);
         }
     }
 }
@@ -371,16 +391,19 @@ static void drawAnimationClientPerdant() {
         for (int x = 0; x < 8; x++) {
             int rainPos = (y + loseStep * 3) % 16;
             
+            uint8_t r, g, b;
             if (rainPos == 0 || rainPos == 1) {
                 // Gouttes qui tombent
                 if ((x + rainPos) % 3 == 0) {
-                    setPixelXY(x, y, 100, 100, 200); // Bleu grisé
+                    r = 100; g = 100; b = 200; // Bleu grisé
                 } else {
-                    setPixelXY(x, y, 80, 20, 80); // Violet sombre
+                    r = 80; g = 20; b = 80; // Violet sombre
                 }
             } else {
-                setPixelXY(x, y, 40, 40, 80); // Fond gris bleuté
+                r = 40; g = 40; b = 80; // Fond gris bleuté
             }
+            applyMatrixBrightnessToRGB(r, g, b);
+            setPixelXY(x, y, r, g, b);
         }
     }
 }

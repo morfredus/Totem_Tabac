@@ -1,3 +1,18 @@
+## [0.16.1] – Correction mise à l'échelle de luminosité pour toutes les animations (2026-01-11)
+### Corrigé
+- **Luminosité maintenant appliquée à TOUTES les animations matrice** : Les 6 animations personnalisées (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) respectent maintenant correctement le paramètre de luminosité global.
+- Correction de la luminosité des smileys en modes Ouverture/Fermeture.
+- Correction de la luminosité de l'animation café en mode Pause Café.
+- Correction de la luminosité du feu d'artifice en mode Gagnant.
+- Correction de la luminosité de la pluie en mode Perdant.
+- Correction de la luminosité de la vague diagonale en mode Humeur Patron.
+- La luminosité peut maintenant être réglée à 0 (matrice complètement éteinte) sans problèmes.
+
+### Détails techniques
+- Application de `applyMatrixBrightnessToRGB()` à toutes les couleurs de pixels d'animation avant affichage.
+- Chaque animation met maintenant à l'échelle les valeurs RGB par la luminosité globale avant d'appeler `setPixelXY()`.
+- Assure un contrôle de luminosité cohérent sur tous les types d'animations.
+
 ## [0.16.0] – Persistance complète et contrôle de luminosité (2026-01-11)
 ### Ajouté
 - **Persistance NVS complète** : Le mode d'animation actuel, le sous-mode et la couleur d'humeur sont maintenant sauvegardés et restaurés au démarrage.

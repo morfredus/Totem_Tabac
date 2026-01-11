@@ -1,3 +1,18 @@
+## [0.16.1] – Fix brightness scaling for all animations (2026-01-11)
+### Fixed
+- **Brightness now applied to ALL matrix animations**: All 6 custom animations (Ouverture, Fermeture, Pause Café, Gagnant, Perdant, Humeur Patron) now properly respect the global brightness setting.
+- Fixed smileys brightness in Ouverture/Fermeture modes.
+- Fixed coffee animation brightness in Pause Café mode.
+- Fixed fireworks brightness in Gagnant mode.
+- Fixed rain brightness in Perdant mode.
+- Fixed diagonal wave brightness in Humeur Patron mode.
+- Brightness can now be set to 0 (complete matrix off) without issues.
+
+### Technical Details
+- Applied `applyMatrixBrightnessToRGB()` to all animation pixel colors before display.
+- Each animation now scales RGB values by global brightness before calling `setPixelXY()`.
+- Ensures consistent brightness control across all animation types.
+
 ## [0.16.0] – Full persistence and brightness control (2026-01-11)
 ### Added
 - **Full NVS persistence**: Current animation mode, submode, and mood color are now saved and restored on boot.
