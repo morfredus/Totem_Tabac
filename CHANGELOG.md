@@ -1,24 +1,70 @@
-# .copilot: Evolution tracking — Branch dev/8x8
-# File: CHANGELOG.md
-# Project version: 0.12.0-dev8x8
-# Last update: 2026-01-10
-# Author: Fred & Copilot
-# - Changelog synchronized with README, hardware_setup, platformio.ini (EN/FR)
-# - Added NeoPixel 8x8 matrix, traffic light mapping, GPIO, synchronized doc
-# Active branch: dev/8x8
+
+## [1.0.0] – Modern web UI overhaul (2026-01-11)
+### Added
+- New modern, interactive, responsive web interface.
+- Exclusive display type selection (PWM or matrix) via UI.
+- Dedicated settings section.
+
+## [1.1.0] – Persistent settings (2026-01-11)
+### Added
+- Save/restore display type (NVS).
+- Save/restore matrix brightness.
+
+## [1.2.0] – Robust AJAX endpoints (2026-01-11)
+### Added
+- Endpoints /mode, /display, /brightness, /humeur, /status, /auto (later removed).
+- Full UI action handling in firmware.
+
+## [1.2.1] – JS/C++ fixes and robustness (2026-01-11)
+### Fixed
+- Fixed JS/C++ string conversion for web page generation.
+- Fixed string and initialization bugs.
+
+## [1.3.0] – PWM/matrix parity and clean switch (2026-01-11)
+### Added
+- Automatic LED shutdown when switching display type.
+- Hardware re-init on PWM/matrix switch.
+
+## [1.4.0] – Patron Mood RGB on matrix (2026-01-11)
+### Added
+- Selected color displayed on all three matrix traffic lights (full RGB palette).
+- Full PWM/matrix parity for this mode.
+
+## [1.4.1] – Removal of auto mode (2026-01-11)
+### Removed
+- Complete removal of time-based auto mode (backend, UI, endpoints).
+
+## [1.4.2] – Comment and history cleanup (2026-01-11)
+### Fixed
+- Removed all references to Copilot in comments and changelogs.
+
+## History — dev/8x8 branch
 # History:
 #   - v0.12.0-dev8x8: Added NeoPixel 8x8 matrix, traffic light mapping, synchronized doc
 #   - v0.11.x and earlier: PWM classic modules only
 #
 ## [0.12.0-dev8x8] – NeoPixel 8x8 Matrix Integration (2026-01-10)
 ### Added
-- Support for 8x8 NeoPixel matrix (addressed 0–63, top-to-bottom, left-to-right)
-- Traffic light simulation: 3 tricolor lights mapped on the matrix (red, yellow, green for each)
-- Safe GPIO selection for matrix per environment (see board_config.h)
-- All user documentation (EN/FR) updated: mapping, wiring, and usage
-- Project version bumped to 0.12.0-dev8x8
+
+## [0.12.0-dev8x8] – Display Selection, Web UI, Persistence (2026-01-10)
+### Added
+- **Exclusive display selection**: classic PWM modules *or* 8x8 NeoPixel matrix, never both at once.
+- **Live selection via web UI** (radio button).
+- **Automatic persistence** of display choice (NVS save/restore).
+- **Universal helpers**: all animation logic now uses abstracted helpers, compatible with both PWM and matrix.
+- **Full documentation sync** (EN/FR).
+
 ### Changed
-- .copilot rules enforced: every change is versioned, documented, and synchronized (EN/FR)
+- Refactored all animation code to use universal helpers.
+- Web UI: new display selection section, simplified header.
+
+### User Impact
+- Firmware always starts with the last selected display (PWM or matrix).
+- Instant switching via web UI, no reboot required.
+- Documentation and guides updated.
+
+---
+
 - README, hardware_setup, and changelogs updated for matrix support
 
 # Changelog — Totem Feux du Tabac

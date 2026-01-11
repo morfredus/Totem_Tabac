@@ -143,6 +143,29 @@ Buttons:
 
 ---
 
+
+# 4.1. Using the 8x8 NeoPixel Matrix (optional)
+
+Since version 0.12.0-dev8x8, you can use an 8x8 NeoPixel matrix *instead of* the classic PWM modules (never both at once).
+
+## Matrix Wiring
+
+- **VCC** (matrix) → 5V power supply
+- **GND** (matrix) → common GND
+- **DIN** (matrix) → GPIO defined in `board_config.h` (`NEOPIXEL_MATRIX_PIN`)
+
+> ⚠️ **Important:** Display selection (PWM modules or matrix) is done via the web interface (radio button) and is automatically saved. Only one system is active at a time.
+
+## Traffic light mapping on the matrix
+
+The matrix simulates 3 traffic lights:
+
+- **Light 1**: columns 0–1 (top = red, center = yellow, bottom = green)
+- **Light 2**: columns 3–4
+- **Light 3**: columns 6–7
+
+See `/docs/modes_reference.md` for animation details and `/README.md` for display selection instructions.
+
 # 4. Wiring Diagram (Text Version)
 
 Use the diagram corresponding to your ESP32 board (see section 3 for mappings).

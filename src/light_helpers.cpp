@@ -1,24 +1,76 @@
-/*
- * .copilot: Suivi des évolutions — Branche dev/8x8
- *
- * Fichier : light_helpers.cpp
- * Version projet : 0.12.0-dev8x8
- * Dernière modif : 2026-01-10
- * Auteur : Fred & Copilot
- *
- * - Helpers PWM pour modules classiques (4 modules × 3 couleurs)
- * - Helpers et mapping pour matrice NeoPixel 8x8 (3 feux tricolores)
- * - Mapping conforme à la doc et au changelog 0.12.0-dev8x8
- * - Toute évolution doit être synchronisée dans README, hardware_setup, changelog (FR/EN)
- *
- * Branche active : dev/8x8
- *
- * Historique :
- *   - v0.12.0-dev8x8 : Ajout helpers NeoPixel 8x8, mapping feux, correction header guard, compatibilité PlatformIO
- *   - v0.11.x et antérieures : PWM modules classiques uniquement
- */
+#include "modes.h"
 #include "light_helpers.h"
+
+// --- Helpers universels PWM/matrice ---
+void initLightsUniversal() {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        initNeoPixelMatrix();
+        clearMatrix();
+    } else {
+        for (int i = 0; i < 4; i++) initTrafficLightPWM(i);
+        clearAll();
+    }
+}
+
+void clearModuleUniversal(int module) {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        if (module < 3) {
+            setRedMatrix(module, 0);
+            setYellowMatrix(module, 0);
+            setGreenMatrix(module, 0);
+        }
+    } else {
+        clearModule(module);
+    }
+}
+
+void clearAllUniversal() {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        for (int i = 0; i < 3; i++) clearModuleUniversal(i);
+        clearMatrix();
+    } else {
+        clearAll();
+    }
+}
+
+void setRedUniversal(int module, uint8_t value) {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        if (module < 3) setRedMatrix(module, value);
+    } else {
+        setRed(module, value);
+    }
+}
+
+void setYellowUniversal(int module, uint8_t value) {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        if (module < 3) setYellowMatrix(module, value);
+    } else {
+        setYellow(module, value);
+    }
+}
+
+void setGreenUniversal(int module, uint8_t value) {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        if (module < 3) setGreenMatrix(module, value);
+    } else {
+        setGreen(module, value);
+    }
+}
+
+void setRGBUniversal(int module, bool r, bool y, uint8_t g) {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        setRedUniversal(module, r ? 255 : 0);
+        setYellowUniversal(module, y ? 255 : 0);
+        setGreenUniversal(module, g);
+    } else {
+        setRGB(module, r, y, g);
+    }
+}
+
+#include "light_helpers.h"
+// ...existing code...
 #include <Adafruit_NeoPixel.h>
+#include <Preferences.h>
 #include "board_config.h"
 
 // --- Objet strip global pour matrice 8x8 ---
@@ -26,11 +78,37 @@
 #define NEOPIXEL_MATRIX_PIN 27 // fallback sécurité
 #endif
 static Adafruit_NeoPixel strip(64, NEOPIXEL_MATRIX_PIN, NEO_GRB + NEO_KHZ800);
+static uint8_t matrixBrightness = 128;
+static Preferences matrixPrefs;
 
 void initNeoPixelMatrix() {
     strip.begin();
+    strip.setBrightness(matrixBrightness);
     strip.show();
     strip.clear();
+}
+
+void setMatrixBrightness(uint8_t b) {
+    matrixBrightness = b;
+    strip.setBrightness(matrixBrightness);
+    strip.show();
+    saveMatrixBrightnessToNVS();
+}
+
+uint8_t getMatrixBrightness() {
+    return matrixBrightness;
+}
+
+void loadMatrixBrightnessFromNVS() {
+    matrixPrefs.begin("matrix", true);
+    matrixBrightness = matrixPrefs.getUChar("brightness", 128);
+    matrixPrefs.end();
+}
+
+void saveMatrixBrightnessToNVS() {
+    matrixPrefs.begin("matrix", false);
+    matrixPrefs.putUChar("brightness", matrixBrightness);
+    matrixPrefs.end();
 }
 
 void clearMatrix() {

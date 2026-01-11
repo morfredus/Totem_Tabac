@@ -1,3 +1,21 @@
+
+#include "modes.h"
+#include <Preferences.h>
+// --- Persistance du choix d'affichage (NVS) ---
+static Preferences displayPrefs;
+
+void loadDisplayTypeFromNVS() {
+    displayPrefs.begin("display", true); // lecture seule
+    int val = displayPrefs.getInt("type", (int)DISPLAY_PWM);
+    currentDisplayType = (val == (int)DISPLAY_MATRIX) ? DISPLAY_MATRIX : DISPLAY_PWM;
+    displayPrefs.end();
+}
+
+void saveDisplayTypeToNVS() {
+    displayPrefs.begin("display", false); // écriture
+    displayPrefs.putInt("type", (int)currentDisplayType);
+    displayPrefs.end();
+}
 #include "modes.h"
 #include "wifi_manager.h"
 #include "light_helpers.h"
@@ -7,13 +25,32 @@
 // VARIABLES GLOBALES
 // ---------------------------------------------------------
 
+
 Mode currentMode = MODE_ZEN;
 int subMode = 0;
 int humeurColor = 0;
 
-bool autoModeEnabled = false;
-int autoMorningHour = 8;
-int autoEveningHour = 18;
+// Variable globale pour le type d'affichage (PWM ou matrice)
+DisplayType currentDisplayType = DISPLAY_PWM;
+// --- Getter/setter pour le type d'affichage ---
+void setDisplayType(DisplayType t) {
+    if (t != currentDisplayType) {
+        // Éteint tout lors du changement d’affichage
+        if (currentDisplayType == DISPLAY_MATRIX) {
+            clearMatrix();
+        } else {
+            clearAll();
+        }
+        currentDisplayType = t;
+        saveDisplayTypeToNVS();
+        initLightsUniversal(); // Réinitialise PWM ou matrice selon le mode
+        setMode(currentMode); // Relance l'animation courante avec le bon moteur
+    }
+}
+
+DisplayType getDisplayType() {
+    return currentDisplayType;
+}
 
 static unsigned long lastUpdate = 0;
 static int animStep = 0;
@@ -38,8 +75,8 @@ static void fadeGreen() {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
         for (int i = 0; i < 4; i++) {
-            clearModule(i);
-            setGreen(i, b);
+            clearModuleUniversal(i);
+            setGreenUniversal(i, b);
         }
 
         fadeStep++;
@@ -56,8 +93,8 @@ static void fadeYellow() {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
         for (int i = 0; i < 4; i++) {
-            clearModule(i);
-            setYellow(i, b);   // JAUNE PWM
+            clearModuleUniversal(i);
+            setYellowUniversal(i, b);
         }
 
         fadeStep++;
@@ -74,8 +111,8 @@ static void fadeRed() {
         int b = (sin(fadeStep * 0.06) + 1) * 127;
 
         for (int i = 0; i < 4; i++) {
-            clearModule(i);
-            setRed(i, b);   // ROUGE PWM
+            clearModuleUniversal(i);
+            setRedUniversal(i, b);
         }
 
         fadeStep++;
@@ -88,10 +125,7 @@ static void fadeRed() {
 // ---------------------------------------------------------
 
 void initLights() {
-    for (int i = 0; i < 4; i++) {
-        initTrafficLightPWM(i);
-    }
-    clearAll();
+    initLightsUniversal();
 }
 
 // ---------------------------------------------------------
@@ -105,7 +139,7 @@ void setMode(Mode m) {
     fadeStep = 0;
     lastUpdate = millis();
     lastFadeUpdate = millis();
-    clearAll();
+    clearAllUniversal();
 }
 
 void nextMode() {
@@ -114,40 +148,51 @@ void nextMode() {
     setMode((Mode)m);
 }
 
-// ---------------------------------------------------------
-// AUTO-MODE
-// ---------------------------------------------------------
 
-static void handleAutoMode() {
-    if (!autoModeEnabled) return;
-
-    int hour;
-    if (!getLocalHour(hour)) return;
-
-    if (hour < autoMorningHour) {
-        if (currentMode != MODE_FERMETURE) setMode(MODE_FERMETURE);
-    }
-    else if (hour < autoEveningHour) {
-        if (currentMode != MODE_ZEN) setMode(MODE_ZEN);
-    }
-    else {
-        if (currentMode != MODE_FERMETURE) setMode(MODE_FERMETURE);
-    }
-}
 
 // ---------------------------------------------------------
 // HUMEUR DU PATRON
 // ---------------------------------------------------------
 
 static void applyHumeurColor() {
-    clearAll();
-    switch (humeurColor) {
-        case 0: setGreen(3, 255); break;
-        case 1: setYellow(3, 255); break;
-        case 2: setRed(3, 255); break;
-        case 3: setRGB(3, false, false, 255); break;
-        case 4: setRGB(3, true, false, 80); break;
-        case 5: setRGB(3, true, true, 255); break;
+    clearAllUniversal();
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        // Palette RGB complète pour la matrice (correspond à humeurColor)
+        uint8_t colors[6][3] = {
+            {0, 255, 0},      // Vert
+            {255, 255, 0},    // Jaune
+            {255, 0, 0},      // Rouge
+            {0, 0, 255},      // Bleu
+            {255, 0, 255},    // Magenta
+            {255, 255, 255}   // Blanc
+        };
+        uint8_t r = colors[humeurColor][0];
+        uint8_t g = colors[humeurColor][1];
+        uint8_t b = colors[humeurColor][2];
+        // Pour chaque feu (3 feux sur la matrice)
+        for (int feu = 0; feu < 3; feu++) {
+            // Chaque feu a 4 pixels pour chaque couleur (rouge, jaune, vert)
+            // On éclaire tous les pixels du feu avec la couleur sélectionnée
+            for (int i = 0; i < 4; i++) {
+                extern const uint8_t RED_PIXELS[3][4];
+                extern const uint8_t YELLOW_PIXELS[3][4];
+                extern const uint8_t GREEN_PIXELS[3][4];
+                // Allume tous les pixels du feu
+                setPixelXY(RED_PIXELS[feu][i] % 8, RED_PIXELS[feu][i] / 8, r, g, b);
+                setPixelXY(YELLOW_PIXELS[feu][i] % 8, YELLOW_PIXELS[feu][i] / 8, r, g, b);
+                setPixelXY(GREEN_PIXELS[feu][i] % 8, GREEN_PIXELS[feu][i] / 8, r, g, b);
+            }
+        }
+    } else {
+        // PWM classique : couleurs limitées
+        switch (humeurColor) {
+            case 0: setGreenUniversal(3, 255); break;
+            case 1: setYellowUniversal(3, 255); break;
+            case 2: setRedUniversal(3, 255); break;
+            case 3: setRGBUniversal(3, false, false, 255); break;
+            case 4: setRGBUniversal(3, true, false, 80); break;
+            case 5: setRGBUniversal(3, true, true, 255); break;
+        }
     }
 }
 
@@ -157,7 +202,7 @@ static void applyHumeurColor() {
 
 void updateMode() {
     unsigned long now = millis();
-    handleAutoMode();
+
 
     switch (currentMode) {
 
@@ -175,9 +220,9 @@ void updateMode() {
         if (now - lastUpdate > 30) {
             int b = (sin(animStep * 0.04) + 1) * 100;
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setYellow(i, 80);
-                setGreen(i, b);
+                clearModuleUniversal(i);
+                setYellowUniversal(i, 80);
+                setGreenUniversal(i, b);
             }
             animStep++;
             lastUpdate = now;
@@ -189,9 +234,9 @@ void updateMode() {
     // -----------------------------------------------------
     case MODE_VAGUE:
         if (now - lastUpdate > 180) {
-            clearAll();
+            clearAllUniversal();
             int pos = animStep % 4;
-            setGreen(pos, 255);
+            setGreenUniversal(pos, 255);
             animStep++;
             lastUpdate = now;
         }
@@ -206,18 +251,18 @@ void updateMode() {
             int step = animStep % 6;
 
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
+                clearModuleUniversal(i);
 
                 int s = (step + (subMode == 1 ? -i : i)) % 6;
                 if (s < 0) s += 6;
 
                 switch (s) {
-                    case 0: setRed(i, 255); break;
-                    case 1: setYellow(i, 255); break;
-                    case 2: setGreen(i, 255); break;
-                    case 3: setRGB(i, true, true, 0); break;
-                    case 4: setRGB(i, true, false, 80); break;
-                    case 5: setRGB(i, true, true, 255); break;
+                    case 0: setRedUniversal(i, 255); break;
+                    case 1: setYellowUniversal(i, 255); break;
+                    case 2: setGreenUniversal(i, 255); break;
+                    case 3: setRGBUniversal(i, true, true, 0); break;
+                    case 4: setRGBUniversal(i, true, false, 80); break;
+                    case 5: setRGBUniversal(i, true, true, 255); break;
                 }
             }
 
@@ -254,8 +299,8 @@ void updateMode() {
         if (now - lastUpdate > 120) {
             bool on = animStep % 2;
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setRed(i, on ? 255 : 0);
+                clearModuleUniversal(i);
+                setRedUniversal(i, on ? 255 : 0);
             }
             animStep++;
             lastUpdate = now;
@@ -274,7 +319,7 @@ void updateMode() {
 
     if (now - lastUpdate > (unsigned long)delayMs) {
 
-            clearAll();
+            clearAllUniversal();
 
             // Intensités de la queue lumineuse
             const uint8_t T0 = 255;  // point principal
@@ -282,24 +327,24 @@ void updateMode() {
             const uint8_t T2 = 60;   // 2e niveau de fade
 
             // Allume le point principal
-            setRed(pos, T0);
-            setYellow(pos, T0);
-            setGreen(pos, T0);
+            setRedUniversal(pos, T0);
+            setYellowUniversal(pos, T0);
+            setGreenUniversal(pos, T0);
 
             // Queue lumineuse derrière le point
             int p1 = pos - dir;      // juste derrière
             int p2 = pos - 2 * dir;  // encore derrière
 
             if (p1 >= 0 && p1 < 4) {
-                setRed(p1, T1);
-                setYellow(p1, T1);
-                setGreen(p1, T1);
+                setRedUniversal(p1, T1);
+                setYellowUniversal(p1, T1);
+                setGreenUniversal(p1, T1);
             }
 
             if (p2 >= 0 && p2 < 4) {
-                setRed(p2, T2);
-                setYellow(p2, T2);
-                setGreen(p2, T2);
+                setRedUniversal(p2, T2);
+                setYellowUniversal(p2, T2);
+                setGreenUniversal(p2, T2);
             }
 
             // Avance
@@ -325,10 +370,10 @@ void updateMode() {
 
         if (now - lastUpdate > (unsigned long)delayMs) {
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setRed(i, random(255));
-                setYellow(i, random(255));
-                setGreen(i, random(255));
+                clearModuleUniversal(i);
+                setRedUniversal(i, random(255));
+                setYellowUniversal(i, random(255));
+                setGreenUniversal(i, random(255));
             }
             animStep++;
             lastUpdate = now;
@@ -346,15 +391,15 @@ void updateMode() {
 
             if (animStep % 8 == 0) {
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setRGB(i, true, true, 255);
+                    clearModuleUniversal(i);
+                    setRGBUniversal(i, true, true, 255);
                 }
             } else {
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setRed(i, random(255));
-                    setYellow(i, random(255));
-                    setGreen(i, random(255));
+                    clearModuleUniversal(i);
+                    setRedUniversal(i, random(255));
+                    setYellowUniversal(i, random(255));
+                    setGreenUniversal(i, random(255));
                 }
             }
 
@@ -373,19 +418,19 @@ void updateMode() {
             if (animStep < 10) {
                 bool on = animStep % 2;
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setYellow(i, on ? 255 : 0);
+                    clearModuleUniversal(i);
+                    setYellowUniversal(i, on ? 255 : 0);
                 }
             }
             else if (animStep < 20) {
-                clearAll();
+                clearAllUniversal();
                 int pos = animStep - 10;
-                if (pos < 4) setGreen(pos, 255);
+                if (pos < 4) setGreenUniversal(pos, 255);
             }
             else {
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setGreen(i, 255);
+                    clearModuleUniversal(i);
+                    setGreenUniversal(i, 255);
                 }
             }
 
@@ -402,16 +447,16 @@ void updateMode() {
 
             if (animStep < 12) {
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setRed(i, random(255));
-                    setYellow(i, random(255));
-                    setGreen(i, random(255));
+                    clearModuleUniversal(i);
+                    setRedUniversal(i, random(255));
+                    setYellowUniversal(i, random(255));
+                    setGreenUniversal(i, random(255));
                 }
             }
             else {
                 for (int i = 0; i < 4; i++) {
-                    clearModule(i);
-                    setGreen(i, 255);
+                    clearModuleUniversal(i);
+                    setGreenUniversal(i, 255);
                 }
             }
 
@@ -429,9 +474,9 @@ void updateMode() {
             bool flash = animStep % 2;
 
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setRed(i, 255);
-                if (flash) setYellow(i, 255);
+                clearModuleUniversal(i);
+                setRedUniversal(i, 255);
+                if (flash) setYellowUniversal(i, 255);
             }
 
             animStep++;
@@ -444,8 +489,8 @@ void updateMode() {
     // -----------------------------------------------------
     case MODE_OUVERTURE:
         for (int i = 0; i < 4; i++) {
-            clearModule(i);
-            setGreen(i, 255);
+            clearModuleUniversal(i);
+            setGreenUniversal(i, 255);
         }
         break;
 
@@ -454,8 +499,8 @@ void updateMode() {
     // -----------------------------------------------------
     case MODE_FERMETURE:
         for (int i = 0; i < 4; i++) {
-            clearModule(i);
-            setRed(i, 255);
+            clearModuleUniversal(i);
+            setRedUniversal(i, 255);
         }
         break;
 
@@ -467,9 +512,9 @@ void updateMode() {
             bool blink = animStep % 2;
 
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
-                setYellow(i, 255);
-                if (blink) setGreen(i, 255);
+                clearModuleUniversal(i);
+                setYellowUniversal(i, 255);
+                if (blink) setGreenUniversal(i, 255);
             }
 
             animStep++;
@@ -485,15 +530,15 @@ void updateMode() {
 
             int phase = animStep % 6;
 
-            for (int i = 0; i < 4; i++) clearModule(i);
+            for (int i = 0; i < 4; i++) clearModuleUniversal(i);
 
             switch (phase) {
-                case 0: for (int i = 0; i < 4; i++) setRed(i, 255); break;
-                case 1: for (int i = 0; i < 4; i++) setYellow(i, 255); break;
-                case 2: for (int i = 0; i < 4; i++) setGreen(i, 255); break;
-                case 3: for (int i = 0; i < 4; i++) setRGB(i, true, true, 255); break;
-                case 4: for (int i = 0; i < 4; i++) setRGB(i, true, false, 80); break;
-                case 5: for (int i = 0; i < 4; i++) setRGB(i, false, false, 255); break;
+                case 0: for (int i = 0; i < 4; i++) setRedUniversal(i, 255); break;
+                case 1: for (int i = 0; i < 4; i++) setYellowUniversal(i, 255); break;
+                case 2: for (int i = 0; i < 4; i++) setGreenUniversal(i, 255); break;
+                case 3: for (int i = 0; i < 4; i++) setRGBUniversal(i, true, true, 255); break;
+                case 4: for (int i = 0; i < 4; i++) setRGBUniversal(i, true, false, 80); break;
+                case 5: for (int i = 0; i < 4; i++) setRGBUniversal(i, false, false, 255); break;
             }
 
             animStep++;
@@ -510,17 +555,17 @@ void updateMode() {
             int step = animStep % 6;
 
             for (int i = 0; i < 4; i++) {
-                clearModule(i);
+                clearModuleUniversal(i);
 
                 int s = (step + i) % 6;
 
                 switch (s) {
-                    case 0: setRed(i, 255); break;
-                    case 1: setYellow(i, 255); break;
-                    case 2: setGreen(i, 255); break;
-                    case 3: setRGB(i, true, true, 0); break;
-                    case 4: setRGB(i, true, false, 80); break;
-                    case 5: setRGB(i, true, true, 255); break;
+                    case 0: setRedUniversal(i, 255); break;
+                    case 1: setYellowUniversal(i, 255); break;
+                    case 2: setGreenUniversal(i, 255); break;
+                    case 3: setRGBUniversal(i, true, true, 0); break;
+                    case 4: setRGBUniversal(i, true, false, 80); break;
+                    case 5: setRGBUniversal(i, true, true, 255); break;
                 }
             }
 
@@ -537,7 +582,7 @@ void updateMode() {
         break;
 
     default:
-        clearAll();
+        clearAllUniversal();
         break;
     }
 }

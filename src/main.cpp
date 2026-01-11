@@ -42,7 +42,50 @@ void handleButton2() {
 }
 
 void setup() {
+                // Route AJAX pour humeur du patron (couleur)
+                server.on("/humeur", [](){
+                    if (server.hasArg("value")) {
+                        humeurColor = server.arg("value").toInt();
+                        setMode(MODE_HUMEUR_PATRON);
+                    }
+                    ajaxOK();
+                });
+        // Endpoint universel pour changer de mode par numéro (pour l'UI web moderne)
+        server.on("/mode", [](){
+            if (server.hasArg("value")) {
+                int m = server.arg("value").toInt();
+                    setMode((Mode)m);
+            }
+            ajaxOK();
+        });
+    // Route pour changer le type d'affichage (matrice/modules)
+    server.on("/display", [](){
+        int t = -1;
+        if (server.hasArg("value")) t = server.arg("value").toInt();
+        else if (server.hasArg("t")) t = server.arg("t").toInt();
+        if (t != -1) setDisplayType(t == 1 ? DISPLAY_MATRIX : DISPLAY_PWM);
+        ajaxOK();
+    });
+
+    // Route pour régler la luminosité de la matrice
+    server.on("/brightness", [](){
+        int b = -1;
+        if (server.hasArg("value")) b = server.arg("value").toInt();
+        else if (server.hasArg("b")) b = server.arg("b").toInt();
+        if (b != -1) {
+            if (b < 10) b = 10;
+            if (b > 255) b = 255;
+            setMatrixBrightness((uint8_t)b);
+        }
+        ajaxOK();
+    });
+
     Serial.begin(115200);
+
+    // Restaure le choix d'affichage (PWM ou matrice) depuis la mémoire NVS
+    loadDisplayTypeFromNVS();
+    // Restaure la luminosité matrice
+    loadMatrixBrightnessFromNVS();
 
     pinMode(BUTTON_PIN, INPUT_PULLUP);
     pinMode(BUTTON2_PIN, INPUT_PULLUP);
@@ -104,7 +147,9 @@ void setup() {
         String json = "{";
         json += "\"mode\":" + String(currentMode) + ",";
         json += "\"sub\":" + String(subMode) + ",";
-        json += "\"humeur\":" + String(humeurColor);
+        json += "\"humeur\":" + String(humeurColor) + ",";
+        json += "\"displayType\":" + String((int)getDisplayType()) + ",";
+        json += "\"brightness\":" + String(getMatrixBrightness());
         json += "}";
         server.send(200, "application/json", json);
     });

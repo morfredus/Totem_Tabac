@@ -145,6 +145,29 @@ Boutons :
 
 ---
 
+
+# 4.1. Utilisation de la matrice NeoPixel 8x8 (optionnel)
+
+Depuis la version 0.12.0-dev8x8, il est possible d’utiliser une matrice NeoPixel 8x8 *à la place* des modules PWM classiques (jamais simultanément).
+
+## Câblage de la matrice
+
+- **VCC** (matrice) → 5V alimentation
+- **GND** (matrice) → GND commun
+- **DIN** (matrice) → GPIO défini dans `board_config.h` (`NEOPIXEL_MATRIX_PIN`)
+
+> ⚠️ **Important** : Le choix entre modules PWM et matrice se fait via l’interface web (radio bouton), et est sauvegardé automatiquement. Un seul système actif à la fois.
+
+## Mapping des feux sur la matrice
+
+La matrice simule 3 feux tricolores :
+
+- **Feu 1** : colonnes 0–1 (haut = rouge, centre = jaune, bas = vert)
+- **Feu 2** : colonnes 3–4
+- **Feu 3** : colonnes 6–7
+
+Voir `/docs/modes_reference_FR.md` pour le détail des animations et `/README_FR.md` pour la sélection d’affichage.
+
 # 4. Schéma de câblage (version texte)
 
 Utilisez le schéma correspondant à votre carte ESP32 (voir section 3 pour les mappings).

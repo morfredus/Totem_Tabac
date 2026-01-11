@@ -62,6 +62,22 @@ Licensed under the **MIT License**.
 - Sub‑mode selection
 - Live status
 - WiFi configuration
+- **Display selection**: choose between classic PWM modules or 8x8 NeoPixel matrix (exclusive, persistent)
+
+---
+
+## 🟦 Display Selection (PWM or Matrix)
+
+Since version 0.12.0-dev8x8, the firmware allows dynamic selection of the display system:
+
+- **Classic PWM modules** (4 modules, 12 channels)
+- **8x8 NeoPixel matrix** (simulates 3 traffic lights)
+
+The choice is made via the web interface (radio button) and is **automatically saved** (persistent after reboot).
+
+All animation logic uses universal helpers, ensuring identical behavior regardless of display type.
+
+See `/docs/modes_reference.md` for animation details and `/docs/hardware_setup.md` for matrix wiring.
 
 ### 🔘 Physical Buttons
 - Next Mode

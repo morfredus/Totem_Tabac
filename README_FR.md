@@ -61,6 +61,22 @@ Licence : **MIT License**
 - Sélection du sous‑mode
 - Statut en direct
 - Configuration WiFi
+- **Sélection d’affichage** : choisissez entre modules PWM classiques ou matrice NeoPixel 8x8 (exclusif, persistant)
+
+---
+
+## 🟦 Sélection d’affichage (PWM ou matrice)
+
+Depuis la version 0.12.0-dev8x8, le firmware permet de choisir dynamiquement le système d’affichage :
+
+- **Modules PWM classiques** (4 modules, 12 canaux)
+- **Matrice NeoPixel 8x8** (simulation 3 feux tricolores)
+
+Le choix se fait via l’interface web (radio bouton) et est **sauvegardé automatiquement** (persistance après redémarrage).
+
+Toute la logique d’animation utilise des helpers universels, garantissant un comportement identique quel que soit l’affichage.
+
+Voir `/docs/modes_reference_FR.md` pour le détail des animations et `/docs/hardware_setup_FR.md` pour le câblage matrice.
 
 ### 🔘 Boutons physiques
 - Mode suivant

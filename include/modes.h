@@ -1,3 +1,6 @@
+// Persistance du choix d'affichage (NVS)
+void loadDisplayTypeFromNVS();
+void saveDisplayTypeToNVS();
 #ifndef MODES_H
 #define MODES_H
 
@@ -30,12 +33,21 @@ enum Mode {
 
 extern Mode currentMode;
 
-extern bool autoModeEnabled;
-extern int autoMorningHour;
-extern int autoEveningHour;
 
 extern int humeurColor; // 0..5
 extern int subMode;     // sous-mode courant
+
+
+// Sélection du type d'affichage : PWM (modules) ou matrice NeoPixel
+enum DisplayType {
+    DISPLAY_PWM = 0,
+    DISPLAY_MATRIX = 1
+};
+
+extern DisplayType currentDisplayType;
+
+void setDisplayType(DisplayType t);
+DisplayType getDisplayType();
 
 void initLights();
 void setMode(Mode m);

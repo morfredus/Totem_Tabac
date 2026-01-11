@@ -1,24 +1,70 @@
-# .copilot: Suivi des évolutions — Branche dev/8x8
-# Fichier : CHANGELOG_FR.md
-# Version projet : 0.12.0-dev8x8
-# Dernière modif : 2026-01-10
-# Auteur : Fred & Copilot
-# - Journal des modifications synchronisé avec README, hardware_setup, platformio.ini (FR/EN)
-# - Ajout matrice NeoPixel 8x8, mapping feux, GPIO, doc synchronisée
-# Branche active : dev/8x8
+
+## [1.0.0] – Refonte UI web moderne (2026-01-11)
+### Ajouté
+- Nouvelle interface web moderne, interactive et responsive.
+- Sélection exclusive du type d’affichage (PWM ou matrice) via l’UI.
+- Section paramètres dédiée.
+
+## [1.1.0] – Persistance des réglages (2026-01-11)
+### Ajouté
+- Sauvegarde/restauration du type d’affichage (NVS).
+- Sauvegarde/restauration de la luminosité matrice.
+
+## [1.2.0] – Endpoints AJAX robustes (2026-01-11)
+### Ajouté
+- Endpoints /mode, /display, /brightness, /humeur, /status, /auto (supprimé ensuite).
+- Gestion complète des actions UI côté firmware.
+
+## [1.2.1] – Correction JS/C++ et robustesse (2026-01-11)
+### Corrigé
+- Correction des conversions JS/C++ pour la génération de page web.
+- Correction des bugs de string et d’initialisation.
+
+## [1.3.0] – Parité PWM/matrice et extinction propre (2026-01-11)
+### Ajouté
+- Extinction automatique des LEDs lors du changement d’affichage.
+- Réinitialisation hardware lors du switch PWM/matrice.
+
+## [1.4.0] – Humeur du Patron RGB sur matrice (2026-01-11)
+### Ajouté
+- Affichage de la couleur sélectionnée sur les trois feux de la matrice (palette RGB complète).
+- Parité totale PWM/matrice pour ce mode.
+
+## [1.4.1] – Suppression du mode automatique horaire (2026-01-11)
+### Supprimé
+- Suppression complète du mode automatique dépendant de l’horaire (backend, UI, endpoints).
+
+## [1.4.2] – Nettoyage commentaires et historique (2026-01-11)
+### Corrigé
+- Suppression de toute référence à Copilot dans les commentaires et changelogs.
+
+## Historique — Branche dev/8x8
 # Historique :
 #   - v0.12.0-dev8x8 : Ajout matrice NeoPixel 8x8, mapping feux, doc synchronisée
 #   - v0.11.x et antérieures : PWM modules classiques uniquement
 #
 ## [0.12.0-dev8x8] – Intégration matrice NeoPixel 8x8 (2026-01-10)
 ### Ajouté
-- Prise en charge d'une matrice NeoPixel 8x8 (adresses 0–63, haut en bas, gauche à droite)
-- Simulation de 3 feux tricolores sur la matrice (rouge, jaune, vert pour chaque feu)
-- Sélection sécurisée du GPIO pour la matrice selon l'environnement (voir board_config.h)
-- Documentation utilisateur (FR/EN) mise à jour : mapping, câblage, utilisation
-- Version projet passée à 0.12.0-dev8x8
+
+## [0.12.0-dev8x8] – Sélection d’affichage PWM/Matrice, UI web, persistance (2026-01-10)
+### Ajouté
+- **Sélection exclusive du système d’affichage** : modules PWM classiques *ou* matrice NeoPixel 8x8, jamais simultanés.
+- **Choix modifiable à chaud via l’interface web** (radio bouton).
+- **Persistance automatique** du choix d’affichage (sauvegarde/restauration en mémoire NVS).
+- **Helpers universels** : toute la logique d’animation utilise désormais des helpers abstraits, compatibles PWM et matrice.
+- **Synchronisation complète de la documentation** (FR/EN).
+
 ### Modifié
-- Règles .copilot appliquées : chaque évolution est versionnée, documentée et synchronisée (FR/EN)
+- Refactorisation de tout le code d’animation pour utiliser les helpers universels.
+- Web UI : nouvelle section pour le choix d’affichage, header simplifié.
+
+### Impact utilisateur
+- Le firmware démarre toujours avec le dernier affichage choisi (PWM ou matrice).
+- Changement immédiat via l’UI web, sans redémarrage.
+- Documentation et guides mis à jour.
+
+---
+
 - README, guides hardware et changelogs mis à jour pour la matrice
 
 #

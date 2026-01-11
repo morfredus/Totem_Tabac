@@ -1,3 +1,18 @@
+#include <stdint.h>
+
+// --- Brightness matrice NeoPixel ---
+void setMatrixBrightness(uint8_t b);
+uint8_t getMatrixBrightness();
+void loadMatrixBrightnessFromNVS();
+void saveMatrixBrightnessToNVS();
+// Helpers universels pour PWM ou matrice selon currentDisplayType
+void initLightsUniversal();
+void clearModuleUniversal(int module);
+void clearAllUniversal();
+void setRedUniversal(int module, uint8_t value);
+void setYellowUniversal(int module, uint8_t value);
+void setGreenUniversal(int module, uint8_t value);
+void setRGBUniversal(int module, bool r, bool y, uint8_t g);
 
 #ifndef LIGHT_HELPERS_H
 #define LIGHT_HELPERS_H
