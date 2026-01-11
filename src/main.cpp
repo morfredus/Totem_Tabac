@@ -5,6 +5,7 @@
 #include <ArduinoOTA.h>
 #include <Update.h>
 
+#include "config.h"
 #include "wifi_manager.h"
 #include "light_helpers.h"
 #include "modes.h"
@@ -13,7 +14,7 @@
 #include "board_config.h"
 #include "submode.h"
 
-WebServer server(80);
+WebServer server(HTTP_SERVER_PORT);
 
 // Anti-rebond boutons
 bool lastButtonState = HIGH;
@@ -112,9 +113,19 @@ void setup() {
     connectToKnownWiFi();
     Serial.println("IP: " + getCurrentIP());
 
+    // Configuration mDNS
+    if (!MDNS.begin(MDNS_NAME)) {
+        Serial.println("mDNS init failed");
+    } else {
+        Serial.println("mDNS started: http://" + String(MDNS_NAME) + ".local");
+        MDNS.addService("http", "tcp", HTTP_SERVER_PORT);
+    }
+
     // Configuration ArduinoOTA
-    ArduinoOTA.setHostname("Totem-Tabac");
-    // ArduinoOTA.setPassword("totem2026");  // Décommenter pour activer la protection par mot de passe
+    ArduinoOTA.setHostname(OTA_HOSTNAME);
+    #ifdef OTA_PASSWORD
+    ArduinoOTA.setPassword(OTA_PASSWORD);
+    #endif
     
     ArduinoOTA.onStart([]() {
         String type;
@@ -223,7 +234,11 @@ void setup() {
 
     // Sous-modes
     server.on("/sub", [](){
-        if (server.hasArg("v")) subMode = server.arg("v").toInt();
+        if (server.hasArg("v")) {
+            subMode = server.arg("v").toInt();
+            // Persister immédiatement
+            saveCurrentModeToNVS();
+        }
         ajaxOK();
     });
 

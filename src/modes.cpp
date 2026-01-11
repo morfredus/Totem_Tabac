@@ -559,7 +559,9 @@ void updateMode() {
                 lastUpdate = now;
             }
         } else {
-            if (now - lastUpdate > 180) {
+            // PWM: appliquer la vitesse selon sous-mode (Lent/Moyen/Rapide)
+            int delayMs = (subMode == 0 ? 180 : subMode == 1 ? 120 : 80);
+            if (now - lastUpdate > (unsigned long)delayMs) {
                 clearAllUniversal();
                 int pos = animStep % 4;
                 setGreenUniversal(pos, 255);

@@ -151,7 +151,7 @@ inline String renderWebPage() {
     html += "</span></div>\n";
     html += "<div class=\"param-row\">\n";
     html += "<span class=\"param-label\">🔄 Mise à jour OTA :</span>\n";
-    html += "<div class=\"submode-btn\" onclick=\"window.open('/update','_blank')\">🚀 Ouvrir page de mise à jour</div>\n";
+    html += "<div class=\"submode-btn\" onclick=\"location.href='/update'\">🚀 Ouvrir page de mise à jour</div>\n";
     html += "</div>\n";
     html += "</div>\n";
 
@@ -190,7 +190,10 @@ inline String renderWebPage() {
     html += "  }\n";
     html += "  document.getElementById('submode-util').innerHTML = submodeUtil;\n";
     html += "}\n";
-    html += "function nextSubMode(){fetch('/submode').then(()=>{setTimeout(fetchStatusAndUpdateSubmode,200);});}\n";
+    html += "function nextSubMode(){\n";
+    html += "  const next = (currentSub + 1) % 3;\n";
+    html += "  fetch('/sub?v=' + next).then(()=>{setTimeout(fetchStatusAndUpdateSubmode,200);});\n";
+    html += "}\n";
     html += "function subModeLabel(mode,sub){\n";
     html += "  if([1,2,3,4,5,7,8].includes(mode)) return ['Lent','Moyen','Rapide'][sub%3];\n";
     html += "  return '';\n";

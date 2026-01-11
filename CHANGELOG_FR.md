@@ -1,3 +1,32 @@
+## [0.20.0]  Configuration utilisateur et gestion mDNS (2026-01-11)
+### Ajouté
+- **\include/config.h\** : Paramètres centralisés configurables par l'utilisateur (nom mDNS, port HTTP, paramètres OTA, mode/luminosité par défaut).
+- **Configuration du nom d'hôte mDNS** : Changez le nom d'accessibilité de l'appareil via \MDNS_NAME\ (défaut : \Totem-Tabac\).
+- **Configuration du nom d'hôte et port OTA** : Personnalisez les paramètres ArduinoOTA via \OTA_HOSTNAME\ et \OTA_PORT\.
+- **Basculement mot de passe OTA** : Protection optionnelle par mot de passe via \OTA_PASSWORD\ (commentée par défaut).
+- **Paramètres d'affichage et mode par défaut** : Configurez le type d'affichage au démarrage (PWM/Matrice), le mode initial, la luminosité matrice.
+- **\include/secrets_example.h\** : Fichier de modèle démontrant la structure de configuration WiFi (jamais engagé à Git).
+- **Documentation utilisateur** :
+  - \docs/configuration.md\ et \docs/configuration_FR.md\  Guide complet de configuration.
+  - \docs/getting_started.md\ et \docs/getting_started_FR.md\  Guides de démarrage rapide pour la première utilisation.
+
+### Modifié
+- **\src/main.cpp\** : Intégration des includes \config.h\ ; initialisation mDNS utilise \MDNS_NAME\ et \MDNS.addService()\ pour l'enregistrement du service HTTP.
+- **Configuration ArduinoOTA** : Référence désormais \OTA_HOSTNAME\ et \OTA_PASSWORD\ optionnel depuis \config.h\ (compatible rétrograde).
+- **Instantiation WebServer** : Le port utilise la macro \HTTP_SERVER_PORT\.
+
+### Détails techniques
+- Tous les paramètres de configuration accessibles à l'utilisateur dans un seul fichier d'en-tête (\config.h\).
+- Service mDNS correctement annoncé (http, tcp, port 80) pour la découverte sur le réseau local.
+- Compatibilité rétrograde maintenue ; les valeurs par défaut correspondent aux paramètres précédents codés en dur.
+- Sortie série maintenant enregistre : \mDNS started: http://Totem-Tabac.local\ pour la commodité de l'utilisateur.
+
+### Documentation
+- README.md et README_FR.md mis à jour avec les modifications v0.20.0, les liens de configuration et les références de démarrage rapide.
+- Les guides de configuration et de démarrage maintenant les points d'entrée principaux pour les nouveaux utilisateurs.
+- Tous les docs maintiennent une équivalence stricte (EN/FR) selon les règles \.copilot\.
+
+
 ## [0.19.0] â€“ Modes doux adaptÃ©s Ã  la matrice (2026-01-11)
 ### ModifiÃ©
 - **Ambiance douce (matrice)** : fond chaud avec respiration verte pleine matrice, accent visuel prÃ¨s des colonnes 0/3/6 (compatible masque 3 feux).
@@ -427,3 +456,4 @@ Le projet suit le schÃ©ma **Semantic Versioning (SemVer)** :
 ### AjoutÃ©
 - Initialisation du projet.
 - DÃ©finition de lâ€™architecture et des objectifs.
+

@@ -13,6 +13,7 @@ inline void nextSubMode() {
             break;
 
         case MODE_ARC_EN_CIEL:
+        case MODE_VAGUE:
         case MODE_PULSE_VERT:
         case MODE_PULSE_JAUNE:
         case MODE_PULSE_ROUGE:
@@ -25,6 +26,9 @@ inline void nextSubMode() {
             subMode = 0;
             break;
     }
+
+    // Persistance du sous-mode et du mode courant
+    saveCurrentModeToNVS();
 }
 
 #endif

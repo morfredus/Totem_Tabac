@@ -1,3 +1,31 @@
+## [0.20.0] – User Configuration & mDNS Management (2026-01-11)
+### Added
+- **`include/config.h`**: Centralized user-configurable parameters (mDNS name, HTTP port, OTA settings, default mode/brightness).
+- **mDNS Hostname Configuration**: Change device accessibility name via `MDNS_NAME` (default: `Totem-Tabac`).
+- **OTA Hostname & Port Configuration**: Customize ArduinoOTA settings via `OTA_HOSTNAME` and `OTA_PORT`.
+- **OTA Password Toggle**: Optional password protection via `OTA_PASSWORD` (commented by default).
+- **Default Display & Mode Settings**: Configure startup display type (PWM/Matrix), initial mode, matrix brightness.
+- **`include/secrets_example.h`**: Template file demonstrating WiFi configuration structure (never committed to Git).
+- **User Documentation**: 
+  - `docs/configuration.md` and `docs/configuration_FR.md` – Comprehensive configuration guide.
+  - `docs/getting_started.md` and `docs/getting_started_FR.md` – Quick-start guides for first-time setup.
+
+### Changed
+- **`src/main.cpp`**: Integrated `config.h` includes; mDNS initialization uses `MDNS_NAME` and `MDNS.addService()` for HTTP service registration.
+- **ArduinoOTA Configuration**: Now references `OTA_HOSTNAME` and optional `OTA_PASSWORD` from `config.h` (backward compatible).
+- **WebServer Instantiation**: Port now uses `HTTP_SERVER_PORT` macro.
+
+### Technical Details
+- All user-facing configuration parameters in single header file (`config.h`).
+- mDNS service properly advertised (http, tcp, port 80) for discovery on local network.
+- Backward compatibility maintained; default values match previous hardcoded settings.
+- Serial output now logs: `mDNS started: http://Totem-Tabac.local` for user convenience.
+
+### Documentation
+- README.md and README_FR.md updated with v0.20.0 changes, configuration links, and quick-start references.
+- Configuration and getting started guides now the primary entry points for new users.
+- All docs maintain strict equivalence (EN/FR) per `.copilot` rules.
+
 ## [0.19.0] – Soft modes adapted to matrix (2026-01-11)
 ### Changed
 - **Soft Ambiance (matrix)**: warm base with soft green breathing across the full matrix, visual accent near columns 0/3/6 (compatible with 3‑light mask).
