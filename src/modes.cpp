@@ -177,18 +177,33 @@ static void applyHumeurColor() {
         uint8_t r = colors[humeurColor][0];
         uint8_t g = colors[humeurColor][1];
         uint8_t b = colors[humeurColor][2];
-        // Pour chaque feu (3 feux sur la matrice)
-        for (int feu = 0; feu < 3; feu++) {
-            // Chaque feu a 4 pixels pour chaque couleur (rouge, jaune, vert)
-            // On éclaire tous les pixels du feu avec la couleur sélectionnée
-            for (int i = 0; i < 4; i++) {
-                extern const uint8_t RED_PIXELS[3][4];
-                extern const uint8_t YELLOW_PIXELS[3][4];
-                extern const uint8_t GREEN_PIXELS[3][4];
-                // Allume tous les pixels du feu
-                setPixelXY(RED_PIXELS[feu][i] % 8, RED_PIXELS[feu][i] / 8, r, g, b);
-                setPixelXY(YELLOW_PIXELS[feu][i] % 8, YELLOW_PIXELS[feu][i] / 8, r, g, b);
-                setPixelXY(GREEN_PIXELS[feu][i] % 8, GREEN_PIXELS[feu][i] / 8, r, g, b);
+        
+        // Vague diagonale avec fading (jamais complètement éteint)
+        unsigned long now = millis();
+        static unsigned long lastWaveUpdate = 0;
+        static int wavePhase = 0;
+        
+        if (now - lastWaveUpdate > 100) {
+            lastWaveUpdate = now;
+            wavePhase = (wavePhase + 1) % 16;
+        }
+        
+        // Remplir la matrice 8x8 avec vague diagonale
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                int diag = (x + y) % 8;
+                int distance = abs(diag - (wavePhase % 8));
+                if (distance > 4) distance = 8 - distance;
+                
+                // Fading de 30% à 100%
+                uint8_t brightness = (30 + (70 * (4 - distance)) / 4);
+                brightness = constrain(brightness, 30, 255);
+                
+                uint8_t scaled_r = (r * brightness) / 255;
+                uint8_t scaled_g = (g * brightness) / 255;
+                uint8_t scaled_b = (b * brightness) / 255;
+                
+                setPixelXY(x, y, scaled_r, scaled_g, scaled_b);
             }
         }
     } else {
@@ -203,6 +218,147 @@ static void applyHumeurColor() {
         }
     }
     showUniversal();
+}
+
+// --- Fonctions helper pour animations matrice ---
+static void drawSmileySmiley(uint8_t r, uint8_t g, uint8_t b) {
+    // Remplir tout en couleur
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            setPixelXY(x, y, r, g, b);
+        }
+    }
+    // Yeux (pixels éteints)
+    setPixelXY(2, 2, 0, 0, 0);
+    setPixelXY(5, 2, 0, 0, 0);
+    // Sourire (pixels éteints) - arc de cercle
+    setPixelXY(2, 5, 0, 0, 0);
+    setPixelXY(3, 6, 0, 0, 0);
+    setPixelXY(4, 6, 0, 0, 0);
+    setPixelXY(5, 5, 0, 0, 0);
+}
+
+static void drawSmileyNeutral(uint8_t r, uint8_t g, uint8_t b) {
+    // Remplir tout en couleur
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            setPixelXY(x, y, r, g, b);
+        }
+    }
+    // Yeux (pixels éteints)
+    setPixelXY(2, 2, 0, 0, 0);
+    setPixelXY(5, 2, 0, 0, 0);
+    // Bouche neutre (pixels éteints) - ligne horizontale
+    setPixelXY(2, 5, 0, 0, 0);
+    setPixelXY(3, 5, 0, 0, 0);
+    setPixelXY(4, 5, 0, 0, 0);
+    setPixelXY(5, 5, 0, 0, 0);
+}
+
+static void drawAnimationOuverture() {
+    // Matrice verte avec smiley heureux
+    drawSmileySmiley(0, 255, 0);
+}
+
+static void drawAnimationFermeture() {
+    // Matrice rouge avec smiley neutre
+    drawSmileyNeutral(255, 0, 0);
+}
+
+static void drawAnimationPauseCafe() {
+    unsigned long now = millis();
+    static unsigned long lastCoffeeUpdate = 0;
+    static int coffeeStep = 0;
+    
+    if (now - lastCoffeeUpdate > 200) {
+        lastCoffeeUpdate = now;
+        coffeeStep = (coffeeStep + 1) % 4;
+    }
+    
+    // Animation café avec bulles remontantes et couleur chaude
+    clearAllUniversal();
+    uint8_t hue = (now / 10) % 256;
+    
+    // Fond marron/orange chaud
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            int brightness = 150 + (50 * sin((x + y + coffeeStep * 2) * 0.5)) / 1;
+            brightness = constrain(brightness, 100, 200);
+            setPixelXY(x, y, brightness, brightness / 2, 0); // Marron chaud
+        }
+    }
+    
+    // Bulles montantes
+    for (int i = 0; i < 3; i++) {
+        int bubbleY = (coffeeStep * 2 + i * 3) % 8;
+        int bubbleX = 2 + i * 2;
+        if (bubbleX < 8 && bubbleY < 8) {
+            setPixelXY(bubbleX, bubbleY, 200, 200, 255); // Blanc/bleu clair
+        }
+    }
+}
+
+static void drawAnimationClientGagnant() {
+    unsigned long now = millis();
+    static unsigned long lastWinUpdate = 0;
+    static int winStep = 0;
+    
+    if (now - lastWinUpdate > 80) {
+        lastWinUpdate = now;
+        winStep = (winStep + 1) % 8;
+    }
+    
+    clearAllUniversal();
+    
+    // Animation de joie : feu d'artifice de couleurs
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            int dist = abs(x - 3.5) + abs(y - 3.5);
+            int wave = ((dist + winStep * 2) % 8);
+            
+            if (wave < 2) {
+                // Éclair jaune/blanc
+                setPixelXY(x, y, 255, 255, 0);
+            } else if (wave < 4) {
+                // Transition vers vert
+                setPixelXY(x, y, 0, 255, 100);
+            } else {
+                // Bleu/magenta
+                setPixelXY(x, y, (sin(x * 0.5 + winStep) + 1) * 127, 0, (cos(y * 0.5 + winStep) + 1) * 127);
+            }
+        }
+    }
+}
+
+static void drawAnimationClientPerdant() {
+    unsigned long now = millis();
+    static unsigned long lastLoseUpdate = 0;
+    static int loseStep = 0;
+    
+    if (now - lastLoseUpdate > 150) {
+        lastLoseUpdate = now;
+        loseStep = (loseStep + 1) % 16;
+    }
+    
+    clearAllUniversal();
+    
+    // Animation de tristesse : pluie rouge/bleu grise
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            int rainPos = (y + loseStep * 3) % 16;
+            
+            if (rainPos == 0 || rainPos == 1) {
+                // Gouttes qui tombent
+                if ((x + rainPos) % 3 == 0) {
+                    setPixelXY(x, y, 100, 100, 200); // Bleu grisé
+                } else {
+                    setPixelXY(x, y, 80, 20, 80); // Violet sombre
+                }
+            } else {
+                setPixelXY(x, y, 40, 40, 80); // Fond gris bleuté
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------
@@ -433,89 +589,101 @@ void updateMode() {
 
     // -----------------------------------------------------
     // 13. MODE_CLIENT_GAGNANT
-    // -----------------------------------------------------
     case MODE_CLIENT_GAGNANT:
-        if (now - lastUpdate > 120) {
-
-            if (animStep < 12) {
-                for (int i = 0; i < 4; i++) {
-                    clearModuleUniversal(i);
-                    setRedUniversal(i, random(255));
-                    setYellowUniversal(i, random(255));
-                    setGreenUniversal(i, random(255));
-                }
-            }
-            else {
-                for (int i = 0; i < 4; i++) {
-                    clearModuleUniversal(i);
-                    setGreenUniversal(i, 255);
-                }
-            }
-
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            drawAnimationClientGagnant();
             showUniversal();
-            animStep++;
-            lastUpdate = now;
+        } else {
+            if (now - lastUpdate > 120) {
+                if (animStep < 12) {
+                    for (int i = 0; i < 4; i++) {
+                        clearModuleUniversal(i);
+                        setRedUniversal(i, random(255));
+                        setYellowUniversal(i, random(255));
+                        setGreenUniversal(i, random(255));
+                    }
+                } else {
+                    for (int i = 0; i < 4; i++) {
+                        clearModuleUniversal(i);
+                        setGreenUniversal(i, 255);
+                    }
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
 
     // -----------------------------------------------------
     // 14. MODE_CLIENT_PERDANT
-    // -----------------------------------------------------
     case MODE_CLIENT_PERDANT:
-        if (now - lastUpdate > 180) {
-
-            bool flash = animStep % 2;
-
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-                setRedUniversal(i, 255);
-                if (flash) setYellowUniversal(i, 255);
-            }
-
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            drawAnimationClientPerdant();
             showUniversal();
-            animStep++;
-            lastUpdate = now;
+        } else {
+            if (now - lastUpdate > 180) {
+                bool flash = animStep % 2;
+                for (int i = 0; i < 4; i++) {
+                    clearModuleUniversal(i);
+                    setRedUniversal(i, 255);
+                    if (flash) setYellowUniversal(i, 255);
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
 
     // -----------------------------------------------------
     // 15. MODE_OUVERTURE
-    // -----------------------------------------------------
     case MODE_OUVERTURE:
-        for (int i = 0; i < 4; i++) {
-            clearModuleUniversal(i);
-            setGreenUniversal(i, 255);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            drawAnimationOuverture();
+            showUniversal();
+        } else {
+            for (int i = 0; i < 4; i++) {
+                clearModuleUniversal(i);
+                setGreenUniversal(i, 255);
+            }
+            showUniversal();
         }
-        showUniversal();
         break;
 
     // -----------------------------------------------------
     // 16. MODE_FERMETURE
-    // -----------------------------------------------------
     case MODE_FERMETURE:
-        for (int i = 0; i < 4; i++) {
-            clearModuleUniversal(i);
-            setRedUniversal(i, 255);
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            drawAnimationFermeture();
+            showUniversal();
+        } else {
+            for (int i = 0; i < 4; i++) {
+                clearModuleUniversal(i);
+                setRedUniversal(i, 255);
+            }
+            showUniversal();
         }
-        showUniversal();
         break;
 
     // -----------------------------------------------------
     // 17. MODE_PAUSE_CAFE
-    // -----------------------------------------------------
     case MODE_PAUSE_CAFE:
-        if (now - lastUpdate > 300) {
-            bool blink = animStep % 2;
-
-            for (int i = 0; i < 4; i++) {
-                clearModuleUniversal(i);
-                setYellowUniversal(i, 255);
-                if (blink) setGreenUniversal(i, 255);
-            }
-
+        if (getDisplayType() == DISPLAY_MATRIX) {
+            drawAnimationPauseCafe();
             showUniversal();
-            animStep++;
-            lastUpdate = now;
+        } else {
+            if (now - lastUpdate > 300) {
+                bool blink = animStep % 2;
+                for (int i = 0; i < 4; i++) {
+                    clearModuleUniversal(i);
+                    setYellowUniversal(i, 255);
+                    if (blink) setGreenUniversal(i, 255);
+                }
+                showUniversal();
+                animStep++;
+                lastUpdate = now;
+            }
         }
         break;
 

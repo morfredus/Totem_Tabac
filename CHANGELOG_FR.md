@@ -1,3 +1,22 @@
+## [0.15.0] – Animations matrice avancées (2026-01-11)
+### Ajouté
+- **Humeur du patron** : Effet de vague diagonale sur toute la matrice avec fading progressif (30-100% de luminosité, jamais éteint).
+- **Ouverture** : Matrice verte complète avec animation smiley heureux (yeux et sourire courbe éteints).
+- **Fermeture** : Matrice rouge complète avec animation smiley neutre (yeux et bouche droite éteints).
+- **Pause café** : Animation créative avec effet de café chaud, bulles montantes et gradient marron/orange (imite la vapeur de café).
+- **Gagnant** : Animation de joie avec vagues de couleurs et effet feu d'artifice sur toute la matrice (pulsations jaune/vert/magenta).
+- **Perdant** : Animation de tristesse avec pluie de gouttes en bleu-gris et violet sombre.
+
+### Modifié
+- Les 6 animations utilitaires utilisent maintenant l'intégralité de la matrice 8x8 pour plus d'impact visuel en mode matrice.
+- Les animations en mode PWM restent inchangées et indépendantes.
+- Fonctions d'animation modularisées pour une meilleure maintenabilité.
+
+### Détails techniques
+- Les animations matrice utilisent la mise à l'échelle de la luminosité et les effets d'onde pour un flux visuel fluide.
+- Suivi d'état d'animation statique par mode pour des transitions d'animation transparentes.
+- Calcul d'onde diagonale optimisé pour les performances sur une matrice de 64 LEDs.
+
 ## [0.14.1] – Correction initialisation matrice 8x8 (2026-01-11)
 ### Corrigé
 - **Pin GPIO matrice** : Changement du GPIO 27 vers GPIO 15 (plus stable au démarrage, pas de conflit boot).

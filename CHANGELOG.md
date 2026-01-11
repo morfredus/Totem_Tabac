@@ -1,3 +1,22 @@
+## [0.15.0] – Enhanced matrix animations (2026-01-11)
+### Added
+- **Patron mood (Humeur du patron)**: Full matrix diagonal wave effect with color fading (30-100% brightness, never fully off).
+- **Opening (Ouverture)**: Green full matrix with animated happy smiley face (LED eyes and curved smile off).
+- **Closing (Fermeture)**: Red full matrix with animated neutral smiley face (LED eyes and straight mouth off).
+- **Coffee break (Pause Café)**: Creative warm animation with rising bubbles and hot brown/orange gradient, mimicking steam from coffee.
+- **Winner (Client Gagnant)**: Joy animation with full-matrix color waves and fireworks effect (yellow/green/magenta pulses).
+- **Loser (Client Perdant)**: Sadness animation with rain-like falling effect in blue-grey and purple tones.
+
+### Changed
+- All 6 utility animations now use full 8x8 matrix for more visual impact when matrix mode is active.
+- PWM mode animations remain unchanged and independent.
+- Animation helper functions modularized for maintainability.
+
+### Technical Details
+- Matrix animations use brightness scaling and wave effects for smooth visual flow.
+- Added static animation state tracking per mode for seamless animation transitions.
+- Diagonal wave calculation optimized for performance on 64-LED matrix.
+
 ## [0.14.1] – Matrix 8x8 initialization fix (2026-01-11)
 ### Fixed
 - **Matrix GPIO pin**: Changed from GPIO 27 to GPIO 15 (more stable at boot, no boot conflicts).
