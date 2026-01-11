@@ -38,12 +38,17 @@ void setDisplayType(DisplayType t) {
         // Éteint tout lors du changement d’affichage
         if (currentDisplayType == DISPLAY_MATRIX) {
             clearMatrix();
+            showMatrix();
         } else {
             clearAll();
         }
         currentDisplayType = t;
         saveDisplayTypeToNVS();
+        delay(50); // Laisser le temps au hardware de se stabiliser
         initLightsUniversal(); // Réinitialise PWM ou matrice selon le mode
+        clearAllUniversal(); // Clear avec le nouveau type
+        showUniversal();
+        delay(50);
         setMode(currentMode); // Relance l'animation courante avec le bon moteur
     }
 }
@@ -78,6 +83,7 @@ static void fadeGreen() {
             clearModuleUniversal(i);
             setGreenUniversal(i, b);
         }
+        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -96,6 +102,7 @@ static void fadeYellow() {
             clearModuleUniversal(i);
             setYellowUniversal(i, b);
         }
+        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -114,6 +121,7 @@ static void fadeRed() {
             clearModuleUniversal(i);
             setRedUniversal(i, b);
         }
+        showUniversal();
 
         fadeStep++;
         lastFadeUpdate = now;
@@ -194,6 +202,7 @@ static void applyHumeurColor() {
             case 5: setRGBUniversal(3, true, true, 255); break;
         }
     }
+    showUniversal();
 }
 
 // ---------------------------------------------------------
@@ -217,6 +226,7 @@ void updateMode() {
                 setYellowUniversal(i, 80);
                 setGreenUniversal(i, b);
             }
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -230,6 +240,7 @@ void updateMode() {
             clearAllUniversal();
             int pos = animStep % 4;
             setGreenUniversal(pos, 255);
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -260,6 +271,7 @@ void updateMode() {
                 }
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -297,6 +309,7 @@ void updateMode() {
                 clearModuleUniversal(i);
                 setRedUniversal(i, on ? 255 : 0);
             }
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -349,6 +362,7 @@ void updateMode() {
             if (pos >= 3) dir = -1;
             if (pos <= 0) dir = +1;
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -379,6 +393,7 @@ void updateMode() {
                 }
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -410,6 +425,7 @@ void updateMode() {
                 }
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -436,6 +452,7 @@ void updateMode() {
                 }
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -455,6 +472,7 @@ void updateMode() {
                 if (flash) setYellowUniversal(i, 255);
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -468,6 +486,7 @@ void updateMode() {
             clearModuleUniversal(i);
             setGreenUniversal(i, 255);
         }
+        showUniversal();
         break;
 
     // -----------------------------------------------------
@@ -478,6 +497,7 @@ void updateMode() {
             clearModuleUniversal(i);
             setRedUniversal(i, 255);
         }
+        showUniversal();
         break;
 
     // -----------------------------------------------------
@@ -493,6 +513,7 @@ void updateMode() {
                 if (blink) setGreenUniversal(i, 255);
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -517,6 +538,7 @@ void updateMode() {
                 case 5: for (int i = 0; i < 4; i++) setRGBUniversal(i, false, false, 255); break;
             }
 
+            showUniversal();
             animStep++;
             lastUpdate = now;
         }
@@ -531,6 +553,7 @@ void updateMode() {
 
     default:
         clearAllUniversal();
+        showUniversal();
         break;
     }
 }

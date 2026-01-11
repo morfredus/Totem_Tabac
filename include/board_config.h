@@ -18,7 +18,7 @@
 #define TL1_GREEN   12
 
 // MATRICE NEOPIXEL 8x8
-#define NEOPIXEL_MATRIX_PIN 27  // GPIO à ajuster selon câblage réel (exemple: 27)
+#define NEOPIXEL_MATRIX_PIN 15  // GPIO 15 est sûr pour NeoPixel (pas de conflit boot)
 
 // MODULE 2
 #define TL2_RED     13

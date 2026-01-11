@@ -1,12 +1,37 @@
 #include "modes.h"
 #include "light_helpers.h"
+#include <Adafruit_NeoPixel.h>
+#include <Preferences.h>
+#include "board_config.h"
+
+// --- Objet strip global pour matrice 8x8 (déclaré en premier) ---
+#ifndef NEOPIXEL_MATRIX_PIN
+#define NEOPIXEL_MATRIX_PIN 27 // fallback sécurité
+#endif
+static Adafruit_NeoPixel strip(64, NEOPIXEL_MATRIX_PIN, NEO_GRB + NEO_KHZ800);
+static uint8_t matrixBrightness = 128;
+static Preferences matrixPrefs;
 
 // --- Helpers universels PWM/matrice ---
 void initLightsUniversal() {
     if (getDisplayType() == DISPLAY_MATRIX) {
+        // Désactiver PWM avant d'initialiser la matrice
+        int allPins[] = {TL1_RED, TL1_YELLOW, TL1_GREEN, 
+                         TL2_RED, TL2_YELLOW, TL2_GREEN,
+                         TL3_RED, TL3_YELLOW, TL3_GREEN, 
+                         TL4_RED, TL4_YELLOW, TL4_GREEN};
+        for (int i = 0; i < 12; i++) {
+            ledcDetachPin(allPins[i]);
+            pinMode(allPins[i], INPUT); // Mettre en haute impédance
+        }
         initNeoPixelMatrix();
         clearMatrix();
+        showMatrix(); // Afficher le buffer vide
     } else {
+        // S'assurer que la matrice est éteinte
+        strip.clear();
+        strip.show();
+        // Initialiser PWM
         for (int i = 0; i < 4; i++) initTrafficLightPWM(i);
         clearAll();
     }
@@ -67,25 +92,21 @@ void setRGBUniversal(int module, bool r, bool y, uint8_t g) {
     }
 }
 
-#include "light_helpers.h"
-// ...existing code...
-#include <Adafruit_NeoPixel.h>
-#include <Preferences.h>
-#include "board_config.h"
+void showUniversal() {
+    if (getDisplayType() == DISPLAY_MATRIX) {
+        showMatrix();
+    }
+    // Pour PWM, pas besoin d'appeler show(), c'est instantané
+}
 
-// --- Objet strip global pour matrice 8x8 ---
-#ifndef NEOPIXEL_MATRIX_PIN
-#define NEOPIXEL_MATRIX_PIN 27 // fallback sécurité
-#endif
-static Adafruit_NeoPixel strip(64, NEOPIXEL_MATRIX_PIN, NEO_GRB + NEO_KHZ800);
-static uint8_t matrixBrightness = 128;
-static Preferences matrixPrefs;
+// --- Fonctions spécifiques à la matrice NeoPixel ---
 
 void initNeoPixelMatrix() {
     strip.begin();
+    strip.clear();
     strip.setBrightness(matrixBrightness);
     strip.show();
-    strip.clear();
+    delay(10); // Stabilisation
 }
 
 void setMatrixBrightness(uint8_t b) {
@@ -120,27 +141,27 @@ void setRedMatrix(int feu, uint8_t value) {
     for (uint8_t i = 0; i < 4; i++) {
         strip.setPixelColor(RED_PIXELS[feu][i], strip.Color(value, 0, 0));
     }
-    strip.show();
 }
 
 void setYellowMatrix(int feu, uint8_t value) {
     for (uint8_t i = 0; i < 4; i++) {
         strip.setPixelColor(YELLOW_PIXELS[feu][i], strip.Color(value, value, 0));
     }
-    strip.show();
 }
 
 void setGreenMatrix(int feu, uint8_t value) {
     for (uint8_t i = 0; i < 4; i++) {
         strip.setPixelColor(GREEN_PIXELS[feu][i], strip.Color(0, value, 0));
     }
-    strip.show();
 }
 
 void setPixelXY(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
     if (x >= 8 || y >= 8) return;
     uint8_t idx = y * 8 + x;
     strip.setPixelColor(idx, strip.Color(r, g, b));
+}
+
+void showMatrix() {
     strip.show();
 }
 #include "light_helpers.h"

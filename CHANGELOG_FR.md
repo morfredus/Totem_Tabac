@@ -1,3 +1,18 @@
+## [0.14.1] – Correction initialisation matrice 8x8 (2026-01-11)
+### Corrigé
+- **Pin GPIO matrice** : Changement du GPIO 27 vers GPIO 15 (plus stable au démarrage, pas de conflit boot).
+- **Séquence d'initialisation matrice** : Ordre corrigé en `begin() → clear() → setBrightness() → show()` avec délai de stabilisation de 10ms.
+- **Changement d'affichage** : Ajout de désactivation explicite des pins PWM lors du passage en mode matrice (état haute impédance).
+- **Stabilité changement de mode** : Ajout de délais de 50ms lors des changements de type d'affichage pour assurer la stabilisation hardware.
+- **Organisation du code** : Déplacement de la déclaration du strip NeoPixel en début de fichier pour corriger les problèmes d'ordre de compilation.
+- **LEDs fantômes** : Correction des LEDs PWM résiduelles qui s'allumaient lorsque la matrice était sélectionnée.
+- **Contrôle de luminosité** : Correction de l'application de la luminosité matrice lors de l'initialisation.
+
+### Détails techniques
+- Les pins PWM sont maintenant correctement détachés et mis en mode INPUT lorsque la matrice est active.
+- Le buffer de la matrice est correctement effacé et affiché lors des transitions de mode.
+- Les appels `showUniversal()` assurent que toutes les animations mettent à jour l'affichage correctement.
+
 ## [0.14.0] – Nettoyage et optimisation des modes (2026-01-11)
 ### Supprimé
 - **MODE_ZEN** : Mode redondant supprimé (doublon de Pulse Vert).

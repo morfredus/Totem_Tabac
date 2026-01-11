@@ -13,6 +13,7 @@ void setRedUniversal(int module, uint8_t value);
 void setYellowUniversal(int module, uint8_t value);
 void setGreenUniversal(int module, uint8_t value);
 void setRGBUniversal(int module, bool r, bool y, uint8_t g);
+void showUniversal();  // Affiche les changements (appelle showMatrix() pour matrice, rien pour PWM)
 
 #ifndef LIGHT_HELPERS_H
 #define LIGHT_HELPERS_H
@@ -52,6 +53,7 @@ void setRedMatrix(int feu, uint8_t value);
 void setYellowMatrix(int feu, uint8_t value);
 void setGreenMatrix(int feu, uint8_t value);
 void setPixelXY(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b);
+void showMatrix();  // Affiche les changements sur la matrice
 
 void initTrafficLightPWM(int module);
 void clearModule(int module);

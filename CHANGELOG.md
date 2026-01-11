@@ -1,3 +1,18 @@
+## [0.14.1] – Matrix 8x8 initialization fix (2026-01-11)
+### Fixed
+- **Matrix GPIO pin**: Changed from GPIO 27 to GPIO 15 (more stable at boot, no boot conflicts).
+- **Matrix initialization sequence**: Corrected order to `begin() → clear() → setBrightness() → show()` with 10ms stabilization delay.
+- **Display switching**: Added explicit PWM pin deactivation when switching to matrix mode (high-impedance state).
+- **Mode switching stability**: Added 50ms delays during display type changes to ensure hardware stabilization.
+- **Code organization**: Moved NeoPixel strip declaration to file beginning to fix compilation order issues.
+- **Phantom LEDs**: Fixed residual PWM LEDs lighting up when matrix is selected.
+- **Brightness control**: Corrected matrix brightness application during initialization.
+
+### Technical Details
+- PWM pins are now properly detached and set to INPUT mode when matrix is active.
+- Matrix buffer is properly cleared and displayed during mode transitions.
+- `showUniversal()` calls ensure all animations properly update the display.
+
 ## [0.14.0] – Mode cleanup and optimization (2026-01-11)
 ### Removed
 - **MODE_ZEN**: Removed redundant mode (duplicate of Pulse Vert).
