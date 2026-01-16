@@ -36,8 +36,8 @@
 #define TL4_GREEN   23
 
 // Boutons physiques
-#define BUTTON_PIN   25   // change de mode
-#define BUTTON2_PIN  26   // change de sous-mode
+#define BUTTON_PIN   32   // change de mode
+#define BUTTON2_PIN  33   // change de sous-mode
 
 #endif
 
